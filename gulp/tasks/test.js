@@ -18,7 +18,7 @@ gulp.task('unit-runner', function() {
 });
 
 gulp.task('test', ['build', 'unit-runner'], function() {
-    console.log('(You need to run "npm install gulp-qunit" before using "gulp test".)');
+    console.log('(Please run "npm install gulp-qunit" before running "gulp test".)');
     var timeOutInSeconds = 5;
     return gulp.src('test/unit/runner.html', { read: false })
         //.pipe(fb.callback(function () {

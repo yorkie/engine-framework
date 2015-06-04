@@ -1,6 +1,3 @@
-var Fs = require('fs');
-var Path = require('fire-path');
-
 var gulp = require('gulp');
 var mirror = require('gulp-mirror');
 var uglify = require('gulp-uglify');
@@ -35,7 +32,9 @@ function rebundle(bundler) {
 function createBundler() {
     var options = {
         debug: true,
-        standalone: 'engine-framework'
+        detectGlobals: false,    // dont insert process, global, __filename, and __dirname
+        bundleExternal: false    // dont bundle external modules
+        //standalone: 'engine-framework',
         //basedir: tempScriptDir
     };
     // https://github.com/substack/node-browserify#methods

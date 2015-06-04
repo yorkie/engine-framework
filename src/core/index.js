@@ -1,3 +1,5 @@
+var root = typeof global !== 'undefined' ? global : window;
+
 /**
  * !#en
  * Global object with runtime classes, properties and methods you can access from anywhere.
@@ -12,9 +14,10 @@
  * @module Fire
  * @main Fire
  */
-
-// Always export Fire globally.
-global.Fire = global.Fire || {};
+if (!root.Fire) {
+    // Always export Fire globally.
+    root.Fire = {};
+}
 
 require('./definition');
 
