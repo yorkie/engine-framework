@@ -1,0 +1,37 @@
+{
+  "name": "engine-framework",
+  "version": "0.0.1",
+  "description": "A simple framework for connecting Fireball Editor and other game engines",
+  "homepage": "http://fireball-x.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fireball-x/engine-framework.git"
+  },
+  "author": "Firebox Technology",
+  "license": "MIT",
+  "bugs": "https://github.com/fireball-x/editor-framework/issues",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "devDependencies": {
+    "browserify": "10.2.1",
+    "del": "1.1.1",
+    "event-stream": "",
+    "gulp": "",
+    "gulp-cached": "^1.0.1",
+    "gulp-concat": "2.5.2",
+    "gulp-fb": "",
+    "gulp-header": "",
+    "gulp-jshint": "1.9.2",
+    "gulp-mirror": "^0.4.0",
+    "gulp-plumber": "^0.6.6",
+    "gulp-rename": "",
+    "gulp-sourcemaps": "^1.3.0",
+    "gulp-uglifyjs": "0.5.0",
+    "gulp-util": "",
+    "jshint-stylish": "1.0.0",
+    "require-dir": "^0.1.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "1.0.0"
+  }
+}
