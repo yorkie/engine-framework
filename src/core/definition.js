@@ -21,7 +21,7 @@ Fire.isPureWeb = !Fire.isNode && !Fire.isApp;                               // c
  * @type {boolean}
  */
 Fire.isEditor = Fire.isApp;     // by far there is no standalone client version, so app == editor
-if(typeof FIRE_EDITOR === 'undefined') {
+if (typeof FIRE_EDITOR === 'undefined') {
     FIRE_EDITOR = Fire.isEditor;
 }
 
