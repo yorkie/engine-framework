@@ -22,7 +22,15 @@ function rebundle(bundler) {
 
     var min = rename({ suffix: '.min' })
     min.pipe(sourcemaps.init({loadMaps: true}))
-        .pipe(uglify())
+        .pipe(uglify({
+            compress: {
+                global_defs : {
+                    FIRE_IS_DEBUG: false,
+                    FIRE_IS_DEV: false,
+                    FIRE_IS_EDITOR: false
+                }
+            }
+        }))
         .pipe(sourcemaps.write('./', {sourceRoot: './', addComment: false}))
         .pipe(gulp.dest(paths.out));
 
