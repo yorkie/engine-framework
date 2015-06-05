@@ -20,7 +20,11 @@ Fire.isPureWeb = !Fire.isNode && !Fire.isApp;                               // c
  * @property isEditor
  * @type {boolean}
  */
-FIRE_EDITOR = Fire.isEditor = Fire.isApp;     // by far there is no standalone client version, so app == editor
+Fire.isEditor = Fire.isApp;     // by far there is no standalone client version, so app == editor
+if(typeof FIRE_EDITOR === 'undefined') {
+    FIRE_EDITOR = Fire.isEditor;
+}
+
 
 /**
  * indicates whether executes in common web browser, or editor's window process(atom-shell's renderer context)
