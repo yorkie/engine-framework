@@ -21,6 +21,11 @@ Fire.isPureWeb = !Fire.isNode && !Fire.isApp;                               // c
  * @type {boolean}
  */
 Fire.isEditor = Fire.isApp;     // by far there is no standalone client version, so app == editor
+// Always export FIRE_EDITOR globally
+if (typeof FIRE_EDITOR === 'undefined') {
+    FIRE_EDITOR = Fire.isEditor;
+}
+
 
 /**
  * indicates whether executes in common web browser, or editor's window process(atom-shell's renderer context)
@@ -108,4 +113,4 @@ Object.defineProperty(Fire, 'isRetina', {
  * @property isRetinaEnabled
  * @type {boolean}
  */
-Fire.isRetinaEnabled = (Fire.isIOS || Fire.isDarwin) && !Fire.isEditor && Fire.isRetina;
+Fire.isRetinaEnabled = (Fire.isIOS || Fire.isDarwin) && !FIRE_EDITOR && Fire.isRetina;

@@ -6,7 +6,7 @@ require('./attribute');
  * @param {string} name - prop name
  */
 var _appendProp = function (name/*, isGetter*/) {
-    if (Fire.isDev) {
+    if (FIRE_DEV) {
         //var JsVarReg = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/;
         //if (!JsVarReg.test(name)) {
         //    Fire.error('The property name "' + name + '" is not compliant with JavaScript naming standards');
@@ -58,7 +58,7 @@ var _metaClass = {
      */
     prop: function (name, defaultValue, attribute) {
         'use strict';
-        if (Fire.isDev) {
+        if (FIRE_DEV) {
             // check default object value
             if (typeof defaultValue === 'object' && defaultValue) {
                 if (Array.isArray(defaultValue)) {
@@ -144,7 +144,7 @@ var _metaClass = {
     get: function (name, getter, attribute) {
         'use strict';
 
-        if (Fire.isDev) {
+        if (FIRE_DEV) {
             var d = Object.getOwnPropertyDescriptor(this.prototype, name);
             if (d && d.get) {
                 Fire.error('%s: the getter of "%s" is already defined!', JS.getClassName(this), name);
@@ -156,7 +156,7 @@ var _metaClass = {
             var AttrArgStart = 2;
             for (var i = AttrArgStart; i < arguments.length; i++) {
                 var attr = arguments[i];
-                if (Fire.isDev) {
+                if (FIRE_DEV) {
                     if (attr._canUsedInGetter === false) {
                         Fire.error('Can not apply the specified attribute to the getter of "%s.%s", attribute index: %s',
                             JS.getClassName(this), name, (i - AttrArgStart));
@@ -166,7 +166,7 @@ var _metaClass = {
 
                 Fire.attr(this, name, attr);
 
-                if (Fire.isDev) {
+                if (FIRE_DEV) {
                     // check attributes
                     if (attr.serializable === false || attr.editorOnly === true) {
                         Fire.warn('No need to use Fire.NonSerialized or Fire.EditorOnly for the getter of %s.%s, ' +
@@ -182,7 +182,7 @@ var _metaClass = {
         }
         Fire.attr(this, name, Fire.NonSerialized);
 
-        if (Fire.isDev) {
+        if (FIRE_DEV) {
             // 不论是否 hide in inspector 都要添加到 props，否则 asset watcher 不能正常工作
             _appendProp.call(this, name/*, true*/);
         }
@@ -192,7 +192,7 @@ var _metaClass = {
             configurable: true
         });
 
-        if (Fire.isEditor) {
+        if (FIRE_EDITOR) {
             Fire.attr(this, name, {hasGetter: true}); // 方便 editor 做判断
         }
         return this;
@@ -209,7 +209,7 @@ var _metaClass = {
      * @private
      */
     set: function (name, setter) {
-        if (Fire.isDev) {
+        if (FIRE_DEV) {
             var d = Object.getOwnPropertyDescriptor(this.prototype, name);
             if (d && d.set) {
                 Fire.error('%s: the setter of "%s" is already defined!', JS.getClassName(this), name);
@@ -217,7 +217,7 @@ var _metaClass = {
             }
         }
 
-        if (Fire.isEditor) {
+        if (FIRE_EDITOR) {
             Object.defineProperty(this.prototype, name, {
                 set: function setter_editorWrapper (value) {
                     if (this._observing) {
@@ -319,13 +319,13 @@ Fire._isFireClass = function (constructor) {
 Fire.isChildClassOf = function (subclass, superclass) {
     if (subclass && superclass) {
         if (typeof subclass !== 'function') {
-            if (Fire.isDev) {
+            if (FIRE_DEV) {
                 Fire.warn('[isChildClassOf] subclass should be function type, not', subclass);
             }
             return false;
         }
         if (typeof superclass !== 'function') {
-            if (Fire.isDev) {
+            if (FIRE_DEV) {
                 Fire.warn('[isChildClassOf] superclass should be function type, not', superclass);
             }
             return false;
@@ -366,7 +366,7 @@ function _initClass(className, fireClass) {
 }
 
 function _nicifyFireClass (fireClass, className) {
-    if (Fire.isEditor) {
+    if (FIRE_EDITOR) {
         if (className) {
             fireClass.toString = function () {
                 var plain = Function.toString.call(this);
@@ -393,7 +393,7 @@ Fire._doDefine = function (className, baseClass, constructor) {
 
     JS.setClassName(className, fireClass);
 
-    if (Fire.isEditor) {
+    if (FIRE_EDITOR) {
         _nicifyFireClass(fireClass, className);
     }
 
@@ -427,7 +427,7 @@ Fire.define = function (className, constructor) {
  */
 Fire.extend = function (className, baseClass, constructor) {
     if (typeof className === 'function') {
-        if (Fire.isDev) {
+        if (FIRE_DEV) {
             if (constructor) {
                 Fire.error('[Fire.extend] invalid type of arguments');
                 return null;
@@ -444,14 +444,14 @@ Fire.extend = function (className, baseClass, constructor) {
         // 未传入任何参数
         return Fire._doDefine('', baseClass, constructor);
     }
-    else if (Fire.isDev && className) {
+    else if (FIRE_DEV && className) {
         Fire.error('[Fire.extend] unknown typeof first argument:' + className);
     }
     return null;
 };
 
 function _checkCtor (ctor) {
-    if (Fire.isDev) {
+    if (FIRE_DEV) {
         if (Fire._isFireClass(ctor)) {
             Fire.error("Constructor can not be another FireClass");
             return;
@@ -471,7 +471,7 @@ function _checkCtor (ctor) {
 }
 
 function _createCtor (constructor, baseClass, useTryCatch) {
-    if (constructor && Fire.isDev) {
+    if (constructor && FIRE_DEV) {
         _checkCtor(constructor);
     }
     // get base user constructors
@@ -498,14 +498,14 @@ function _createCtor (constructor, baseClass, useTryCatch) {
     var fireClass;
     var body = '(function(){\n';
 
-    if (Fire.isEditor) {
+    if (FIRE_EDITOR) {
         body += 'this._observing=false;\n';
     }
     body += '_createInstanceProps(this,fireClass);\n';
 
     // call user constructors
     if (ctors) {
-        if (Fire.isEditor) {
+        if (FIRE_EDITOR) {
             console.assert(ctors.length > 0);
         }
 
