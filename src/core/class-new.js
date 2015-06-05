@@ -1,5 +1,6 @@
 require('./attribute');
 require('./class');
+var FObject = require('./fobject');
 
 // 不能使用于get方法的属性
 var _propertyNotForGet = [

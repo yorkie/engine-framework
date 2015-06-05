@@ -1,5 +1,10 @@
 var Fire = require('./core');
 
-Fire.Editor = require('./editor');
+Fire.Runtime = require('./runtime');
+
+if (Fire.isEditor) {
+    // TODO - exclude editor in browserify (https://github.com/substack/node-browserify#bexcludefile)
+    require('./editor');
+}
 
 module.exports = Fire;

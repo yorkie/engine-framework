@@ -1,6 +1,7 @@
 var gulp = require('gulp');
-var qunit = require('gulp-qunit');
 var fb = require('gulp-fb');
+
+var TimeOutInSeconds = 5;
 
 gulp.task('unit-runner', function() {
     var js = paths.test.src;
@@ -18,17 +19,14 @@ gulp.task('unit-runner', function() {
 });
 
 gulp.task('test', ['build', 'unit-runner'], function() {
-    console.log('(Please run "npm install gulp-qunit" before running "gulp test".)');
-    var timeOutInSeconds = 5;
+    var qunit;
+    try {
+        qunit = require('gulp-qunit');
+    }
+    catch (e) {
+        console.error('Please run "npm install gulp-qunit" before running "gulp test".');
+        throw e;
+    }
     return gulp.src('test/unit/runner.html', { read: false })
-        //.pipe(fb.callback(function () {
-        //    // launch server
-        //    require('./test/server.js');
-        //}))
-        .pipe(qunit({ timeout: timeOutInSeconds }))
-        //.on('error', function(err) {
-        //    // Make sure failed tests cause gulp to exit non-zero
-        //    throw err;
-        //})
-        ;
+        .pipe(qunit({ timeout: TimeOutInSeconds }));
 });

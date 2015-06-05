@@ -1,4 +1,5 @@
 ﻿var JS = require('./js');
+require('./attribute');
 
 /**
  * both getter and prop must register the name into __props__ array

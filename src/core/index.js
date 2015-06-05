@@ -21,7 +21,6 @@ if (!root.Fire) {
 
 require('./definition');
 
-// TODO - preprocess
 Fire.isDev = Fire.isEditor;
 
 // javascript extends
@@ -30,6 +29,7 @@ require('./log');
 require('./math');
 require('./utils');
 require('./enum');
+require('./fobject');
 require('./class-new');
 //
 

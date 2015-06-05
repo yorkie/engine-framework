@@ -1,6 +1,4 @@
 
-// logs
-
 /**
  * !#en Outputs a message to the Fireball Console (editor) or Web Console (runtime).
  * !#zh 向 Fireball 编辑器控制台或浏览器控制台输出信息。
