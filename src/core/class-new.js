@@ -124,7 +124,7 @@ Fire.Class = function (options) {
             else {
                 var getter = val.get;
                 var setter = val.set;
-                if (Fire.isEditor) {
+                if (FIRE_IS_EDITOR) {
                     if (!getter && !setter) {
                         Fire.error('Property %s.%s must define at least one of "default", "get" or "set".', name,
                             propName);
@@ -144,7 +144,7 @@ Fire.Class = function (options) {
     var statics = options.statics;
     if (statics) {
         var staticPropName;
-        if (Fire.isEditor) {
+        if (FIRE_IS_EDITOR) {
             var INVALID_STATICS = ['name', '__ctors__', '__props__', 'arguments', 'call', 'apply', 'caller', 'get',
                                    'getset', 'length', 'prop', 'prototype', 'set'];
             for (staticPropName in statics) {
@@ -171,7 +171,7 @@ Fire.Class = function (options) {
         if (type === 'function' || func === null) {
             cls.prototype[funcName] = func;
         }
-        else if (Fire.isEditor) {
+        else if (FIRE_IS_EDITOR) {
             var TypoCheckList = {
                 extend: 'extends',
                 property: 'properties',
@@ -201,7 +201,7 @@ function preParseProperties (properties) {
         var notify = val.notify;
         if (notify) {
             if (val.get || val.set) {
-                if (Fire.isDev) {
+                if (FIRE_IS_DEV) {
                     Fire.warn('"notify" can\'t work with "get/set" !');
                 }
                 continue;
@@ -234,7 +234,7 @@ function preParseProperties (properties) {
                     }
                 }
             }
-            else if (Fire.isDev) {
+            else if (FIRE_IS_DEV) {
                 Fire.warn('"notify" must work with "default" !');
             }
         }
@@ -243,7 +243,7 @@ function preParseProperties (properties) {
 
 var tmpAttrs = [];
 function parseAttributes (attrs, className, propName) {
-    var ERR_Type = Fire.isEditor ? 'The %s of %s must be type %s' : '';
+    var ERR_Type = FIRE_IS_EDITOR ? 'The %s of %s must be type %s' : '';
 
     tmpAttrs.length = 0;
     var result = tmpAttrs;
@@ -272,7 +272,7 @@ function parseAttributes (attrs, className, propName) {
             result.push(Fire.String_Obsoleted);
         }
         else if (type === 'Object' || type === Object) {
-            if (Fire.isEditor) {
+            if (FIRE_IS_EDITOR) {
                 Fire.error('Please define "type" parameter of %s.%s as the actual constructor.', className, propName);
             }
         }
@@ -286,14 +286,14 @@ function parseAttributes (attrs, className, propName) {
                 if (type.hasOwnProperty('__enums__')) {
                     result.push(Fire.Enum(type));
                 }
-                else if (Fire.isEditor) {
+                else if (FIRE_IS_EDITOR) {
                     Fire.error('Please define "type" parameter of %s.%s as the constructor of %s.', className, propName, type);
                 }
             }
             else if (typeof type === 'function') {
                 result.push(Fire.ObjectType(type));
             }
-            else if (Fire.isEditor) {
+            else if (FIRE_IS_EDITOR) {
                 Fire.error('Unknown "type" parameter of %s.%s：%s', className, propName, type);
             }
         }
@@ -305,7 +305,7 @@ function parseAttributes (attrs, className, propName) {
             if (typeof val === expectType) {
                 result.push(typeof attrCreater === 'function' ? attrCreater(val) : attrCreater);
             }
-            else if (Fire.isEditor) {
+            else if (FIRE_IS_EDITOR) {
                 Fire.error('The %s of %s.%s must be type %s', attrName, className, propName, expectType);
             }
         }
@@ -345,11 +345,11 @@ function parseAttributes (attrs, className, propName) {
             if (range.length >= 2) {
                 result.push(Fire.Range(range[0], range[1]));
             }
-            else if (Fire.isEditor) {
+            else if (FIRE_IS_EDITOR) {
                 Fire.error('The length of range array must be 2');
             }
         }
-        else if (Fire.isEditor) {
+        else if (FIRE_IS_EDITOR) {
             Fire.error(ERR_Type, '"range"', className + '.' + propName, 'array');
         }
     }
@@ -363,15 +363,15 @@ function parseAttributes (attrs, className, propName) {
                 if (typeof def === 'boolean') {
                     result.push(Fire.Nullable(boolPropName, def));
                 }
-                else if (Fire.isEditor) {
+                else if (FIRE_IS_EDITOR) {
                     Fire.error(ERR_Type, '"default"', 'nullable object', 'boolean');
                 }
             }
-            else if (Fire.isEditor) {
+            else if (FIRE_IS_EDITOR) {
                 Fire.error(ERR_Type, '"propName"', 'nullable object', 'string');
             }
         }
-        else if (Fire.isEditor) {
+        else if (FIRE_IS_EDITOR) {
             Fire.error(ERR_Type, '"nullable"', className + '.' + propName, 'object');
         }
     }
@@ -384,12 +384,12 @@ function parseAttributes (attrs, className, propName) {
                 if (typeof watchCallback === 'function') {
                     result.push(Fire.Watch(watchKey.split(' '), watchCallback));
                 }
-                else if (Fire.isEditor) {
+                else if (FIRE_IS_EDITOR) {
                     Fire.error(ERR_Type, 'value', 'watch object', 'function');
                 }
             }
         }
-        else if (Fire.isEditor) {
+        else if (FIRE_IS_EDITOR) {
             Fire.error(ERR_Type, 'watch', className + '.' + propName, 'object');
         }
     }

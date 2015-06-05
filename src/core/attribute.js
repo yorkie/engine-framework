@@ -153,7 +153,7 @@ Fire.SingleText = { textMode: 'single' };
 Fire.MultiText = { textMode: 'multi' };
 
 function getTypeChecker (type, attrName, objectTypeCtor) {
-    if (Fire.isDev) {
+    if (FIRE_IS_DEV) {
         return function (constructor, mainPropName) {
             var mainPropAttrs = Fire.attr(constructor, mainPropName) || {};
             if (mainPropAttrs.type !== type) {
@@ -237,7 +237,7 @@ Fire._ScriptUuid = {};
  * @private
  */
 Fire.ObjectType = function (typeCtor) {
-    if (Fire.isEditor) {
+    if (FIRE_IS_EDITOR) {
         if (!typeCtor) {
             Fire.warn('Argument for Fire.ObjectType must be non-nil');
             return;
@@ -251,7 +251,7 @@ Fire.ObjectType = function (typeCtor) {
         type: 'object',
         ctor: typeCtor,
         _onAfterProp: (function () {
-            if (Fire.isEditor) {
+            if (FIRE_IS_EDITOR) {
                 return function (classCtor, mainPropName) {
                     var check = getTypeChecker('object', 'Fire.ObjectType', typeCtor);
                     check(classCtor, mainPropName);
@@ -312,7 +312,7 @@ Fire.RawType = function (typename) {
 
         _onAfterProp: function (constructor, mainPropName) {
             // check raw object
-            var checked = Fire.isDev && (function checkRawType(constructor) {
+            var checked = FIRE_IS_DEV && (function checkRawType(constructor) {
                 if (! Fire.isChildClassOf(constructor, Asset)) {
                     Fire.error('RawType is only available for Assets');
                     return false;

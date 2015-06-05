@@ -59,7 +59,7 @@ Fire.defineEnum = function (obj) {
     return enumType;
 };
 
-if (Fire.isDev) {
+if (FIRE_IS_DEV) {
     // check key order in object literal
     var _TestEnum = Fire.defineEnum({
         ZERO: -1,

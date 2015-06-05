@@ -245,7 +245,7 @@ module.exports = {
     isDomNode: isDomNode
 };
 
-if (Fire.isDev) {
+if (FIRE_IS_DEV) {
     Fire.JS.mixin(module.exports, {
         ///**
         // * @param {object} obj

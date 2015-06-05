@@ -22,7 +22,7 @@ if (!root.Fire) {
 require('./definition');
 
 // TODO - preprocess
-Fire.isDev = Fire.isEditor;
+FIRE_IS_DEV = FIRE_IS_EDITOR;
 
 // javascript extends
 require('./js');

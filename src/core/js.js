@@ -167,7 +167,7 @@ JS.getClassName = function (obj) {
                 if (registered && registered !== constructor) {
                     var error = 'A Class already exists with the same ' + key + ' : "' + id + '".';
                     // @ifdef EDITOR
-                    if (!Fire.isEditor) {
+                    if (!FIRE_IS_EDITOR) {
                         error += ' (This may be caused by error of unit test.) \
 If you dont need serialization, you can set class id to "". You can also call \
 Fire.JS.unregisterClass to remove the id of unused class';
