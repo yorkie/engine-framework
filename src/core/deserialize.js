@@ -363,7 +363,7 @@ var _Deserializer = (function () {
  * @return {object} the main data(asset)
  */
 Fire.deserialize = function (data, result, options) {
-    var isEditor = (options && 'isEditor' in options) ? options.isEditor : FIRE_IS_EDITOR;
+    var isEditor = (options && 'isEditor' in options) ? options.isEditor : FIRE_EDITOR;
     var classFinder = (options && options.classFinder) || JS._getClassById;
     var createAssetRefs = (options && options.createAssetRefs) || Fire.isEditorCore;
     var target;

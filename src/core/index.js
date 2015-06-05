@@ -22,7 +22,8 @@ if (!root.Fire) {
 require('./definition');
 
 // TODO - preprocess
-FIRE_IS_DEV = FIRE_IS_EDITOR;
+// Always export FIRE_DEV globally
+FIRE_DEV = FIRE_EDITOR;
 
 // javascript extends
 require('./js');

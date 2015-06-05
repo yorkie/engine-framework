@@ -25,9 +25,9 @@ function rebundle(bundler) {
         .pipe(uglify({
             compress: {
                 global_defs : {
-                    FIRE_IS_DEBUG: false,
-                    FIRE_IS_DEV: false,
-                    FIRE_IS_EDITOR: false
+                    FIRE_DEBUG: false,
+                    FIRE_DEV: false,
+                    FIRE_EDITOR: false
                 }
             }
         }))
