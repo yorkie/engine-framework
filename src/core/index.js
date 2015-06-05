@@ -21,8 +21,14 @@ if (!root.Fire) {
 
 require('./definition');
 
-// TODO - preprocess
-Fire.isDev = Fire.isEditor;
+if (typeof FIRE_DEBUG === 'undefined') {
+    FIRE_DEBUG = true;
+}
+
+if (typeof FIRE_DEV === 'undefined') {
+    // Always export FIRE_DEV globally
+    FIRE_DEV = FIRE_EDITOR || FIRE_DEBUG;
+}
 
 // javascript extends
 require('./js');

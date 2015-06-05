@@ -166,7 +166,7 @@ var Engine = (function () {
         Runtime.init();
 
 // @ifdef EDITOR
-        if (Fire.isEditor === false) {
+        if (FIRE_EDITOR === false) {
             // test in other platform
             Engine._scene = new Scene();
             //if (editorCallback.onSceneLoaded) {
