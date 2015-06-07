@@ -6,8 +6,8 @@ var NodeWrapper = require('./node');
 
 /**
  * You should override:
- * - children
- * - getCurrentScene (static)
+ * - childNodes
+ * - getCurrentSceneNode (static)
  *
  * @class SceneWrapper
  * @extends NodeWrapper
@@ -19,7 +19,7 @@ var SceneWrapper = Fire.Class({
     extends: NodeWrapper,
 
     properties: {
-        parent: {
+        parentNode: {
             get: function () {
                 return null;
             },
@@ -34,23 +34,22 @@ var SceneWrapper = Fire.Class({
     statics: {
         /**
          * Get the current running scene.
-         * @method getCurrentScene
+         * @method getCurrentSceneNode
          * @return {RuntimeNode}
          * @static
          */
-        getCurrentScene: function () {
+        getCurrentSceneNode: function () {
             if (FIRE_EDITOR) {
                 Fire.error('Not yet implemented');
             }
+            return null;
         }
     },
 
-    /**
-     * Set the sibling index of this node.
-     *
-     * @method setSiblingIndex
-     * @param {number} index
-     */
+    getSiblingIndex: function () {
+        return 0;
+    },
+
     setSiblingIndex: function (index) {
         if (FIRE_DEV) {
             if (index !== 0) {

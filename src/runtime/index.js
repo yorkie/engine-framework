@@ -30,3 +30,6 @@ Fire.node = register.getWrapper;
  * @type {Fire.Runtime.SceneWrapper}
  */
 Fire.JS.get(Fire, 'SceneWrapperImpl', register.getRegisteredSceneWrapper);
+
+// add utility methods
+require('./extends');

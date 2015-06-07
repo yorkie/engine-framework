@@ -12,4 +12,7 @@ if (!root.Editor) {
     root.Editor = {};
 }
 
+// extends engine
+require('./extends/runtime');
+
 module.exports = Editor;
