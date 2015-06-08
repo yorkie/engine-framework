@@ -71,7 +71,8 @@ var NodeWrapper = Fire.Class({
         },
 
         /**
-         * Get the READ ONLY array of children.
+         * Returns the array of children. If no child, this method should return an empty array.
+         * The returns array can be modified ONLY in setSiblingIndex.
          * @property childNodes
          * @type {RuntimeNode[]}
          * @readOnly

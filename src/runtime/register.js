@@ -8,6 +8,7 @@ var NodeWrapper = require('./wrappers/node');
 var SceneWrapper = require('./wrappers/scene');
 
 var runtimeSceneWrapper = null;
+var runtimeMixinOptions = null;
 
 /**
  * 通过注册 runtime 的 type 为某个解释器, 使得这份 type 具备序列化, Inspector 中展示的能力
@@ -29,10 +30,26 @@ function registerNodeType (nodeType, nodeWrapper) {
             Fire.error('The %s can only register once!', getClassName(SceneWrapper));
         }
         else {
-            runtimeSceneWrapper = SceneWrapper;
+            runtimeSceneWrapper = nodeWrapper;
         }
     }
+
+    // Create a subclass for cpp runtime
+    nodeType = Fire.Class({
+        extends: nodeType
+    });
+
     nodeType.prototype._FB_WrapperType = nodeWrapper;
+}
+
+/**
+ * 通过注册 mixin 的描述来让 engine-framework 懂得如何 mixin 一份 FireClass 到 runtime 的 nodeType 中。
+ * @method registerMixin
+ * @param {object} mixinOptions
+ * @param {function} mixinOptions.mixin - mixin method
+ */
+function registerMixin (mixinOptions) {
+    runtimeMixinOptions = mixinOptions;
 }
 
 /**
@@ -57,7 +74,7 @@ function getWrapperType (nodeOrNodeType) {
 
 /**
  * 返回跟 object 相互绑定的 NodeWrapper 实例，如果不存在将被创建。
- * @method getWrapper
+ * @method node
  * @param {object} object
  * @return {Fire.Runtime.NodeWrapper}
  */
@@ -75,8 +92,8 @@ function getWrapper (object) {
     return wrapper;
 }
 
-//// registerMixin ( runtimeType, mixinDescriptor ) 通过注册 mixin 的描述来让 engine-framework 懂得如何 mixin 一份 FireClass 到
-//// runtimeType 中.
+
+
 //// 值得注意的是, 不同的 runtime 中, 他们 runtimeType 的 mixin 的关键字将会有些许变动, 比如: 有些 runtime 的 node 不支持 event,
 //// 那么 listeners 关键字: 在这些 runtime 中将会失效, 我们可以 warning user.
 //Fire.registerMixin = require('./mixin');
@@ -88,5 +105,15 @@ module.exports = {
     getWrapper: getWrapper,
     getRegisteredSceneWrapper: function () {
         return runtimeSceneWrapper;
+    },
+
+    registerMixin: registerMixin,
+    /**
+     * get current registered mixin options
+     * @method getMixinOptions
+     * @return {object}
+     */
+    getMixinOptions: function () {
+        return runtimeMixinOptions;
     }
 };

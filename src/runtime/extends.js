@@ -1,3 +1,5 @@
+// 这里提供一些辅助 api
+
 /**
  * @module Fire.Runtime
  */
@@ -88,4 +90,27 @@ var SceneWrapper = require('./wrappers/scene');
  */
 SceneWrapper.getCurrentScene = function () {
     return Fire.node(Fire.SceneWrapperImpl.getCurrentSceneNode());
+};
+
+/**
+ * @module Fire
+ */
+
+function getChildNodes (node) {
+    var wrapper = Fire.node(node);
+    var childNodes = wrapper.childNodes;
+    return {
+        name: wrapper.name,
+        children: childNodes.length > 0 ? wrapper.childNodes.map(getChildNodes) : null
+    };
+}
+
+/**
+ * @method takeHierarchySnapshot
+ * @return {object[]}
+ */
+Fire.takeHierarchySnapshot = function () {
+    var root = register.getRegisteredSceneWrapper().getCurrentSceneNode();
+    var children = Fire.node(root).childNodes;
+    return children.map(getChildNodes);
 };
