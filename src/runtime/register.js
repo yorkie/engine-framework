@@ -10,13 +10,16 @@ var SceneWrapper = require('./wrappers/scene');
 var runtimeSceneWrapper = null;
 var runtimeMixinOptions = null;
 
+var menuToWrapper = {};
+
 /**
  * 通过注册 runtime 的 type 为某个解释器, 使得这份 type 具备序列化, Inspector 中展示的能力
  * @method registerNodeType
  * @param {function} nodeType
  * @param {NodeWrapper} nodeWrapper
+ * @param {string} [menuPath] - Optional, the menu path name. Eg. "Rendering/Camera"
  */
-function registerNodeType (nodeType, nodeWrapper) {
+function registerNodeType (nodeType, nodeWrapper, menuPath) {
     if (! Fire.JS.isChildClassOf(nodeWrapper, NodeWrapper)) {
         Fire.error('%s must be child class of %s!', getClassName(nodeWrapper), getClassName(NodeWrapper));
         return;
@@ -36,10 +39,18 @@ function registerNodeType (nodeType, nodeWrapper) {
 
     // Create a subclass for cpp runtime
     nodeType = Fire.Class({
-        extends: nodeType
+        extends: nodeType,
+        constructor: function () {
+            this._FB_wrapper = null;
+        }
     });
 
     nodeType.prototype._FB_WrapperType = nodeWrapper;
+
+    // TODO - 菜单应该在 package.json 里注册
+    if (menuPath) {
+        menuToWrapper[menuPath] = nodeWrapper;
+    }
 }
 
 /**
@@ -106,6 +117,12 @@ module.exports = {
     getRegisteredSceneWrapper: function () {
         return runtimeSceneWrapper;
     },
+    /**
+     * This dictionary stores all the registered WrapperTypes, and use MenuPath as key.
+     * @property menuToWrapper
+     * @type {object}
+     */
+    menuToWrapper: menuToWrapper,
 
     registerMixin: registerMixin,
     /**

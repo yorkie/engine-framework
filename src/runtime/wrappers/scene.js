@@ -8,6 +8,7 @@ var NodeWrapper = require('./node');
  * You should override:
  * - childNodes
  * - getCurrentSceneNode (static)
+ * - createEmpty (static)
  *
  * @class SceneWrapper
  * @extends NodeWrapper

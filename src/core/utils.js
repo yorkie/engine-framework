@@ -234,6 +234,21 @@ Fire.binarySearch = function(array, value) {
     return ~l;
 };
 
+/**
+ * Once the current event loop turn runs to completion, call the callback function.
+ * @method nextTick
+ * @param {function} callback
+ * @param {any} p1
+ * @param {any} p2
+ */
+Fire.nextTick = function (callback, p1, p2) {
+    if (callback) {
+        setTimeout(function () {
+            callback(p1, p2);
+        }, 1);
+    }
+};
+
 function isDomNode(obj) {
     return (
         typeof Node === "object" ? obj instanceof Node :

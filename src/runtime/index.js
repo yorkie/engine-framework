@@ -28,6 +28,7 @@ register.registerMixin(mixin);
  */
 
 Fire.getWrapperType = register.getWrapperType;
+Fire.menuToWrapper = register.menuToWrapper;
 Fire.node = register.getWrapper;
 Fire.getMixinOptions = register.getMixinOptions;
 

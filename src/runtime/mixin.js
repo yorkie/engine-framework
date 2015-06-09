@@ -8,7 +8,7 @@ var mixin = {
         cls.call(node);
 
         // mixin prototype
-        // TODO - check attributes also applied
+        // TODO - ensure attributes also applied
         var nodeProto = node.constructor.prototype;
         if (cls.$super === Fire.FObject) {
             Fire.JS.mixin(nodeProto, Fire.FObject.prototype, cls.prototype);

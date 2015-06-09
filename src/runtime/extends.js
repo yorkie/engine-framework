@@ -8,37 +8,38 @@
  */
 var NodeWrapper = require('./wrappers/node');
 
+var nodeProto = NodeWrapper.prototype;
+
+/**
+ * The parent of the wrapper.
+ * If this is the top most node in hierarchy, its parent must be type SceneWrapper.
+ * Changing the parent will keep the transform's local space position, rotation and scale the same but modify
+ * the world space position, scale and rotation.
+ * @property parent
+ * @type {NodeWrapper}
+ */
+Fire.JS.getset(nodeProto, 'parent',
+    function () {
+        var parent = this.parentNode;
+        return parent && Fire.node(parent);
+    },
+    function (value) {
+        this.parentNode = value.target;
+    }
+);
+
+/**
+ * Returns a new array which contains wrappers of child nodes.
+ * @property children
+ * @type {NodeWrapper[]}
+ */
+Fire.JS.get(nodeProto, 'children',
+    function () {
+        return this.childNodes.map(Fire.node);
+    }
+);
+
 Fire.JS.mixin(NodeWrapper.prototype, {
-
-    /**
-     * The parent of the wrapper.
-     * If this is the top most node in hierarchy, its parent must be type SceneWrapper.
-     * Changing the parent will keep the transform's local space position, rotation and scale the same but modify
-     * the world space position, scale and rotation.
-     * @property parent
-     * @type {NodeWrapper}
-     */
-    parent: {
-        get: function () {
-            var parent = this.parentNode;
-            return parent && Fire.node(parent);
-        },
-        set: function (value) {
-            this.parentNode = value.target;
-        }
-    },
-
-    /**
-     * Returns a new array which contains wrappers of child nodes.
-     * @property children
-     * @type {NodeWrapper[]}
-     */
-    children: {
-        get: function () {
-            return this.childNodes.map(Fire.node);
-        }
-    },
-
     /**
      * Is this wrapper a child of the parentWrapper?
      *

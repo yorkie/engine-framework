@@ -37,6 +37,7 @@ require('./utils');
 require('./enum');
 require('./fobject');
 require('./class-new');
+require('./value-types');
 //
 
 //require('./deserialize');
