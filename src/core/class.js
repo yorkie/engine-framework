@@ -193,7 +193,8 @@ var _metaClass = {
 
         Object.defineProperty(this.prototype, name, {
             get: getter,
-            configurable: true
+            configurable: true,
+            enumerable: true    // 必须 enumerable 否则挂脚本的 mixin 不能正常工作
         });
 
         if (FIRE_EDITOR) {
@@ -240,7 +241,8 @@ var _metaClass = {
         else {
             Object.defineProperty(this.prototype, name, {
                 set: setter,
-                configurable: true
+                configurable: true,
+                enumerable: true    // 必须 enumerable 否则挂脚本的 mixin 不能正常工作
             });
         }
 

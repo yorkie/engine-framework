@@ -20,7 +20,7 @@ var menuToWrapper = {};
  * @param {string} [menuPath] - Optional, the menu path name. Eg. "Rendering/Camera"
  */
 function registerNodeType (nodeType, nodeWrapper, menuPath) {
-    if (! Fire.JS.isChildClassOf(nodeWrapper, NodeWrapper)) {
+    if (! Fire.isChildClassOf(nodeWrapper, NodeWrapper)) {
         Fire.error('%s must be child class of %s!', getClassName(nodeWrapper), getClassName(NodeWrapper));
         return;
     }
@@ -28,8 +28,8 @@ function registerNodeType (nodeType, nodeWrapper, menuPath) {
         Fire.error('%s is already registered!', getClassName(nodeType));
         return;
     }
-    if (Fire.JS.isChildClassOf(nodeWrapper, SceneWrapper)) {
-        if (runtimeSceneWrapper) {
+    if (Fire.isChildClassOf(nodeWrapper, SceneWrapper)) {
+        if (!FIRE_TEST && runtimeSceneWrapper) {
             Fire.error('The %s can only register once!', getClassName(SceneWrapper));
         }
         else {
@@ -51,6 +51,8 @@ function registerNodeType (nodeType, nodeWrapper, menuPath) {
     if (menuPath) {
         menuToWrapper[menuPath] = nodeWrapper;
     }
+
+    return nodeType;
 }
 
 /**

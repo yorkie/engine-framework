@@ -15,7 +15,7 @@ function NYI (defVal, attrs, noSetter) {
             return defVal;
         }
     };
-    if (noSetter) {
+    if (!noSetter) {
         prop.set = function (value) {
             if (FIRE_EDITOR) {
                 Fire.error('Not yet implemented');

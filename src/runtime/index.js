@@ -11,7 +11,7 @@ var register = require('./register');
 
 Fire.JS.mixin(Runtime, {
     NodeWrapper: require('./wrappers/node'),
-    SceneWrapper: require('./wrappers/node'),
+    SceneWrapper: require('./wrappers/scene'),
     registerNodeType: register.registerNodeType,
     registerMixin: register.registerMixin
 });

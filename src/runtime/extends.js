@@ -1,5 +1,7 @@
 // 这里提供一些辅助 api
 
+var JS = Fire.JS;
+
 /**
  * @module Fire.Runtime
  */
@@ -18,7 +20,7 @@ var nodeProto = NodeWrapper.prototype;
  * @property parent
  * @type {NodeWrapper}
  */
-Fire.JS.getset(nodeProto, 'parent',
+JS.getset(nodeProto, 'parent',
     function () {
         var parent = this.parentNode;
         return parent && Fire.node(parent);
@@ -33,13 +35,20 @@ Fire.JS.getset(nodeProto, 'parent',
  * @property children
  * @type {NodeWrapper[]}
  */
-Fire.JS.get(nodeProto, 'children',
+JS.get(nodeProto, 'children',
     function () {
         return this.childNodes.map(Fire.node);
     }
 );
 
-Fire.JS.mixin(NodeWrapper.prototype, {
+JS.mixin(nodeProto, {
+    /**
+     * Is this node an instance of Scene?
+     *
+     * @property isScene
+     */
+    isScene: false,
+
     /**
      * Is this wrapper a child of the parentWrapper?
      *
@@ -92,6 +101,12 @@ var SceneWrapper = require('./wrappers/scene');
 SceneWrapper.getCurrentScene = function () {
     return Fire.node(Fire.SceneWrapperImpl.getCurrentSceneNode());
 };
+
+var sceneProto = SceneWrapper.prototype;
+
+JS.mixin(sceneProto, {
+    isScene: true
+});
 
 /**
  * @module Fire
