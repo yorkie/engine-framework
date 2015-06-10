@@ -1,5 +1,9 @@
 var JS = require('./js');
 require('./class');
+var Def = require('./definition');
+
+var Destroyed = Def.Destroyed;
+var ToDestroy = Def.ToDestroy;
 
 /**
  * The base class of most of all the objects in Fireball.

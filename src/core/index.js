@@ -21,12 +21,15 @@ if (!root.Fire) {
 
 require('./definition');
 
-// Always export FIRE_DEBUG, FIRE_DEV globally
+// Declare pre-process macros globally for uglify
 if (typeof FIRE_DEBUG === 'undefined') {
     FIRE_DEBUG = true;
 }
 if (typeof FIRE_DEV === 'undefined') {
     FIRE_DEV = FIRE_EDITOR || FIRE_DEBUG;
+}
+if (typeof FIRE_TEST === 'undefined') {
+    FIRE_TEST = false;
 }
 
 // javascript extends
@@ -40,7 +43,7 @@ require('./class-new');
 require('./value-types');
 //
 
-//require('./deserialize');
+require('./deserialize');
 //require('./engine');
 
 module.exports = Fire;

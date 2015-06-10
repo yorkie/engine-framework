@@ -114,3 +114,100 @@ Object.defineProperty(Fire, 'isRetina', {
  * @type {boolean}
  */
 Fire.isRetinaEnabled = (Fire.isIOS || Fire.isDarwin) && !FIRE_EDITOR && Fire.isRetina;
+
+// definitions for FObject._objFlags
+
+var Destroyed = 1 << 0;
+var ToDestroy = 1 << 1;
+var DontSave = 1 << 2;
+var EditorOnly  = 1 << 3;
+var Dirty = 1 << 4;
+var DontDestroy = 1 << 5;
+
+/**
+ * Bit mask that controls object states.
+ * @class _ObjectFlags
+ * @static
+ * @private
+ */
+var ObjectFlags = {
+
+    // public flags
+
+    /**
+     * The object will not be saved.
+     * @property DontSave
+     * @type number
+     */
+    DontSave: DontSave,
+
+    /**
+     * The object will not be saved when building a player.
+     * @property EditorOnly
+     * @type number
+     */
+    EditorOnly: EditorOnly,
+
+    Dirty: Dirty,
+
+    /**
+     * Dont destroy automatically when loading a new scene.
+     * @property DontDestroy
+     * @private
+     */
+    DontDestroy: DontDestroy,
+
+    // public flags for engine
+
+    Destroying: 1 << 9,
+
+    /**
+     * Hide in game and hierarchy.
+     * This flag is readonly, it can only be used as an argument of scene.addEntity() or Entity.createWithFlags()
+     * @property HideInGame
+     * @type number
+     */
+    HideInGame: 1 << 10,
+
+    // public flags for editor
+
+    /**
+     * This flag is readonly, it can only be used as an argument of scene.addEntity() or Entity.createWithFlags()
+     * @property HideInEditor
+     * @type number
+     */
+    HideInEditor: 1 << 11,
+
+    // flags for Component
+    IsOnEnableCalled: 1 << 12,
+    IsOnLoadCalled: 1 << 13,
+    IsOnStartCalled: 1 << 14,
+    IsEditorOnEnabledCalled: 1 << 15
+
+};
+
+/**
+ * Hide in game view, hierarchy, and scene view... etc.
+ * This flag is readonly, it can only be used as an argument of scene.addEntity() or Entity.createWithFlags()
+ * @property Hide
+ * @type number
+ */
+ObjectFlags.Hide = ObjectFlags.HideInGame | ObjectFlags.HideInEditor;
+
+Fire._ObjectFlags = ObjectFlags;
+
+var PersistentMask = ~(ToDestroy | Dirty | ObjectFlags.Destroying | DontDestroy |     // can not clone these flags
+                       ObjectFlags.IsOnEnableCalled |
+                       ObjectFlags.IsEditorOnEnabledCalled |
+                       ObjectFlags.IsOnLoadCalled |
+                       ObjectFlags.IsOnStartCalled);
+
+module.exports = {
+    Destroyed: Destroyed,
+    ToDestroy: ToDestroy,
+    DontSave: DontSave,
+    //EditorOnly: EditorOnly,
+    //Dirty: Dirty,
+    //DontDestroy: DontDestroy,
+    PersistentMask: PersistentMask
+};

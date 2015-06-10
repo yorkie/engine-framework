@@ -1,4 +1,8 @@
 ﻿var JS = require('./js');
+var Utils = require('./utils');
+var _isPlainEmptyObj_DEV = Utils.isPlainEmptyObj_DEV;
+var _cloneable_DEV = Utils.cloneable_DEV;
+
 require('./attribute');
 
 /**

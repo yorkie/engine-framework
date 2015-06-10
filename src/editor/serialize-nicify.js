@@ -68,8 +68,6 @@ var nicifySerialized = function (serialized) {
     }
 };
 
-Fire._nicifySerialized = nicifySerialized;
-
 var _iterative = function (obj, serialized, refInfos) {
     if (typeof obj !== 'object') {
         return;
@@ -124,3 +122,6 @@ var _traversalChild = function (element, key, obj, serialized, refInfos) {
         }
     }
 };
+
+Fire._nicifySerialized = nicifySerialized;
+module.exports = nicifySerialized;

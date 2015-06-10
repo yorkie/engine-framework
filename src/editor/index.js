@@ -15,4 +15,6 @@ if (!root.Editor) {
 //// extends engine
 //require('./extends/runtime');
 
+require('./serialize');
+
 module.exports = Editor;

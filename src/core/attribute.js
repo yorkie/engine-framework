@@ -1,4 +1,6 @@
-﻿/**
+﻿var JS = require('./js');
+
+/**
  * Tag the class with any meta attributes, then return all current attributes assigned to it.
  * This function holds only the attributes, not their implementations.
  *
@@ -229,7 +231,7 @@ Fire._ScriptUuid = {};
 
 /**
  * Makes a property only accept the supplied object type in Inspector.
- * If the type is derived from Fire.Asset, it will be serialized to uuid.
+ * If the type is derived from Fire.Asset, it will be serialized as uuid.
  *
  * @method ObjectType
  * @param {function} typeCtor - the special type you want

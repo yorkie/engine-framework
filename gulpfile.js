@@ -11,10 +11,10 @@ global.paths = {
         src: 'test/unit/**/*.js',
         runner: 'test/lib/runner.html',
         lib_dev: [
-            'bin/engine-framework.js',
+            'bin/engine-framework.test.dev.js',
         ],
         lib_min: [
-            'bin/engine-framework.min.js',
+            'bin/engine-framework.test.min.js',
         ]
     },
 

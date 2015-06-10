@@ -1,3 +1,9 @@
+var Def = require('../core/definition');
+var PersistentMask = Def.PersistentMask;
+var DontSave = Def.DontSave;
+var _isDomNode = require('../core/utils').isDomNode;
+var nicifySerialized = require('./serialize-nicify');
+
 function _getType (obj) {
     var p = obj.constructor.prototype;
     if (p.hasOwnProperty('__cid__')) {

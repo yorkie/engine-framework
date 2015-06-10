@@ -18,7 +18,7 @@ gulp.task('unit-runner', function() {
         ;
 });
 
-gulp.task('test', ['build', 'unit-runner'], function() {
+gulp.task('test', ['build-test', 'unit-runner'], function() {
     var qunit;
     try {
         qunit = require('gulp-qunit');

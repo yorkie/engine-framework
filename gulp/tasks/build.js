@@ -9,6 +9,50 @@ var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var handleErrors = require('../util/handleErrors');
 
+function getUglifyOptions (minify, global_defs) {
+    if (minify) {
+        return {
+            compress: {
+                global_defs: global_defs
+            }
+        };
+    }
+    else {
+        // http://lisperator.net/uglifyjs/compress
+        var compress = {
+            global_defs: global_defs,
+            sequences: false,  // join consecutive statements with the “comma operator”
+            properties: false,  // optimize property access: a["foo"] → a.foo
+            //dead_code: true,  // discard unreachable code
+            drop_debugger: false,  // discard “debugger” statements
+            unsafe: false, // some unsafe optimizations (see below)
+            //conditionals: true,  // optimize if-s and conditional expressions
+            comparisons: false,  // optimize comparisons
+            //evaluate: true,  // evaluate constant expressions
+            booleans: false,  // optimize boolean expressions
+            loops: false,  // optimize loops
+            unused: false,  // drop unused variables/functions
+            hoist_funs: false,  // hoist function declarations
+            hoist_vars: false, // hoist variable declarations
+            if_return: false,  // optimize if-s followed by return/continue
+            join_vars: false,  // join var declarations
+            cascade: false,  // try to cascade `right` into `left` in sequences
+            side_effects: false  // drop side-effect-free statements
+            //warnings: true  // warn about potentially dangerous optimizations/code
+        };
+        // http://lisperator.net/uglifyjs/codegen
+        return {
+            mangle: false,
+            preserveComments: 'all',
+            output: {
+                beautify: true,
+                bracketize: true
+            },
+            compress: compress
+        };
+    }
+}
+
 function rebundle(bundler) {
     var bundle = bundler.bundle()
         .on('error', handleErrors.handler)
@@ -16,22 +60,59 @@ function rebundle(bundler) {
         .pipe(source(paths.outBasename))
         .pipe(buffer());
 
-    var dev = sourcemaps.init({loadMaps: true});
-    dev.pipe(sourcemaps.write('./', {sourceRoot: './'}))
+    var dev = sourcemaps.init({loadMaps: true})
+        .pipe(uglify(getUglifyOptions(false, {
+            FIRE_EDITOR: false,
+            FIRE_DEBUG: true,
+            FIRE_DEV: true,
+            FIRE_TEST: false
+        })))
+        .pipe(sourcemaps.write('./', {sourceRoot: './', addComment: true}))
         .pipe(gulp.dest(paths.out));
 
-    var min = rename({ suffix: '.min' })
+    var min = rename({ suffix: '.min' });
     min.pipe(sourcemaps.init({loadMaps: true}))
-        .pipe(uglify({
-            compress: {
-                global_defs : {
-                    FIRE_EDITOR: false,
-                    FIRE_DEBUG: false,
-                    FIRE_DEV: false
-                }
-            }
-        }))
+        .pipe(uglify(getUglifyOptions(true, {
+            FIRE_EDITOR: false,
+            FIRE_DEBUG: false,
+            FIRE_DEV: false,
+            FIRE_TEST: false
+        })))
         .pipe(sourcemaps.write('./', {sourceRoot: './', addComment: false}))
+        .pipe(gulp.dest(paths.out));
+
+    return bundle.pipe(mirror(dev, min));
+}
+
+function rebundle_test(bundler) {
+    var bundle = bundler.bundle()
+        .on('error', handleErrors.handler)
+        .pipe(handleErrors())
+        .pipe(source(paths.outBasename))
+        .pipe(buffer());
+
+    // 理论上这里不需要 build dev 版本的测试用例代码，但是由于 qunit 的 try catch 机制，
+    // 使得浏览器无法使用 source map 定位源文件。
+    var dev = rename({ suffix: '.test.dev' })
+    dev.pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(uglify(getUglifyOptions(false, {
+            FIRE_EDITOR: true,
+            FIRE_DEBUG: true,
+            FIRE_DEV: true,
+            FIRE_TEST: true
+        })))
+        .pipe(sourcemaps.write('./', {sourceRoot: './', addComment: true}))
+        .pipe(gulp.dest(paths.out));
+
+    var min = rename({ suffix: '.test.min' })
+    min.pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(uglify(getUglifyOptions(true, {
+            FIRE_EDITOR: false,
+            FIRE_DEBUG: false,
+            FIRE_DEV: false,
+            FIRE_TEST: true
+        })))
+        .pipe(sourcemaps.write('./', {sourceRoot: './', addComment: true}))
         .pipe(gulp.dest(paths.out));
 
     return bundle.pipe(mirror(dev, min));
@@ -40,7 +121,7 @@ function rebundle(bundler) {
 function createBundler() {
     var options = {
         debug: true,
-        detectGlobals: false,    // dont insert process, global, __filename, and __dirname
+        detectGlobals: false,    // dont insert `process`, `global`, `__filename`, and `__dirname`
         bundleExternal: false    // dont bundle external modules
         //standalone: 'engine-framework',
         //basedir: tempScriptDir
@@ -52,4 +133,8 @@ function createBundler() {
 
 gulp.task('build', ['clean'], function () {
     return rebundle(createBundler());
+});
+
+gulp.task('build-test', function () {
+    return rebundle_test(createBundler());
 });
