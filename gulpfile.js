@@ -4,8 +4,8 @@ var requireDir = require('require-dir');
 // specify game project paths for tasks.
 global.paths = {
     src: './src',
-    out: './bin',
-    outBasename: 'engine-framework.js',
+    outDir: './bin',
+    outFile: 'engine-framework.js',
 
     test: {
         src: 'test/unit/**/*.js',

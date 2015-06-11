@@ -57,7 +57,7 @@ function rebundle(bundler) {
     var bundle = bundler.bundle()
         .on('error', handleErrors.handler)
         .pipe(handleErrors())
-        .pipe(source(paths.outBasename))
+        .pipe(source(paths.outFile))
         .pipe(buffer());
 
     var dev = sourcemaps.init({loadMaps: true})
@@ -68,7 +68,7 @@ function rebundle(bundler) {
             FIRE_TEST: false
         })))
         .pipe(sourcemaps.write('./', {sourceRoot: './', addComment: true}))
-        .pipe(gulp.dest(paths.out));
+        .pipe(gulp.dest(paths.outDir));
 
     var min = rename({ suffix: '.min' });
     min.pipe(sourcemaps.init({loadMaps: true}))
@@ -79,7 +79,7 @@ function rebundle(bundler) {
             FIRE_TEST: false
         })))
         .pipe(sourcemaps.write('./', {sourceRoot: './', addComment: false}))
-        .pipe(gulp.dest(paths.out));
+        .pipe(gulp.dest(paths.outDir));
 
     return bundle.pipe(mirror(dev, min));
 }
@@ -88,7 +88,7 @@ function rebundle_test(bundler) {
     var bundle = bundler.bundle()
         .on('error', handleErrors.handler)
         .pipe(handleErrors())
-        .pipe(source(paths.outBasename))
+        .pipe(source(paths.outFile))
         .pipe(buffer());
 
     // 理论上这里不需要 build dev 版本的测试用例代码，但是由于 qunit 的 try catch 机制，
@@ -102,7 +102,7 @@ function rebundle_test(bundler) {
             FIRE_TEST: true
         })))
         .pipe(sourcemaps.write('./', {sourceRoot: './', addComment: true}))
-        .pipe(gulp.dest(paths.out));
+        .pipe(gulp.dest(paths.outDir));
 
     var min = rename({ suffix: '.test.min' })
     min.pipe(sourcemaps.init({loadMaps: true}))
@@ -113,7 +113,7 @@ function rebundle_test(bundler) {
             FIRE_TEST: true
         })))
         .pipe(sourcemaps.write('./', {sourceRoot: './', addComment: true}))
-        .pipe(gulp.dest(paths.out));
+        .pipe(gulp.dest(paths.outDir));
 
     return bundle.pipe(mirror(dev, min));
 }

@@ -55,8 +55,8 @@ var ERR_NaN = 'The %s must not be NaN';
  * - getWorldOrientedBounds
  * 
  * You may want to override
- * - getSiblingIndex
  * - setSiblingIndex
+ * - getSiblingIndex
  * - x
  * - y
  * - worldX
@@ -313,36 +313,36 @@ var NodeWrapper = Fire.Class({
         //},
     },
 
-    /**
-     * This method is called when the scene is saving, allowing you to return JSON to represent the state of your node.
-     * When the scene is later loaded, the data you returned is passed to the wrapper's deserialize method so you can
-     * restore the node.
-     * @method serialize
-     * @return {object} - a JSON represents the state of the target node
-     */
-    serialize: function (data) {
-        if (FIRE_EDITOR) {
-            Fire.error('Not yet implemented');
-        }
-        return null;
-    },
-
-    /**
-     * @callback deserializeCallback
-     * @param {string} error - null or the error info
-     * @param {RuntimeNode} node - the loaded node or null
-     */
-
-    /**
-     * Creates a new node using the state data from the last time the scene was serialized if the wrapper implements the serialize() method.
-     * @method deserializeAsync
-     * @param {object} data - the JSON data returned from serialize() method
-     * @param {deserializeCallback} callback - Should not being called in current tick.
-     *                                         If there's no async operation, use Fire.nextTick to simulate.
-     */
-    deserializeAsync: function (data, callback) {
-        Fire.nextTick(callback, 'Not yet implemented', null);
-    },
+    ///**
+    // * This method is called when the scene is saving, allowing you to return JSON to represent the state of your node.
+    // * When the scene is later loaded, the data you returned is passed to the wrapper's deserialize method so you can
+    // * restore the node.
+    // * @method serialize
+    // * @return {object} - a JSON represents the state of the target node
+    // */
+    //serialize: function (data) {
+    //    if (FIRE_EDITOR) {
+    //        Fire.error('Not yet implemented');
+    //    }
+    //    return null;
+    //},
+    //
+    ///**
+    // * @callback deserializeCallback
+    // * @param {string} error - null or the error info
+    // * @param {RuntimeNode} node - the loaded node or null
+    // */
+    //
+    ///**
+    // * Creates a new node using the state data from the last time the scene was serialized if the wrapper implements the serialize() method.
+    // * @method deserializeAsync
+    // * @param {object} data - the JSON data returned from serialize() method
+    // * @param {deserializeCallback} callback - Should not being called in current tick.
+    // *                                         If there's no async operation, use Fire.nextTick to simulate.
+    // */
+    //deserializeAsync: function (data, callback) {
+    //    Fire.nextTick(callback, 'Not yet implemented', null);
+    //},
 
     ///**
     // * Creates a new node using the state data from the last time the scene was serialized if the wrapper implements the serialize() method.
@@ -372,9 +372,10 @@ var NodeWrapper = Fire.Class({
 
     /**
      * Set the sibling index of this node.
+     * (值越小越先渲染，-1 代表最后一个)
      *
      * @method setSiblingIndex
-     * @param {number} index
+     * @param {number} index - new zero-based index of the node, -1 will move to the end of children.
      */
     setSiblingIndex: function (index) {
         var siblings = Fire.node(this.parentNode).childNodes;
