@@ -88,16 +88,16 @@ var JS = {
      * @return {function} the result class
      */
     extend: function (cls, base) {
-// @ifdef DEV
-        if ( !base ) {
-            Fire.error('The base class to extend from must be non-nil');
-            return;
+        if (FIRE_DEV) {
+            if (!base) {
+                Fire.error('The base class to extend from must be non-nil');
+                return;
+            }
+            if (!cls) {
+                Fire.error('The class to extend must be non-nil');
+                return;
+            }
         }
-        if ( !cls ) {
-            Fire.error('The class to extend must be non-nil');
-            return;
-        }
-// @endif
         for (var p in base) if (base.hasOwnProperty(p)) cls[p] = base[p];
         function __() { this.constructor = cls; }
         __.prototype = base.prototype;
@@ -183,13 +183,11 @@ JS.getClassName = function (obj) {
                 var registered = table[id];
                 if (registered && registered !== constructor) {
                     var error = 'A Class already exists with the same ' + key + ' : "' + id + '".';
-                    // @ifdef EDITOR
-                    if (!FIRE_EDITOR) {
+                    if (FIRE_TEST) {
                         error += ' (This may be caused by error of unit test.) \
 If you dont need serialization, you can set class id to "". You can also call \
 Fire.JS.unregisterClass to remove the id of unused class';
                     }
-                    // @endif
                     Fire.error(error);
                 }
                 else {
@@ -261,14 +259,12 @@ Fire.JS.unregisterClass to remove the id of unused class';
      */
     JS._getClassById = function (classId) {
         var cls = _idToClass[classId];
-// @ifdef EDITOR
-        if (!cls) {
+        if (FIRE_EDITOR && !cls) {
             if (classId.length === 32) {
                 // 尝试解析旧的 uuid 压缩格式
                 cls = _idToClass[Editor.compressUuid(classId)];
             }
         }
-// @endif
         return cls;
     };
 
@@ -301,38 +297,39 @@ Fire.JS.unregisterClass to remove the id of unused class';
         return '';
     };
 
-    // @ifdef EDITOR
-    Object.defineProperty(JS, '_registeredClassIds', {
-        get: function () {
-            var dump = {};
-            for (var id in _idToClass) {
-                dump[id] = _idToClass[id];
+    if (FIRE_EDITOR) {
+        Object.defineProperty(JS, '_registeredClassIds', {
+            get: function () {
+                var dump = {};
+                for (var id in _idToClass) {
+                    dump[id] = _idToClass[id];
+                }
+                return dump;
+            },
+            set: function (value) {
+                JS.clear(_idToClass);
+                for (var id in value) {
+                    _idToClass[id] = value[id];
+                }
             }
-            return dump;
-        },
-        set: function (value) {
-            JS.clear(_idToClass);
-            for (var id in value) {
-                _idToClass[id] = value[id];
+        });
+        Object.defineProperty(JS, '_registeredClassNames', {
+            get: function () {
+                var dump = {};
+                for (var id in _nameToClass) {
+                    dump[id] = _nameToClass[id];
+                }
+                return dump;
+            },
+            set: function (value) {
+                JS.clear(_nameToClass);
+                for (var id in value) {
+                    _nameToClass[id] = value[id];
+                }
             }
-        }
-    });
-    Object.defineProperty(JS, '_registeredClassNames', {
-        get: function () {
-            var dump = {};
-            for (var id in _nameToClass) {
-                dump[id] = _nameToClass[id];
-            }
-            return dump;
-        },
-        set: function (value) {
-            JS.clear(_nameToClass);
-            for (var id in value) {
-                _nameToClass[id] = value[id];
-            }
-        }
-    });
-    // @endif
+        });
+    }
+
 })();
 
 /**
@@ -393,16 +390,16 @@ JS.set = function (obj, prop, setter, enumerable) {
 JS.obsolete = function (obj, obsoleted, newName, writable) {
     var oldName = obsoleted.split('.').slice(-1);
     JS.get(obj, oldName, function () {
-        // @ifdef DEV
-        Fire.warn('"%s" is deprecated, use "%s" instead please.', obsoleted, newName);
-        // @endif
+        if (FIRE_DEV) {
+            Fire.warn('"%s" is deprecated, use "%s" instead please.', obsoleted, newName);
+        }
         return obj[newName];
     });
     if (writable) {
         JS.set(obj, oldName, function (value) {
-            // @ifdef DEV
-            Fire.warn('"%s" is deprecated, use "%s" instead please.', obsoleted, newName);
-            // @endif
+            if (FIRE_DEV) {
+                Fire.warn('"%s" is deprecated, use "%s" instead please.', obsoleted, newName);
+            }
             obj[newName] = value;
         });
     }

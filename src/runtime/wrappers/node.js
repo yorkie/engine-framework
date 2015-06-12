@@ -5,22 +5,17 @@
 var JS = Fire.JS;
 var Vec2 = Fire.Vec2;
 var Rect = Fire.Rect;
+var NYI = require('./utils').NYI;
 
-function NYI (defVal, attrs, noSetter) {
+function NYI_Accessor (defVal, attrs, noSetter) {
     var prop = {
         get: function () {
-            if (FIRE_EDITOR) {
-                Fire.error('Not yet implemented');
-            }
+            NYI();
             return defVal;
         }
     };
     if (!noSetter) {
-        prop.set = function (value) {
-            if (FIRE_EDITOR) {
-                Fire.error('Not yet implemented');
-            }
-        };
+        prop.set = NYI;
     }
     if (attrs) {
         return JS.mixin(prop, attrs);
@@ -107,7 +102,7 @@ var NodeWrapper = Fire.Class({
          * @property parentNode
          * @type {RuntimeNode}
          */
-        parentNode: NYI(null, INVISIBLE),
+        parentNode: NYI_Accessor(null, INVISIBLE),
 
         /**
          * Returns the array of children. If no child, this method should return an empty array.
@@ -116,7 +111,7 @@ var NodeWrapper = Fire.Class({
          * @type {RuntimeNode[]}
          * @readOnly
          */
-        childNodes: NYI([], INVISIBLE, true),
+        childNodes: NYI_Accessor([], INVISIBLE, true),
 
         // TRANSFORM
 
@@ -125,7 +120,7 @@ var NodeWrapper = Fire.Class({
          * @property position
          * @type {Fire.Vec2}
          */
-        position: NYI(Vec2.zero),
+        position: NYI_Accessor(Vec2.zero),
 
         /**
          * The local x position in its parent's coordinate system
@@ -176,7 +171,7 @@ var NodeWrapper = Fire.Class({
          * @property worldPosition
          * @type {Fire.Vec2}
          */
-        worldPosition: NYI(Vec2.zero, INVISIBLE),
+        worldPosition: NYI_Accessor(Vec2.zero, INVISIBLE),
 
         /**
          * The x position of the transform in world space
@@ -227,7 +222,7 @@ var NodeWrapper = Fire.Class({
          * @property rotation
          * @type {number}
          */
-        rotation: NYI(0, {
+        rotation: NYI_Accessor(0, {
             tooltip: "The counterclockwise degrees of rotation relative to the parent"
         }),
 
@@ -236,14 +231,14 @@ var NodeWrapper = Fire.Class({
          * @property worldRotation
          * @type {number}
          */
-        worldRotation: NYI(0, INVISIBLE),
+        worldRotation: NYI_Accessor(0, INVISIBLE),
 
         /**
          * The local scale factor relative to the parent
          * @property scale
          * @type {Fire.Vec2}
          */
-        scale: NYI(Vec2.one),
+        scale: NYI_Accessor(Vec2.one),
 
         /**
          * The local x scale factor relative to the parent
@@ -295,7 +290,7 @@ var NodeWrapper = Fire.Class({
          * @type {Fire.Vec2}
          * @readOnly
          */
-        worldScale: NYI(Vec2.one, INVISIBLE, true)
+        worldScale: NYI_Accessor(Vec2.one, INVISIBLE, true)
     },
 
     statics: {

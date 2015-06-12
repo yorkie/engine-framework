@@ -44,6 +44,9 @@ require('./value-types');
 //
 
 require('./deserialize');
-//require('./engine');
+require('./event/event-target');
+require('./playable');
+require('./ticker');
+require('./time');
 
 module.exports = Fire;

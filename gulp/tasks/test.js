@@ -13,7 +13,7 @@ gulp.task('unit-runner', function() {
             'Engine Framework Test Suite',
             paths.test.lib_min,
             paths.test.lib_dev,
-            paths.src))
+            []))
         .pipe(gulp.dest(dest))
         ;
 });

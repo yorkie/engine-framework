@@ -13,7 +13,11 @@ Fire.JS.mixin(Runtime, {
     NodeWrapper: require('./wrappers/node'),
     SceneWrapper: require('./wrappers/scene'),
     registerNodeType: register.registerNodeType,
-    registerMixin: register.registerMixin
+
+    registerMixin: register.registerMixin,
+
+    EngineWrapper: require('./wrappers/engine'),
+    registerEngine: register.registerEngine
 });
 
 // add utility methods

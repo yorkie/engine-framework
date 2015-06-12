@@ -1,3 +1,5 @@
+require('./polyfill');
+
 var Fire = require('./core');
 
 Fire.Runtime = require('./runtime');

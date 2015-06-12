@@ -37,9 +37,9 @@ test('test', function () {
 
     // getter / setter
 
-    strictEqual(instance.weight10, instance.weight * 10, 'define getter');
+    strictEqual(instance.weight10, instance.weight * 10, 'testing getter');
     instance.weight10 = 40;
-    strictEqual(instance.weight10, 40, 'define setter');
+    strictEqual(instance.weight10, 40, 'testing setter');
 
     strictEqual(instance.weight5x, instance.weight * 5, 'define getter by getset');
     instance.weight5x = 30;

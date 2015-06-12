@@ -3,6 +3,7 @@
  */
 
 var NodeWrapper = require('./node');
+var NYI = require('./utils').NYI;
 
 /**
  * You should override:
@@ -40,9 +41,7 @@ var SceneWrapper = Fire.Class({
          * @static
          */
         getCurrentSceneNode: function () {
-            if (FIRE_EDITOR) {
-                Fire.error('Not yet implemented');
-            }
+            NYI();
             return null;
         }
     },

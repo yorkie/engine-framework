@@ -16,8 +16,8 @@ var Color = Fire.Color;
 //var FontInfo = Fire.FontInfo;
 
 //var TestOnly = Fire.__TESTONLY__;
-//var Ticker = TestOnly.Ticker;
-//var Time = Fire.Time;
+var Ticker = Fire._Ticker;
+var Time = Fire.Time;
 //var Entity = Fire.Entity;
 //var Engine = Fire.Engine;
 //var Camera = Fire.Camera;
@@ -270,8 +270,58 @@ if (!Fire.Texture) {
 
     var canvasCtxToGetPixel = null;
 }
-//// output test states
-//
+
+
+var EngineWrapper = Fire.Class({
+    extends: Fire.Runtime.EngineWrapper,
+    initRuntime: function () {},
+    playRuntime: function () {},
+    stopRuntime: function () {},
+    tick: function () {}
+});
+Fire.Runtime.registerEngine(new EngineWrapper(true));
+
+var Engine = Fire.Engine;
+Engine._reset = function (w, h) {
+    if (!Engine.isInitialized) {
+        Engine.init({
+            width: w,
+            height: h
+        });
+    }
+    //else {
+    //    Screen.size = new V2(w, h);
+    //}
+    //Engine._launchScene(new Fire._Scene());
+
+    Engine.stop();
+};
+
+var SetupEngine = {
+    setup: function () {
+        Engine.tick = function () {};
+        Engine._reset(256, 512);
+        //// check error
+        //Engine._renderContext.checkMatchCurrentScene(true);
+    },
+    teardown: function () {
+        Engine.tick = function () {};
+        //Engine._launchScene(new Fire._Scene());
+        Engine.stop();
+        //// check error
+        //Engine._renderContext.checkMatchCurrentScene(true);
+    }
+};
+
+// force stop to ensure start will only called once
+function asyncEnd () {
+    Engine.stop();
+    Engine.tick = function () {};
+    start();
+}
+
+// output test states
+
 //QUnit.testStart = function(test) {
 //    console.log('#' + (test.module || '') + ": " + test.name + ": started.");
 //};

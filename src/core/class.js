@@ -191,11 +191,18 @@ var _metaClass = {
             _appendProp.call(this, name/*, true*/);
         }
 
-        Object.defineProperty(this.prototype, name, {
-            get: getter,
-            configurable: true,
-            enumerable: true    // 必须 enumerable 否则挂脚本的 mixin 不能正常工作
-        });
+        if (Object.getOwnPropertyDescriptor(this.prototype, name)) {
+            Object.defineProperty(this.prototype, name, {
+                get: getter
+            });
+        }
+        else {
+            Object.defineProperty(this.prototype, name, {
+                get: getter,
+                configurable: true,
+                enumerable: true
+            });
+        }
 
         if (FIRE_EDITOR) {
             Fire.attr(this, name, {hasGetter: true}); // 方便 editor 做判断
@@ -234,16 +241,24 @@ var _metaClass = {
                     }
                     setter.call(this, value);
                 },
-                configurable: true
+                configurable: true,
+                enumerable: true
             });
             Fire.attr(this, name, { hasSetter: true }); // 方便 editor 做判断
         }
         else {
-            Object.defineProperty(this.prototype, name, {
-                set: setter,
-                configurable: true,
-                enumerable: true    // 必须 enumerable 否则挂脚本的 mixin 不能正常工作
-            });
+            if (Object.getOwnPropertyDescriptor(this.prototype, name)) {
+                Object.defineProperty(this.prototype, name, {
+                    set: setter
+                });
+            }
+            else {
+                Object.defineProperty(this.prototype, name, {
+                    set: setter,
+                    configurable: true,
+                    enumerable: true
+                });
+            }
         }
 
         return this;

@@ -6,6 +6,7 @@ var getClassName = Fire.JS.getClassName;
 
 var NodeWrapper = require('./wrappers/node');
 var SceneWrapper = require('./wrappers/scene');
+var EngineWrapper = require('./wrappers/engine');
 
 var runtimeSceneWrapper = null;
 var runtimeMixinOptions = null;
@@ -63,6 +64,25 @@ function registerNodeType (nodeType, nodeWrapper, menuPath) {
  */
 function registerMixin (mixinOptions) {
     runtimeMixinOptions = mixinOptions;
+}
+
+/**
+ * 注册一份引擎实例，注册后的引擎可以通过 Fire.Engine 进行访问。
+ * @method registerEngine
+ * @param {EngineWrapper} engineInstance
+ */
+function registerEngine (engineInstance) {
+    if (FIRE_EDITOR) {
+        if (!(engineInstance instanceof EngineWrapper)) {
+            Fire.error('The engine to register must be child class of %s', getClassName(EngineWrapper));
+            return;
+        }
+        if (Fire.Engine) {
+            Fire.error('The engine is already registered!');
+            return;
+        }
+    }
+    Fire.Engine = engineInstance;
 }
 
 /**
@@ -134,5 +154,7 @@ module.exports = {
      */
     getMixinOptions: function () {
         return runtimeMixinOptions;
-    }
+    },
+
+    registerEngine: registerEngine
 };

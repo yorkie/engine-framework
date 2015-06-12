@@ -1,4 +1,5 @@
 var JS = require('./js');
+var EventTarget = require('./event/event-target');
 
 var Playable = (function () {
     /**
@@ -146,5 +147,7 @@ var Playable = (function () {
 
     return Playable;
 })();
+
+Fire.Playable = Playable;
 
 module.exports = Playable;

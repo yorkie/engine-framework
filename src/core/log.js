@@ -42,15 +42,8 @@ Fire.warn = function () {
  * @param {any|string} obj - A JavaScript string containing zero or more substitution strings.
  * @param {any} ...subst - JavaScript objects with which to replace substitution strings within msg. This gives you additional control over the format of the output.
  */
-if (console.error.bind) {
-    // error会dump call stack，用bind可以避免dump Fire.error自己。
-    Fire.error = console.error.bind(console);
-}
-else {
-    Fire.error = function () {
-        console.error.apply(console, arguments);
-    };
-}
+// error会dump call stack，用bind可以避免dump Fire.error自己。
+Fire.error = console.error.bind(console);
 
 /**
  * show error stacks in unit tests
