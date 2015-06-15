@@ -256,9 +256,11 @@ function isDomNode(obj) {
     );
 }
 
-module.exports = {
-    isDomNode: isDomNode
-};
+if (Fire.isWeb) {
+    module.exports = {
+        isDomNode: isDomNode
+    };
+}
 
 if (FIRE_DEV) {
     Fire.JS.mixin(module.exports, {

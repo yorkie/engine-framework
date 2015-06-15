@@ -33,20 +33,29 @@ if (typeof FIRE_TEST === 'undefined') {
 }
 
 // javascript extends
+
 require('./js');
-require('./log');
+if (!FIRE_EDITOR) {
+    // 编辑器已经定义了 Fire.log
+    require('./log');
+}
 require('./math');
 require('./utils');
 require('./enum');
 require('./fobject');
 require('./class-new');
 require('./value-types');
-//
+
+// engine toolkit
 
 require('./deserialize');
 require('./event/event-target');
 require('./playable');
-require('./ticker');
-require('./time');
+
+if (Fire.isWeb) {
+    // codes only available in page level
+    require('./ticker');
+    require('./time');
+}
 
 module.exports = Fire;
