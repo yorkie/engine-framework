@@ -1,3 +1,6 @@
+var JS = require('./js');
+
+var ENABLE_TARGET = FIRE_EDITOR || FIRE_TEST;
 
 var _Deserializer = (function () {
     ///**
@@ -6,9 +9,9 @@ var _Deserializer = (function () {
     function _Deserializer(jsonObj, result, target, isEditor, classFinder) {
         this._editor = isEditor;
         this._classFinder = classFinder;
-        // @ifndef PLAYER
-        this._target = target;
-        // @endif
+        if (ENABLE_TARGET) {
+            this._target = target;
+        }
         this._idList = [];
         this._idObjList = [];
         this._idPropList = [];
@@ -22,9 +25,9 @@ var _Deserializer = (function () {
             for (var i = 0; i < refCount; i++) {
                 if (jsonArray[i]) {
                     var mainTarget;
-                    // @ifndef PLAYER
-                    mainTarget = (i === 0 && target);
-                    // @endif
+                    if (ENABLE_TARGET) {
+                        mainTarget = (i === 0 && target);
+                    }
                     this.deserializedList[i] = _deserializeObject(this, jsonArray[i], mainTarget);
                 }
             }
@@ -68,26 +71,26 @@ var _Deserializer = (function () {
         if (typeof id === 'undefined') {
             var uuid = jsonObj.__uuid__;
             if (uuid) {
-                // @ifndef PLAYER
-                // 这里不做任何操作，因为有可能调用者需要知道依赖哪些 asset。
-                // 调用者使用 uuidList 时，可以判断 obj[propName] 是否为空，为空则表示待进一步加载，
-                // 不为空则只是表明依赖关系。
-                //if (target && target[propName] && target[propName]._uuid === uuid) {
-                //    console.assert(obj[propName] === target[propName]);
-                //    return;
-                //}
-                // @endif
+                //if (ENABLE_TARGET) {
+                    //这里不做任何操作，因为有可能调用者需要知道依赖哪些 asset。
+                    //调用者使用 uuidList 时，可以判断 obj[propName] 是否为空，为空则表示待进一步加载，
+                    //不为空则只是表明依赖关系。
+                //    if (target && target[propName] && target[propName]._uuid === uuid) {
+                //        console.assert(obj[propName] === target[propName]);
+                //        return;
+                //    }
+                // }
                 self.result.uuidList.push(uuid);
                 self.result.uuidObjList.push(obj);
                 self.result.uuidPropList.push(propName);
             }
             else {
-                // @ifdef PLAYER
-                obj[propName] = _deserializeObject(self, jsonObj);
-                // @endif
-                // @ifndef PLAYER
-                obj[propName] = _deserializeObject(self, jsonObj, target && target[propName]);
-                // @endif
+                if (ENABLE_TARGET) {
+                    obj[propName] = _deserializeObject(self, jsonObj, target && target[propName]);
+                }
+                else {
+                    obj[propName] = _deserializeObject(self, jsonObj);
+                }
             }
         }
         else {
@@ -115,20 +118,20 @@ var _Deserializer = (function () {
                 else {
                     if (prop) {
                         if ( !prop.__uuid__ && typeof prop.__id__ === 'undefined' ) {
-                            // @ifdef PLAYER
-                            instance[propName] = _deserializeObject(self, prop);
-                            // @endif
-                            // @ifndef PLAYER
-                            instance[propName] = _deserializeObject(self, prop, self._target && instance[propName]);
-                            // @endif
+                            if (ENABLE_TARGET) {
+                                instance[propName] = _deserializeObject(self, prop, self._target && instance[propName]);
+                            }
+                            else {
+                                instance[propName] = _deserializeObject(self, prop);
+                            }
                         }
                         else {
-                            // @ifdef PLAYER
-                            _deserializeObjField(self, instance, prop, propName);
-                            // @endif
-                            // @ifndef PLAYER
-                            _deserializeObjField(self, instance, prop, propName, self._target && instance);
-                            // @endif
+                            if (ENABLE_TARGET) {
+                                _deserializeObjField(self, instance, prop, propName, self._target && instance);
+                            }
+                            else {
+                                _deserializeObjField(self, instance, prop, propName);
+                            }
                         }
                     }
                     else {
@@ -153,20 +156,20 @@ var _Deserializer = (function () {
                 else {
                     if (prop) {
                         if ( !prop.__uuid__ && typeof prop.__id__ === 'undefined' ) {
-                            // @ifdef PLAYER
-                            instance[propName] = _deserializeObject(self, prop);
-                            // @endif
-                            // @ifndef PLAYER
-                            instance[propName] = _deserializeObject(self, prop, self._target && instance[propName]);
-                            // @endif
+                            if (ENABLE_TARGET) {
+                                instance[propName] = _deserializeObject(self, prop, self._target && instance[propName]);
+                            }
+                            else {
+                                instance[propName] = _deserializeObject(self, prop);
+                            }
                         }
                         else {
-                            // @ifdef PLAYER
-                            _deserializeObjField(self, instance, prop, propName);
-                            // @endif
-                            // @ifndef PLAYER
-                            _deserializeObjField(self, instance, prop, propName, self._target && instance);
-                            // @endif
+                            if (ENABLE_TARGET) {
+                                _deserializeObjField(self, instance, prop, propName, self._target && instance);
+                            }
+                            else {
+                                _deserializeObjField(self, instance, prop, propName);
+                            }
                         }
                     }
                     else {
@@ -203,20 +206,20 @@ var _Deserializer = (function () {
                     else {
                         if (prop) {
                             if (!prop.__uuid__ && typeof prop.__id__ === 'undefined') {
-                                // @ifdef PLAYER
-                                obj[propName] = _deserializeObject(self, prop);
-                                // @endif
-                                // @ifndef PLAYER
-                                obj[propName] = _deserializeObject(self, prop, target && target[propName]);
-                                // @endif
+                                if (ENABLE_TARGET) {
+                                    obj[propName] = _deserializeObject(self, prop, target && target[propName]);
+                                }
+                                else {
+                                    obj[propName] = _deserializeObject(self, prop);
+                                }
                             }
                             else {
-                                // @ifdef PLAYER
-                                _deserializeObjField(self, obj, prop, propName);
-                                // @endif
-                                // @ifndef PLAYER
-                                _deserializeObjField(self, obj, prop, propName, target && obj);
-                                // @endif
+                                if (ENABLE_TARGET) {
+                                    _deserializeObjField(self, obj, prop, propName, target && obj);
+                                }
+                                else {
+                                    _deserializeObjField(self, obj, prop, propName);
+                                }
                             }
                         }
                         else {
@@ -259,23 +262,19 @@ var _Deserializer = (function () {
                 Fire.error('[Fire.deserialize] unknown type: ' + serialized.__type__);
                 return null;
             }
-            // @ifdef PLAYER
-            // instantiate a new object
-            obj = new klass();
-            // @endif
-            // @ifndef PLAYER
-            if (target) {
+
+            if (ENABLE_TARGET && target) {
                 // use target
                 if ( !(target instanceof klass) ) {
                     Fire.warn('Type of target to deserialize not matched with data: target is %s, data is %s',
-                               JS.getClassName(target), klass);
+                        JS.getClassName(target), klass);
                 }
                 obj = target;
             }
             else {
+                // instantiate a new object
                 obj = new klass();
             }
-            // @endif
 
             if ( Fire._isFireClass(klass) ) {
                 if (! obj._deserialize) {
@@ -293,49 +292,39 @@ var _Deserializer = (function () {
 
             // embedded primitive javascript object
 
-            // @ifdef PLAYER
-            obj = {};
-            // @endif
-            // @ifndef PLAYER
-            obj = target || {};
-            // @endif
-
+            obj = (ENABLE_TARGET && target) || {};
             _deserializePrimitiveObject(self, obj, serialized);
         }
         else {
 
             // Array
 
-            // @ifdef PLAYER
-            obj = new Array(serialized.length);
-            // @endif
-            // @ifndef PLAYER
-            if (target) {
+            if (ENABLE_TARGET && target) {
                 target.length = serialized.length;
                 obj = target;
             }
             else {
                 obj = new Array(serialized.length);
             }
-            // @endif
+
             for (var i = 0; i < serialized.length; i++) {
                 prop = serialized[i];
                 if (typeof prop === 'object' && prop) {
                     if (!prop.__uuid__ && typeof prop.__id__ === 'undefined') {
-                        // @ifdef PLAYER
-                        obj[i] = _deserializeObject(self, prop);
-                        // @endif
-                        // @ifndef PLAYER
-                        obj[i] = _deserializeObject(self, prop, target && target[i]);
-                        // @endif
+                        if (ENABLE_TARGET) {
+                            obj[i] = _deserializeObject(self, prop, target && target[i]);
+                        }
+                        else {
+                            obj[i] = _deserializeObject(self, prop);
+                        }
                     }
                     else {
-                        // @ifdef PLAYER
-                        _deserializeObjField(self, obj, prop, '' + i);
-                        // @endif
-                        // @ifndef PLAYER
-                        _deserializeObjField(self, obj, prop, '' + i, target && target[i]);
-                        // @endif
+                        if (ENABLE_TARGET) {
+                            _deserializeObjField(self, obj, prop, '' + i, target && target[i]);
+                        }
+                        else {
+                            _deserializeObjField(self, obj, prop, '' + i);
+                        }
                     }
                 }
                 else {
@@ -366,16 +355,11 @@ Fire.deserialize = function (data, result, options) {
     var isEditor = (options && 'isEditor' in options) ? options.isEditor : FIRE_EDITOR;
     var classFinder = (options && options.classFinder) || JS._getClassById;
     var createAssetRefs = (options && options.createAssetRefs) || Fire.isEditorCore;
-    var target;
-    // @ifndef PLAYER
-    target = (options && options.target);
-    // @endif
+    var target = ENABLE_TARGET && (options && options.target);
 
-    // @ifndef PLAYER
-    if (Fire.isNode && Buffer.isBuffer(data)) {
+    if ((FIRE_EDITOR || FIRE_TEST) && Fire.isNode && Buffer.isBuffer(data)) {
         data = data.toString();
     }
-    // @endif
 
     if (typeof data === 'string') {
         data = JSON.parse(data);

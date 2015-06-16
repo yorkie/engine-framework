@@ -22,8 +22,8 @@ var Time = Fire.Time;
 //var Engine = Fire.Engine;
 //var Camera = Fire.Camera;
 //var Component = Fire.Component;
-//var LoadManager = Fire.LoadManager;
-//var AssetLibrary = Fire.AssetLibrary;
+var LoadManager = Fire.LoadManager;
+var AssetLibrary = Fire.AssetLibrary;
 //var SpriteRenderer = Fire.SpriteRenderer;
 //var Screen = Fire.Screen;
 

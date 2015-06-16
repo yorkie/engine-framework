@@ -16,10 +16,8 @@
   "devDependencies": {
     "browserify": "10.2.1",
     "del": "1.1.1",
-    "event-stream": "",
     "gulp": "0.0.9",
     "gulp-cached": "^1.0.1",
-    "gulp-concat": "2.5.2",
     "gulp-fb": "",
     "gulp-header": "",
     "gulp-jshint": "1.9.2",

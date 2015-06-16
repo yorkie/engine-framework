@@ -1,4 +1,11 @@
-﻿/**
+﻿var JS = require('./js');
+var Asset = Fire.Asset;
+var callInNextTick = require('./utils').callInNextTick;
+var LoadManager = require('./load-manager');
+var JsonLoader = require('./loaders').JsonLoader;
+
+
+/**
  * The asset library which managing loading/unloading assets in project.
  *
  * @class AssetLibrary
@@ -119,12 +126,10 @@ var AssetLibrary = (function () {
 
             // step 3
 
-            // @ifdef EDITOR
-            if (!_libraryBase) {
+            if (FIRE_EDITOR && !_libraryBase) {
                 callInNextTick(callback, 'Cannot load ' + uuid + ' in editor because AssetLibrary not yet initialized!', null);
                 return;
             }
-            // @endif
             var url = this.getUrl(uuid);
 
             // step 4
@@ -228,17 +233,14 @@ var AssetLibrary = (function () {
              否则外部获取到的依赖资源就会是旧的。
              */
 
-            // @ifdef EDITOR
             // AssetLibrary._loadAssetByUuid 的回调有可能在当帧也可能延后执行，这里要判断是否由它调用 callback，
             // 否则 callback 可能会重复调用
             var invokeCbByDepends = false;
-            // @endif
 
             // load depends assets
             for (var i = 0, len = _tdInfo.uuidList.length; i < len; i++) {
                 var dependsUuid = _tdInfo.uuidList[i];
-                // @ifdef EDITOR
-                if (existingAsset) {
+                if (FIRE_EDITOR && existingAsset) {
                     var existingDepends = _tdInfo.uuidObjList[i][_tdInfo.uuidPropList[i]];
                     if (existingDepends && existingDepends._uuid === dependsUuid) {
                         var dependsUrl = _libraryBase + dependsUuid.substring(0, 2) + Fire.Path.sep + dependsUuid;
@@ -263,17 +265,14 @@ var AssetLibrary = (function () {
                         continue;
                     }
                 }
-                // @endif
                 var onDependsAssetLoaded = (function (dependsUuid, obj, prop) {
                     // create closure manually because its extremely faster than bind
                     return function (error, dependsAsset) {
-                        // @ifdef EDITOR
-                        if (error) {
+                        if (FIRE_EDITOR && error) {
                             if (Editor.AssetDB && Editor.AssetDB.isValidUuid(dependsUuid)) {
                                 Fire.error('[AssetLibrary] Failed to load "%s", %s', dependsUuid, error);
                             }
                         }
-                        // @endif
                         //else {
                         //    dependsAsset._uuid = dependsUuid;
                         //}
@@ -290,11 +289,9 @@ var AssetLibrary = (function () {
                 invokeCbByDepends = true;
             }
 
-            // @ifdef EDITOR
-            if ( !invokeCbByDepends && pendingCount === 0) {
+            if (FIRE_EDITOR && !invokeCbByDepends && pendingCount === 0) {
                 callback(null, asset);
             }
-            // @endif
 
             // _tdInfo 是用来重用临时对象，每次使用后都要重设，这样才对 GC 友好。
             _tdInfo.reset();
@@ -346,12 +343,10 @@ var AssetLibrary = (function () {
          * @param {string} libraryPath
          */
         init: function (libraryPath) {
-// @ifdef EDITOR
-            if (_libraryBase && !Fire.isUnitTest) {
+            if (FIRE_EDITOR && _libraryBase && !FIRE_TEST) {
                 Fire.error('AssetLibrary has already been initialized!');
                 return;
             }
-// @endif
             _libraryBase = Fire.Path.setEndWithSep(libraryPath);
             //Fire.log('[AssetLibrary] library: ' + _libraryBase);
         }
@@ -382,16 +377,15 @@ var AssetLibrary = (function () {
      */
     AssetLibrary._uuidToAsset = {};
 
-    // @ifdef DEV
-    if (Asset.prototype._onPreDestroy) {
-        Fire.error('_onPreDestroy of Asset has already defined');
-    }
-    // @endif
-    Asset.prototype._onPreDestroy = function () {
-        if (AssetLibrary._uuidToAsset[this._uuid] === this) {
-            AssetLibrary.unloadAsset(this);
-        }
-    };
+    //暂时屏蔽，因为目前没有缓存任何asset
+    //if (FIRE_DEV && Asset.prototype._onPreDestroy) {
+    //    Fire.error('_onPreDestroy of Asset has already defined');
+    //}
+    //Asset.prototype._onPreDestroy = function () {
+    //    if (AssetLibrary._uuidToAsset[this._uuid] === this) {
+    //        AssetLibrary.unloadAsset(this);
+    //    }
+    //};
 
     return AssetLibrary;
 })();

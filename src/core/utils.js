@@ -249,18 +249,22 @@ Fire.nextTick = function (callback, p1, p2) {
     }
 };
 
-function isDomNode(obj) {
-    return (
-        typeof Node === "object" ? obj instanceof Node :
-        obj && typeof obj === "object" && typeof obj.nodeType === "number" && typeof obj.nodeName === "string"
-    );
-}
+module.exports = {
+    isDomNode: Fire.isWeb && function (obj) {
+        return (
+            typeof Node === "object" ? obj instanceof Node :
+            obj && typeof obj === "object" && typeof obj.nodeType === "number" && typeof obj.nodeName === "string"
+        );
+    },
 
-if (Fire.isWeb) {
-    module.exports = {
-        isDomNode: isDomNode
-    };
-}
+    callInNextTick: function (callback, p1, p2) {
+        if (callback) {
+            setTimeout(function () {
+                callback(p1, p2);
+            }, 1);
+        }
+    }
+};
 
 if (FIRE_DEV) {
     Fire.JS.mixin(module.exports, {

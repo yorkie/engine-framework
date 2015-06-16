@@ -45,6 +45,8 @@ require('./enum');
 require('./fobject');
 require('./class-new');
 require('./value-types');
+require('./callbacks-invoker');
+require('./path');
 
 // engine toolkit
 
@@ -57,6 +59,9 @@ if (Fire.isWeb) {
     // codes only available in page level
     require('./ticker');
     require('./time');
+    require('./loaders');
+    require('./load-manager');
+    require('./asset-library');
 }
 
 module.exports = Fire;
