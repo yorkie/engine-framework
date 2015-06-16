@@ -109,6 +109,7 @@ test('test inherited FireClass', function() {
         __type__: 'MyAsset',
         _objFlags: 0,
         _name: '',
+        _rawExt: '',
         emptyArray: [],
         array: [1, '2',  {a:3}, [4, [5]], true],
         string: 'unknown',

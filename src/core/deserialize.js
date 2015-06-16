@@ -282,7 +282,7 @@ var _Deserializer = (function () {
                     _deserializeFireClass(self, obj, serialized, klass, target);
                 }
                 else {
-                    obj._deserialize(serialized.content, self, target);
+                    obj._deserialize(serialized.content, self);
                 }
             }
             else {

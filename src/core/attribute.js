@@ -314,8 +314,8 @@ Fire.RawType = function (typename) {
 
         _onAfterProp: function (constructor, mainPropName) {
             // check raw object
-            var checked = FIRE_DEV && (function checkRawType(constructor) {
-                if (! Fire.isChildClassOf(constructor, Asset)) {
+            var checked = !FIRE_DEV || (function checkRawType(constructor) {
+                if (! Fire.isChildClassOf(constructor, Fire.Asset)) {
                     Fire.error('RawType is only available for Assets');
                     return false;
                 }
@@ -339,15 +339,6 @@ Fire.RawType = function (typename) {
                 }
                 return true;
             })(constructor);
-
-            if (checked) {
-                var mainPropAttr = Fire.attr(constructor, mainPropName) || {};
-                var needExtname = (NEED_EXT_TYPES.indexOf(mainPropAttr.rawType) !== -1);
-                if (needExtname) {
-                    // declare extname field
-                    constructor.prop('_rawext', '', Fire.HideInInspector);
-                }
-            }
         }
     };
 };

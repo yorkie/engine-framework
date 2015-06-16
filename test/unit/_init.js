@@ -33,33 +33,6 @@ var v2 = Fire.v2;
 var color = Fire.color;
 var M3 = Fire.Matrix23;
 
-if (!Fire.Asset) {
-    var Asset = Fire.Class({
-        name: 'Fire.Asset', extends: Fire.HashObject,
-        constructor: function () {
-            Object.defineProperty(this, '_uuid', {
-                value: '',
-                writable: true,
-                enumerable: false
-            });
-            this.dirty = false;
-        },
-        _setRawExtname: function (extname) {
-            if (this.hasOwnProperty('_rawext')) {
-                if (extname.charAt(0) === '.') {
-                    extname = extname.substring(1);
-                }
-                this._rawext = extname;
-            }
-            else {
-                Fire.error('Have not defined any RawTypes yet, no need to set raw file\'s extname.');
-            }
-        }
-    });
-
-    Fire.Asset = Asset;
-}
-
 if (!Fire.Sprite) {
     var Sprite = (function () {
         var Sprite = Fire.Class({

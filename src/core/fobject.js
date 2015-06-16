@@ -209,7 +209,6 @@ FObject = (function () {
      * @method _deserialize
      * @param {object} data - the serialized json data
      * @param {_Deserializer} ctx
-     * @param {object} target
      * @private
      */
     prototype._deserialize = null;

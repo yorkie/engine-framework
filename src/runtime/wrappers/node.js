@@ -49,7 +49,7 @@ var ERR_NaN = 'The %s must not be NaN';
  * - getWorldBounds
  * - getWorldOrientedBounds
  * 
- * You may want to override
+ * You may want to override:
  * - setSiblingIndex
  * - getSiblingIndex
  * - x

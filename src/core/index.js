@@ -35,7 +35,7 @@ if (typeof FIRE_TEST === 'undefined') {
 // javascript extends
 
 require('./js');
-if (!FIRE_EDITOR) {
+if (!FIRE_EDITOR || FIRE_TEST) {
     // 编辑器已经定义了 Fire.log
     require('./log');
 }
@@ -48,6 +48,7 @@ require('./value-types');
 
 // engine toolkit
 
+require('./asset');
 require('./deserialize');
 require('./event/event-target');
 require('./playable');
