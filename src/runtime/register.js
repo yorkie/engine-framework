@@ -38,14 +38,6 @@ function registerNodeType (nodeType, nodeWrapper, menuPath) {
         }
     }
 
-    // Create a subclass for cpp runtime
-    nodeType = Fire.Class({
-        extends: nodeType,
-        constructor: function () {
-            this._FB_wrapper = null;
-        }
-    });
-
     nodeType.prototype._FB_WrapperType = nodeWrapper;
 
     // TODO - 菜单应该在 package.json 里注册
