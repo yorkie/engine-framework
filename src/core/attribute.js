@@ -1,4 +1,5 @@
 ﻿var JS = require('./js');
+var isPlainEmptyObj = require('./utils').isPlainEmptyObj_DEV;
 
 /**
  * Tag the class with any meta attributes, then return all current attributes assigned to it.
@@ -170,7 +171,7 @@ function getTypeChecker (type, attrName, objectTypeCtor) {
             if (typeof defaultVal === 'undefined') {
                 return;
             }
-            var isContainer = Array.isArray(defaultVal) || _isPlainEmptyObj_DEV(defaultVal);
+            var isContainer = Array.isArray(defaultVal) || isPlainEmptyObj(defaultVal);
             if (isContainer) {
                 return;
             }
