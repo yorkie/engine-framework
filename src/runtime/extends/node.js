@@ -1,14 +1,13 @@
-// 这里提供一些辅助 api
-
 var JS = Fire.JS;
 
 /**
  * @module Fire.Runtime
  */
+
 /**
  * @class NodeWrapper
  */
-var NodeWrapper = require('./wrappers/node');
+var NodeWrapper = require('../wrappers/node');
 
 var nodeProto = NodeWrapper.prototype;
 
@@ -86,47 +85,3 @@ JS.mixin(nodeProto, {
         this.setSiblingIndex(-1);
     }
 });
-
-/**
- * @class SceneWrapper
- */
-var SceneWrapper = require('./wrappers/scene');
-
-/**
- * Get the current running scene.
- * @method getCurrentScene
- * @return {SceneWrapper}
- * @static
- */
-SceneWrapper.getCurrentScene = function () {
-    return Fire.node(Fire.SceneWrapperImpl.getCurrentSceneNode());
-};
-
-var sceneProto = SceneWrapper.prototype;
-
-JS.mixin(sceneProto, {
-    isScene: true
-});
-
-/**
- * @module Fire
- */
-
-function getChildNodes (node) {
-    var wrapper = Fire.node(node);
-    var childNodes = wrapper.childNodes;
-    return {
-        name: wrapper.name,
-        children: childNodes.length > 0 ? wrapper.childNodes.map(getChildNodes) : null
-    };
-}
-
-/**
- * @method takeHierarchySnapshot
- * @return {object[]}
- */
-Fire.takeHierarchySnapshot = function () {
-    var root = register.getRegisteredSceneWrapper().getCurrentSceneNode();
-    var children = Fire.node(root).childNodes;
-    return children.map(getChildNodes);
-};

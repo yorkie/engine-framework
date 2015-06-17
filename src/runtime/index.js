@@ -20,8 +20,10 @@ Fire.JS.mixin(Runtime, {
     registerEngine: register.registerEngine
 });
 
-// add utility methods
-require('./extends');
+// load utility methods
+require('./extends/node');
+require('./extends/scene');
+require('./extends/engine');
 
 // register a default mixin solution
 var mixin = require('./mixin');

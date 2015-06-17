@@ -91,12 +91,14 @@ function rebundle_test(bundler) {
         .pipe(source(paths.outFile))
         .pipe(buffer());
 
+    var TestEditorExtends = true;
+
     // 理论上这里不需要 build dev 版本的测试用例代码，但是由于 qunit 的 try catch 机制，
     // 使得浏览器无法使用 source map 定位源文件。
     var dev = rename({ suffix: '.test.dev' })
     dev.pipe(sourcemaps.init({loadMaps: true}))
         .pipe(uglify(getUglifyOptions(false, {
-            FIRE_EDITOR: true,
+            FIRE_EDITOR: TestEditorExtends,
             FIRE_DEBUG: true,
             FIRE_DEV: true,
             FIRE_TEST: true
@@ -107,7 +109,7 @@ function rebundle_test(bundler) {
     var min = rename({ suffix: '.test.min' })
     min.pipe(sourcemaps.init({loadMaps: true}))
         .pipe(uglify(getUglifyOptions(true, {
-            FIRE_EDITOR: false,
+            FIRE_EDITOR: TestEditorExtends,
             FIRE_DEBUG: false,
             FIRE_DEV: false,
             FIRE_TEST: true

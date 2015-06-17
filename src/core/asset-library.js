@@ -27,8 +27,13 @@ var AssetLibrary = (function () {
 
     // create a loading context which reserves all relevant parameters
     function LoadingHandle (readMainCache, writeMainCache) {
-        this.readMainCache = readMainCache;
-        this.writeMainCache = writeMainCache;
+        //this.readMainCache = readMainCache;
+        //this.writeMainCache = writeMainCache;
+
+        // FORCE ignore global cache in fireball lite
+        this.readMainCache = false;
+        this.writeMainCache = false;
+
         var needIndieCache = !(this.readMainCache && this.writeMainCache);
         this.taskIndieCache = needIndieCache ? {} : null;
     }

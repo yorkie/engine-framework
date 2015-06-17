@@ -25,7 +25,7 @@ function registerNodeType (nodeType, nodeWrapper, menuPath) {
         Fire.error('%s must be child class of %s!', getClassName(nodeWrapper), getClassName(NodeWrapper));
         return;
     }
-    if (nodeType.prototype._FB_WrapperType) {
+    if (nodeType.prototype.hasOwnProperty('_FB_WrapperType')) {
         Fire.error('%s is already registered!', getClassName(nodeType));
         return;
     }
@@ -44,8 +44,6 @@ function registerNodeType (nodeType, nodeWrapper, menuPath) {
     if (menuPath) {
         menuToWrapper[menuPath] = nodeWrapper;
     }
-
-    return nodeType;
 }
 
 /**

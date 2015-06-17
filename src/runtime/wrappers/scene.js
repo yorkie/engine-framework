@@ -21,6 +21,9 @@ var NYI = require('./utils').NYI;
 var SceneWrapper = Fire.Class({
     name: 'Fire.Runtime.SceneWrapper',
     extends: NodeWrapper,
+    constructor: function () {
+        this._serializedData = null;
+    },
 
     properties: {
         parentNode: {

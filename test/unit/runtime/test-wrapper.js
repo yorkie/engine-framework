@@ -7,7 +7,7 @@ test('Node', function() {
         statics: {
         }
     });
-    MyNode = Fire.Runtime.registerNodeType(MyNode, MyNodeWrapper);
+    Fire.Runtime.registerNodeType(MyNode, MyNodeWrapper);
 
     var node = new MyNode();
     var nodeWrapper = Fire.node(node);
@@ -27,7 +27,7 @@ test('SceneNode', function() {
             }
         }
     });
-    MyScene = Fire.Runtime.registerNodeType(MyScene, MySceneWrapper);
+    Fire.Runtime.registerNodeType(MyScene, MySceneWrapper);
 
     dummyScene = new MyScene();
     var dummySceneWrapper = Fire.node(dummyScene);

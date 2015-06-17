@@ -1,6 +1,6 @@
 var JS = require('./js');
 
-var ENABLE_TARGET = FIRE_EDITOR || FIRE_TEST;
+var ENABLE_TARGET = FIRE_EDITOR;
 
 var _Deserializer = (function () {
     ///**

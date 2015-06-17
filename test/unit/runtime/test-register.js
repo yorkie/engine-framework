@@ -5,7 +5,7 @@ test('basic', function() {
     var MyNodeWrapper = Fire.Class({
         extends: Fire.Runtime.NodeWrapper
     });
-    MyNode = Fire.Runtime.registerNodeType(MyNode, MyNodeWrapper);
+    Fire.Runtime.registerNodeType(MyNode, MyNodeWrapper);
 
     strictEqual(Fire.getWrapperType(MyNode), MyNodeWrapper, 'getWrapperType should return registered wrapper type');
 
@@ -32,7 +32,7 @@ test('Fire.SceneWrapperImpl', function() {
     var MySceneWrapper = Fire.Class({
         extends: Fire.Runtime.SceneWrapper
     });
-    MyScene = Fire.Runtime.registerNodeType(MyScene, MySceneWrapper);
+    Fire.Runtime.registerNodeType(MyScene, MySceneWrapper);
 
     strictEqual(Fire.SceneWrapperImpl, MySceneWrapper, 'Fire.SceneWrapperImpl should return registered SceneWrapper');
 });

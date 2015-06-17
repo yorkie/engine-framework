@@ -403,3 +403,5 @@ Editor.serialize.setName = function (jsonObj, name) {
         jsonObj._name = name;
     }
 };
+
+module.exports = Editor.serialize;
