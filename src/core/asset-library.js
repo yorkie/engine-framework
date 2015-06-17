@@ -89,12 +89,20 @@ var AssetLibrary = (function () {
 
         getUuid: function (url) {
 
-            if ( url.indexOf(_libraryBase) === 0 ) {
-                return url.slice( url.lastIndexOf('/') + 1, url.length );
+            var hasUuid = url.indexOf(_libraryBase) === 0;
+            if ( hasUuid ) {
+                var basename = Fire.Path.basename(url);
+
+                var hasSuffix = basename.indexOf('.');
+                if ( hasSuffix ) {
+                    basename = basename.split('.')[0];
+                }
+
+                return url.slice( basename );
             }
 
             // If url is not in the library, just return 0
-            return 0;
+            return "";
         },
 
         /**
