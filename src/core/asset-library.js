@@ -98,7 +98,7 @@ var AssetLibrary = (function () {
                     basename = basename.split('.')[0];
                 }
 
-                return url.slice( basename );
+                return basename;
             }
 
             // If url is not in the library, just return 0
