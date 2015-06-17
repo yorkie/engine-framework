@@ -7,9 +7,11 @@ var NYI = require('./utils').NYI;
 
 /**
  * You should override:
- * - childNodes
  * - getCurrentSceneNode (static)
- * - createEmpty (static)
+ * - childNodes
+ *
+ * You may want to override:
+ * - preloadAssets (so that scene can load synchronously)
  *
  * @class SceneWrapper
  * @extends NodeWrapper
@@ -44,6 +46,17 @@ var SceneWrapper = Fire.Class({
             NYI();
             return null;
         }
+    },
+
+    /**
+     * Preload assets before scene loading.
+     * @method preloadAssets
+     * @param {Fire.Asset[]}
+     * @param {function} callback
+     * @param {string} callback.error
+     */
+    preloadAssets: function (assets, callback) {
+        callback();
     },
 
     getSiblingIndex: function () {
