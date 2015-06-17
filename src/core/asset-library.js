@@ -87,6 +87,20 @@ var AssetLibrary = (function () {
             return _libraryBase + uuid.slice(0, 2) + Fire.Path.sep + uuid;
         },
 
+        getUuid: function (url) {
+
+            var hasUuid = url.indexOf(_libraryBase) === 0;
+            if ( hasUuid ) {
+                var basename = Fire.Path.basename(url);
+
+                var index = basename.indexOf('.');
+                return basename.slice(0, index);
+            }
+
+            // If url is not in the library, just return 0
+            return "";
+        },
+
         /**
          * !#zh uuid加载流程：
          * 1. 查找_uuidToAsset，如果已经加载过，直接返回

@@ -35,7 +35,7 @@ if (typeof FIRE_TEST === 'undefined') {
 // javascript extends
 
 require('./js');
-if (!FIRE_EDITOR || FIRE_TEST) {
+if (!Fire.log) {
     // 编辑器已经定义了 Fire.log
     require('./log');
 }
