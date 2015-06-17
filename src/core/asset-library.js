@@ -93,12 +93,8 @@ var AssetLibrary = (function () {
             if ( hasUuid ) {
                 var basename = Fire.Path.basename(url);
 
-                var hasSuffix = basename.indexOf('.');
-                if ( hasSuffix ) {
-                    basename = basename.split('.')[0];
-                }
-
-                return basename;
+                var index = basename.indexOf('.');
+                return basename.slice(0, index);
             }
 
             // If url is not in the library, just return 0
