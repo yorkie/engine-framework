@@ -102,6 +102,17 @@ module.exports = Fire.Class({
          */
         deserialize: function (data) {
             return Fire.deserialize(data);
+        },
+
+        urlToUuid: function (url) {
+            if (Fire.AssetLibrary) {
+                var uuid = Fire.AssetLibrary.getUuid(url);
+                return uuid;
+            }
+            else {
+                Fire.error('Asset.urlToUuid is not usable in core process');
+            }
+            return '';
         }
     },
 
