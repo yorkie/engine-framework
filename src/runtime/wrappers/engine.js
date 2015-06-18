@@ -17,6 +17,7 @@ var NYI = require('./utils').NYI;
  * - playRuntime
  * - stopRuntime
  * - tick (if useDefaultMainLoop)
+ * - resize
  *
  * @class EngineWrapper
  * @extends Fire.Playable
@@ -160,6 +161,16 @@ var EngineWrapper = Fire.Class({
             //}
             callback(err);
         });
+    },
+
+    /**
+     * Resize the rendering canvas.
+     * @method resize
+     * @param {number} width
+     * @param {number} height
+     */
+    resize: function (width, height) {
+        NYI();
     },
 
     // OVERRIDE
