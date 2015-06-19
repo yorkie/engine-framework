@@ -8,9 +8,10 @@
 var Runtime = {};
 
 var register = require('./register');
+var NodeWrapper = require('./wrappers/node');
 
 Fire.JS.mixin(Runtime, {
-    NodeWrapper: require('./wrappers/node'),
+    NodeWrapper: NodeWrapper,
     SceneWrapper: require('./wrappers/scene'),
     registerNodeType: register.registerNodeType,
 
@@ -35,7 +36,7 @@ register.registerMixin(mixin);
 
 Fire.getWrapperType = register.getWrapperType;
 Fire.menuToWrapper = register.menuToWrapper;
-Fire.node = register.getWrapper;
+Fire.node = NodeWrapper.getWrapper;
 Fire.getMixinOptions = register.getMixinOptions;
 
 /**

@@ -9,6 +9,7 @@ var NYI = require('./utils').NYI;
  * You should override:
  * - getCurrentSceneNode (static)
  * - childNodes
+ * - createNode
  *
  * You may want to override:
  * - preloadAssets (so that scene can load synchronously)
@@ -22,7 +23,7 @@ var SceneWrapper = Fire.Class({
     name: 'Fire.Runtime.SceneWrapper',
     extends: NodeWrapper,
     constructor: function () {
-        this._serializedData = null;
+        this._dataToDeserialize = null;
     },
 
     properties: {

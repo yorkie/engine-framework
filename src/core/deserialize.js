@@ -66,7 +66,7 @@ var _Deserializer = (function () {
     };
 
     // 和 _deserializeObject 不同的地方在于会判断 id 和 uuid
-    function _deserializeObjField (self, obj, jsonObj, propName, target) {
+    _Deserializer.prototype._deserializeObjField = function (obj, jsonObj, propName, target) {
         var id = jsonObj.__id__;
         if (typeof id === 'undefined') {
             var uuid = jsonObj.__uuid__;
@@ -80,31 +80,31 @@ var _Deserializer = (function () {
                 //        return;
                 //    }
                 // }
-                self.result.uuidList.push(uuid);
-                self.result.uuidObjList.push(obj);
-                self.result.uuidPropList.push(propName);
+                this.result.uuidList.push(uuid);
+                this.result.uuidObjList.push(obj);
+                this.result.uuidPropList.push(propName);
             }
             else {
                 if (ENABLE_TARGET) {
-                    obj[propName] = _deserializeObject(self, jsonObj, target && target[propName]);
+                    obj[propName] = _deserializeObject(this, jsonObj, target && target[propName]);
                 }
                 else {
-                    obj[propName] = _deserializeObject(self, jsonObj);
+                    obj[propName] = _deserializeObject(this, jsonObj);
                 }
             }
         }
         else {
-            var dObj = self.deserializedList[id];
+            var dObj = this.deserializedList[id];
             if (dObj) {
                 obj[propName] = dObj;
             }
             else {
-                self._idList.push(id);
-                self._idObjList.push(obj);
-                self._idPropList.push(propName);
+                this._idList.push(id);
+                this._idObjList.push(obj);
+                this._idPropList.push(propName);
             }
         }
-    }
+    };
 
     function _deserializePrimitiveObject (self, instance, serialized) {
         for (var propName in serialized) {
@@ -127,10 +127,10 @@ var _Deserializer = (function () {
                         }
                         else {
                             if (ENABLE_TARGET) {
-                                _deserializeObjField(self, instance, prop, propName, self._target && instance);
+                                self._deserializeObjField(instance, prop, propName, self._target && instance);
                             }
                             else {
-                                _deserializeObjField(self, instance, prop, propName);
+                                self._deserializeObjField(instance, prop, propName);
                             }
                         }
                     }
@@ -165,10 +165,10 @@ var _Deserializer = (function () {
                         }
                         else {
                             if (ENABLE_TARGET) {
-                                _deserializeObjField(self, instance, prop, propName, self._target && instance);
+                                self._deserializeObjField(instance, prop, propName, self._target && instance);
                             }
                             else {
-                                _deserializeObjField(self, instance, prop, propName);
+                                self._deserializeObjField(instance, prop, propName);
                             }
                         }
                     }
@@ -215,10 +215,10 @@ var _Deserializer = (function () {
                             }
                             else {
                                 if (ENABLE_TARGET) {
-                                    _deserializeObjField(self, obj, prop, propName, target && obj);
+                                    self._deserializeObjField(obj, prop, propName, target && obj);
                                 }
                                 else {
-                                    _deserializeObjField(self, obj, prop, propName);
+                                    self._deserializeObjField(obj, prop, propName);
                                 }
                             }
                         }
@@ -320,10 +320,10 @@ var _Deserializer = (function () {
                     }
                     else {
                         if (ENABLE_TARGET) {
-                            _deserializeObjField(self, obj, prop, '' + i, target && target[i]);
+                            self._deserializeObjField(obj, prop, '' + i, target && target[i]);
                         }
                         else {
-                            _deserializeObjField(self, obj, prop, '' + i);
+                            self._deserializeObjField(obj, prop, '' + i);
                         }
                     }
                 }

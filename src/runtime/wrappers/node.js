@@ -48,7 +48,9 @@ var ERR_NaN = 'The %s must not be NaN';
  * - worldScale
  * - getWorldBounds
  * - getWorldOrientedBounds
- * 
+ * - createNode
+ * - onBeforeSerialize (so that node's properties can be serialized in wrapper)
+ *
  * You may want to override:
  * - setSiblingIndex
  * - getSiblingIndex
@@ -73,9 +75,9 @@ var NodeWrapper = Fire.Class({
          */
         this.target = arguments[0];
 
-        if (FIRE_EDITOR && !this.target) {
-            Fire.warn('target of %s must be non-nil', JS.getClassName(this));
-        }
+        //if (FIRE_EDITOR && !this.target) {
+        //    Fire.warn('target of %s must be non-nil', JS.getClassName(this));
+        //}
     },
 
     properties: {
@@ -308,6 +310,37 @@ var NodeWrapper = Fire.Class({
         //},
     },
 
+    // SERIALIZATION
+
+    /**
+     * Creates a new node using the properties defined in this wrapper, the properties will be serialized in the scene.
+     * Note: 不需要设置新节点的父子关系，也不需要设置 wrapper 的 target 为新节点.
+     * @method createNode
+     * @return {RuntimeNode} - the created node
+     */
+    createNode: function () {
+        NYI();
+        return null;
+    },
+
+    /**
+     * 这个方法会在场景保存前调用，你可以将 node 的属性保存到 wrapper 的可序列化的 properties 中，
+     * 以便在 createNode() 方法中重新设置好 node。
+     * @method onBeforeSerialize
+     */
+    onBeforeSerialize: function () {
+    },
+
+    /**
+     * Creates a new node and bind with this wrapper.
+     * @method onAfterDeserialize
+     */
+    onAfterDeserialize: function () {
+        var node = this.createNode();
+        this.target = node;
+        node._FB_wrapper = this;
+    },
+
     ///**
     // * This method is called when the scene is saving, allowing you to return JSON to represent the state of your node.
     // * When the scene is later loaded, the data you returned is passed to the wrapper's deserialize method so you can
@@ -351,6 +384,8 @@ var NodeWrapper = Fire.Class({
     //    }
     //    return null;
     //},
+
+    // HIERARCHY
 
     /**
      * Get the sibling index.
@@ -413,9 +448,7 @@ var NodeWrapper = Fire.Class({
      * @return {Fire.Rect} - the rect represented in world position
      */
     getWorldBounds: function (out) {
-        if (FIRE_EDITOR) {
-            Fire.error('Not yet implemented');
-        }
+        NYI();
         return new Rect();
     },
 
@@ -431,10 +464,34 @@ var NodeWrapper = Fire.Class({
      *                    in the sequence of BottomLeft, TopLeft, TopRight, BottomRight
      */
     getWorldOrientedBounds: function (out_bl, out_tl, out_tr, out_br){
-        if (FIRE_EDITOR) {
-            Fire.error('Not yet implemented');
-        }
+        NYI();
         return [Vec2.zero, Vec2.zero, Vec2.zero, Vec2.zero];
     }
 });
+
+/**
+ * @module Fire
+ */
+
+/**
+ * 返回跟 object 相互绑定的 NodeWrapper 实例，如果不存在将被创建。
+ * @method node
+ * @param {RuntimeNode} node
+ * @return {Fire.Runtime.NodeWrapper}
+ */
+NodeWrapper.getWrapper = function (node) {
+    var wrapper = node._FB_wrapper;
+    if (!wrapper) {
+        var Wrapper = Fire.getWrapperType(node);
+        if (!Wrapper) {
+            var getClassName = Fire.JS.getClassName;
+            Fire.error('%s not registered for %s', getClassName(NodeWrapper), getClassName(node));
+            return null;
+        }
+        wrapper = new Wrapper(node);
+        node._FB_wrapper = wrapper;
+    }
+    return wrapper;
+};
+
 module.exports = NodeWrapper;

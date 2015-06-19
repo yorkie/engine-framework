@@ -26,7 +26,7 @@ var AssetLibrary = (function () {
     var _tdInfo = new Fire._DeserializeInfo();
 
     // create a loading context which reserves all relevant parameters
-    function LoadingHandle (readMainCache, writeMainCache) {
+    function LoadingHandle (readMainCache, writeMainCache, recordAssets) {
         //this.readMainCache = readMainCache;
         //this.writeMainCache = writeMainCache;
 
@@ -36,6 +36,9 @@ var AssetLibrary = (function () {
 
         var needIndieCache = !(this.readMainCache && this.writeMainCache);
         this.taskIndieCache = needIndieCache ? {} : null;
+
+        // 需要让场景 preload 的 asset（所有包含 raw file 后缀名的 asset 并且不含 rawType 属性的 asset）
+        this.assetsNeedPostLoad = recordAssets ? [] : null;
     }
     LoadingHandle.prototype.readCache = function (uuid) {
         if (this.readMainCache && this.writeMainCache) {
@@ -51,12 +54,15 @@ var AssetLibrary = (function () {
             }
         }
     };
-    LoadingHandle.prototype.writeCache = function (uuid, asset) {
+    LoadingHandle.prototype.writeCache = function (uuid, asset, hasRawType) {
         if (this.writeMainCache) {
             AssetLibrary._uuidToAsset[uuid] = asset;
         }
         if (this.taskIndieCache) {
             this.taskIndieCache[uuid] = asset;
+        }
+        if (this.assetsNeedPostLoad && asset._rawExt && !hasRawType) {
+            this.assetsNeedPostLoad.push(asset);
         }
     };
 
@@ -154,10 +160,10 @@ var AssetLibrary = (function () {
             // step 4
             LoadManager.loadByLoader(JsonLoader, url,
                 function (error, json) {
-                    function onDeserializedWithDepends (err, asset) {
+                    function onDeserializedWithDepends (err, asset, hasRawType) {
                         if (asset) {
                             asset._uuid = uuid;
-                            handle.writeCache(uuid, asset);
+                            handle.writeCache(uuid, asset, hasRawType);
                         }
                         if ( canShareLoadingTask ) {
                             _uuidToCallbacks.invokeAndRemove(uuid, err, asset);
@@ -181,11 +187,23 @@ var AssetLibrary = (function () {
          * @param {string|object} json
          * @param {loadCallback} callback
          * @param {boolean} [dontCache=false] - If false, the result will cache to AssetLibrary, and MUST be unload by user manually.
+         * @param {boolean} [recordAssets=false] - 是否统计新加载的需要让场景 preload 的 asset（所有包含 raw file 后缀名的 asset 并且不含 rawType 属性的 asset）
+         * @return {LoadingHandle}
          * @private
          */
-        loadJson: function (json, callback, dontCache) {
-            var handle = new LoadingHandle(!dontCache, !dontCache);
-            this._deserializeWithDepends(json, '', callback, handle);
+        loadJson: function (json, callback, dontCache, recordAssets) {
+            var handle = new LoadingHandle(!dontCache, !dontCache, recordAssets);
+            var thisTick = true;
+            this._deserializeWithDepends(json, '', function (p1, p2) {
+                if (thisTick) {
+                    callInNextTick(callback, p1, p2);
+                }
+                else {
+                    callback(p1, p2);
+                }
+            }, handle);
+            thisTick = false;
+            return handle;
         },
 
         /**
@@ -199,7 +217,7 @@ var AssetLibrary = (function () {
          */
         _deserializeWithDepends: function (json, url, callback, handle, existingAsset) {
             // deserialize asset
-            var isScene = json && json[0] && json[0].__type__ === JS._getClassId(Scene);
+            var isScene = typeof Scene !== 'undefined' && json && json[0] && json[0].__type__ === JS._getClassId(Scene);
             var classFinder = isScene ? Fire._MissingScript.safeFindClass : function (id) {
                 var cls = JS._getClassById(id);
                 if (cls) {
@@ -232,14 +250,14 @@ var AssetLibrary = (function () {
                     asset[rawProp] = raw;
                     --pendingCount;
                     if (pendingCount === 0) {
-                        callback(null, asset);
+                        callback(null, asset, true);
                     }
                 });
             }
 
             if (pendingCount === 0) {
-                callback(null, asset);
-                // _tdInfo 是用来重用临时对象，每次使用后都要重设，这样才对 GC 友好。
+                callback(null, asset, !!rawProp);
+                // _tdInfo 是用来重用的临时对象，每次使用后都要重设，这样才对 GC 友好。
                 _tdInfo.reset();
                 return;
             }
@@ -275,7 +293,7 @@ var AssetLibrary = (function () {
                                         clearInterval(idToClear);
                                         --pendingCount;
                                         if (pendingCount === 0) {
-                                            callback(null, asset);
+                                            callback(null, asset, !!rawProp);
                                         }
                                     }
                                 }, 10);
@@ -286,7 +304,7 @@ var AssetLibrary = (function () {
                 }
                 var onDependsAssetLoaded = (function (dependsUuid, obj, prop) {
                     // create closure manually because its extremely faster than bind
-                    return function (error, dependsAsset) {
+                    return function (error, dependsAsset, hasRawType) {
                         if (FIRE_EDITOR && error) {
                             if (Editor.AssetDB && Editor.AssetDB.isValidUuid(dependsUuid)) {
                                 Fire.error('[AssetLibrary] Failed to load "%s", %s', dependsUuid, error);
@@ -297,10 +315,11 @@ var AssetLibrary = (function () {
                         //}
                         // update reference
                         obj[prop] = dependsAsset;
+
                         // check all finished
                         --pendingCount;
                         if (pendingCount === 0) {
-                            callback(null, asset);
+                            callback(null, asset, !!rawProp);
                         }
                     };
                 })( dependsUuid, _tdInfo.uuidObjList[i], _tdInfo.uuidPropList[i] );
@@ -309,10 +328,10 @@ var AssetLibrary = (function () {
             }
 
             if (FIRE_EDITOR && !invokeCbByDepends && pendingCount === 0) {
-                callback(null, asset);
+                callback(null, asset, !!rawProp);
             }
 
-            // _tdInfo 是用来重用临时对象，每次使用后都要重设，这样才对 GC 友好。
+            // _tdInfo 是用来重用的临时对象，每次使用后都要重设，这样才对 GC 友好。
             _tdInfo.reset();
         },
 

@@ -95,28 +95,6 @@ function getWrapperType (nodeOrNodeType) {
     }
 }
 
-/**
- * 返回跟 object 相互绑定的 NodeWrapper 实例，如果不存在将被创建。
- * @method node
- * @param {object} object
- * @return {Fire.Runtime.NodeWrapper}
- */
-function getWrapper (object) {
-    var wrapper = object._FB_wrapper;
-    if (!wrapper) {
-        var Wrapper = Fire.getWrapperType(object);
-        if (!Wrapper) {
-            Fire.error('%s not registered for %s', getClassName(NodeWrapper), getClassName(object));
-            return null;
-        }
-        wrapper = new Wrapper(object);
-        object._FB_wrapper = wrapper;
-    }
-    return wrapper;
-}
-
-
-
 //// 值得注意的是, 不同的 runtime 中, 他们 runtimeType 的 mixin 的关键字将会有些许变动, 比如: 有些 runtime 的 node 不支持 event,
 //// 那么 listeners 关键字: 在这些 runtime 中将会失效, 我们可以 warning user.
 //Fire.registerMixin = require('./mixin');
@@ -125,7 +103,6 @@ function getWrapper (object) {
 module.exports = {
     registerNodeType: registerNodeType,
     getWrapperType: getWrapperType,
-    getWrapper: getWrapper,
     getRegisteredSceneWrapper: function () {
         return runtimeSceneWrapper;
     },
