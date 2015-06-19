@@ -286,7 +286,7 @@ Fire.JS.unregisterClass to remove the id of unused class';
      * @private
      */
     JS._getClassId = function (obj) {
-        if (typeof obj === 'function' && obj.prototype.__cid__) {
+        if (typeof obj === 'function' && obj.prototype.hasOwnProperty('__cid__')) {
             return obj.prototype.__cid__;
         }
         if (obj && obj.constructor) {

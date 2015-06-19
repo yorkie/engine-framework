@@ -1,7 +1,7 @@
 // The default mixin solution
 var JS = Fire.JS;
 
-var tmpArray = [];
+//var tmpArray = [];
 
 var mixin = {
     mixin: function (node, cls) {

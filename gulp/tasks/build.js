@@ -100,7 +100,7 @@ function rebundle_test(bundler) {
         .pipe(uglify(getUglifyOptions(false, {
             FIRE_EDITOR: TestEditorExtends,
             FIRE_DEBUG: true,
-            FIRE_DEV: true,
+            FIRE_DEV: TestEditorExtends || true,
             FIRE_TEST: true
         })))
         .pipe(sourcemaps.write('./', {sourceRoot: './', addComment: true}))
@@ -111,10 +111,10 @@ function rebundle_test(bundler) {
         .pipe(uglify(getUglifyOptions(true, {
             FIRE_EDITOR: TestEditorExtends,
             FIRE_DEBUG: false,
-            FIRE_DEV: false,
+            FIRE_DEV: TestEditorExtends || false,
             FIRE_TEST: true
         })))
-        .pipe(sourcemaps.write('./', {sourceRoot: './', addComment: true}))
+        .pipe(sourcemaps.write('./', {sourceRoot: './', addComment: false}))
         .pipe(gulp.dest(paths.outDir));
 
     return bundle.pipe(mirror(dev, min));

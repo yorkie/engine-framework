@@ -217,8 +217,9 @@ var AssetLibrary = (function () {
          */
         _deserializeWithDepends: function (json, url, callback, handle, existingAsset) {
             // deserialize asset
-            var isScene = typeof Scene !== 'undefined' && json && json[0] && json[0].__type__ === JS._getClassId(Scene);
-            var classFinder = isScene ? Fire._MissingScript.safeFindClass : function (id) {
+            //var isScene = typeof Scene !== 'undefined' && json && json[0] && json[0].__type__ === JS._getClassId(Scene);
+            //var classFinder = isScene ? Fire._MissingScript.safeFindClass : function (id) {
+            var classFinder = function (id) {
                 var cls = JS._getClassById(id);
                 if (cls) {
                     return cls;
@@ -226,12 +227,12 @@ var AssetLibrary = (function () {
                 Fire.warn('Can not get class "%s"', id);
                 return Object;
             };
-            Engine._canModifyCurrentScene = false;
+            //Fire.Engine._canModifyCurrentScene = false;
             var asset = Fire.deserialize(json, _tdInfo, {
                 classFinder: classFinder,
                 target: existingAsset
             });
-            Engine._canModifyCurrentScene = true;
+            //Fire.Engine._canModifyCurrentScene = true;
 
             // load depends
             var pendingCount = _tdInfo.uuidList.length;

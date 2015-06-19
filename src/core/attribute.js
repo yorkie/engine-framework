@@ -198,9 +198,6 @@ function getTypeChecker (type, attrName, objectTypeCtor) {
             delete mainPropAttrs.type;
         };
     }
-    else {
-        return undefined;
-    }
 }
 
 /**
