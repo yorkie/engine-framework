@@ -5,10 +5,16 @@ test('basic', function() {
 
     function Node () {}
     Node.prototype.getAge = function () {};
+    var NodeWrapper = Fire.Class({
+        extends: Fire.Runtime.NodeWrapper
+    });
+    Fire.Runtime.registerNodeType(Node, NodeWrapper);
+
     var originGetAge = Node.prototype.getAge;
     var node = new Node();
 
     var Script = Fire.Class({
+        name: '2154648724566',
         extends: Fire.Class({
             constructor: function () {
                 this.realAge = 30;
@@ -41,7 +47,9 @@ test('basic', function() {
 
     mixinOpt.mixin(node, Script);
 
-    strictEqual(node._name, 'ha', 'should mixin constructor');
+    strictEqual(node.constructor, Node, 'constructor should not changed');
+
+    strictEqual(node._name, 'ha', 'should execute constructor');
     strictEqual(node.name, 'ha', 'should mixin properties');
     strictEqual(Fire.attr(node, 'name').displayName, 'Name', 'should mixin attributes');
     strictEqual(node.getName(), 'ha', 'should mixin methods');
@@ -51,6 +59,8 @@ test('basic', function() {
     strictEqual(Fire.attr(node, 'age').tooltip, 'Age', 'should mixin base attributes');
     notStrictEqual(node.getAge, originGetAge, 'should override origin methods');
     strictEqual(node.getAge(), 40, 'should mixin base methods');
+
+    Fire.JS.unregisterClass(Script);
 });
 
 //test('inherited', function() {

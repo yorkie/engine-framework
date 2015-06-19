@@ -8,6 +8,7 @@
         MySceneWrapper;
     var SpriteNeedsDeferredLoad,
         TextureNeedsDeferredLoad;
+    var ScriptToMix;
 
     module('test scene serialization', {
         setup: function () {
@@ -154,9 +155,42 @@
                     }
                 }
             });
+
+            ScriptToMix = Fire.Class({
+                name: '2154648724566',
+                extends: Fire.Class({
+                    constructor: function () {
+                        this.realAge = 30;
+                    },
+                    properties: {
+                        age: {
+                            default: 40,
+                            tooltip: 'Age'
+                        }
+                    },
+                    getAge: function () {
+                        return this.age;
+                    }
+                }),
+                constructor: function () {
+                    this._name = 'ha';
+                },
+                properties: {
+                    name: {
+                        get: function () {
+                            return this._name;
+                        },
+                        displayName: 'Name'
+                    }
+                },
+                getName: function () {
+                    return this.name;
+                }
+            });
         },
         teardown: function () {
-            Fire.JS.unregisterClass(MySceneWrapper, MyNodeWrapper, SpriteNeedsDeferredLoad, TextureNeedsDeferredLoad);
+            Fire.JS.unregisterClass(MySceneWrapper, MyNodeWrapper, SpriteNeedsDeferredLoad, TextureNeedsDeferredLoad,
+                ScriptToMix);
             SetupEngine.teardown();
         }
     });
@@ -190,6 +224,8 @@
             node1.color = {r: 123, g: 0, b: 255, a: 255};
             node1.asset = sprite;
             wrapper.target.children.push(node1);
+
+            Fire.getMixinOptions().mixin(node1, ScriptToMix);
 
             var node2 = new MyNode();
             node2.parent = node1;
@@ -225,7 +261,8 @@
                             __uuid__: node1.asset._uuid
                         },
                         "_name": "",
-                        "_objFlags": 0
+                        "_objFlags": 0,
+                        "mixinId": Fire.JS._getClassId(ScriptToMix)
                     },
                     {
                         "__type__": "MyNodeWrapper",
@@ -234,7 +271,8 @@
                             __uuid__: node2.asset._uuid
                         },
                         "_name": "",
-                        "_objFlags": 0
+                        "_objFlags": 0,
+                        "mixinId": ""
                     }
                 ]
             };

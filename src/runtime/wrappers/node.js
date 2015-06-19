@@ -82,6 +82,17 @@ var NodeWrapper = Fire.Class({
 
     properties: {
         /**
+         * The class ID of attached script.
+         * @property mixins
+         * @type {string|string[]}
+         * @default ""
+         */
+        mixinId: {
+            default: "",
+            visible: false
+        },
+
+        /**
          * The name of the node.
          * @property name
          * @type {string}

@@ -18,7 +18,7 @@ gulp.task('unit-runner', function() {
         ;
 });
 
-gulp.task('test', ['build-test', 'unit-runner'], function() {
+function test () {
     var qunit;
     try {
         qunit = require('gulp-qunit');
@@ -29,4 +29,7 @@ gulp.task('test', ['build-test', 'unit-runner'], function() {
     }
     return gulp.src('test/unit/runner.html', { read: false })
         .pipe(qunit({ timeout: TimeOutInSeconds }));
-});
+}
+
+gulp.task('test', ['build-test', 'unit-runner'], test);
+gulp.task('rerun-test', test);

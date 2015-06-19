@@ -9,6 +9,11 @@ var mixin = {
             Fire.error('The class to mixin must be FireClass.');
             return;
         }
+        var newMixinClassId = JS._getClassId(cls);
+        if (FIRE_EDITOR && !newMixinClassId) {
+            Fire.error("The class to mixin must have class name or script's uuid.");
+            return;
+        }
 
         // call constructor on node
         cls.call(node);
@@ -19,6 +24,7 @@ var mixin = {
         var nodeProto = nodeClass.prototype;
         var clsProto = cls.prototype;
         JS.mixin(nodeProto, clsProto);  // 这里也会 mixin cls 的父类
+        nodeProto.constructor = nodeClass;  // restore overrided constructor
             //if (cls.$super === Fire.FObject) {
             //}
             //else {
@@ -57,6 +63,21 @@ var mixin = {
             else {
                 nodeClass.__props__ = props;
             }
+        }
+
+        // save class id to wrapper
+        var wrapper = Fire.node(node);
+        var mixinId = wrapper.mixinId;
+        if (mixinId) {
+            if (Array.isArray(mixinId)) {
+                mixinId.push(newMixinClassId);
+            }
+            else {
+                mixinId = [mixinId, newMixinClassId];
+            }
+        }
+        else {
+            wrapper.mixinId = newMixinClassId;
         }
     }
 };
