@@ -175,6 +175,10 @@
                         return this._name;
                     },
                     displayName: 'Name'
+                },
+                target: {
+                    default: null,
+                    type: MyNodeWrapper
                 }
             },
             getName: function () {
@@ -222,14 +226,15 @@
             node1.asset = sprite;
             wrapper.target.children.push(node1);
 
-            Fire.mixin(node1, ScriptToMix);
-            node1.age = 30;
-
             var node2 = new MyNode();
             node2.parent = node1;
             node2.color = {r: 321, g: 250, b: 250, a: 0};
             node2.asset = texture;
             node1.children.push(node2);
+
+            Fire.mixin(node1, ScriptToMix);
+            node1.age = 30;
+            node1.target = Fire.node(node2);
 
             actual = Editor.serialize(wrapper, {stringify: false});
             expect = {
@@ -277,7 +282,10 @@
                     {
                         "_name": "",
                         "_objFlags": 0,
-                        "age": 30
+                        "age": 30,
+                        "target": {
+                            "__id__": 2
+                        }
                     }
                 ]
             };
@@ -323,6 +331,8 @@
 
                 strictEqual(rootNode.getName, ScriptToMix.prototype.getName, 'should mixin methods');
                 strictEqual(rootNode.age, 30, 'should deserialize mixin');
+                //ok(rootNode.target === childNode, 'should restore node references in mixin');
+                ok(rootNode.target === Fire.node(childNode), 'should restore wrapper references in mixin');
 
                 start();
             });
