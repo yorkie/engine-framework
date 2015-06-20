@@ -475,3 +475,28 @@ Fire._DeserializeInfo.prototype.assignAssetsBy = function (getter) {
     }
     return success;
 };
+
+Fire.deserialize.applyMixinProps = function (data, classToMix, target) {
+    var props = classToMix.__props__;
+    if (props) {
+        for (var p = 0; p < props.length; p++) {
+            var propName = props[p];
+            var attrs = Fire.attr(classToMix, propName);
+            // assume all prop in __props__ must have attr
+            if (attrs.serializable === false) {
+                continue;   // skip nonSerialized
+            }
+            if (!FIRE_EDITOR && attrs.editorOnly) {
+                continue;   // skip editor only if not editor
+            }
+            var prop = data[propName];
+            if (typeof prop !== 'undefined') {
+                target[propName] = prop;
+            }
+        }
+        //if (props[props.length - 1] === '_$erialized') {
+        //    // save original serialized data
+        //    target._$erialized = data;
+        //}
+    }
+};

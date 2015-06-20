@@ -290,7 +290,8 @@ Fire.JS.unregisterClass to remove the id of unused class';
             return obj.prototype.__cid__;
         }
         if (obj && obj.constructor) {
-            if (obj.constructor.prototype && obj.constructor.prototype.hasOwnProperty('__cid__')) {
+            var prototype = obj.constructor.prototype;
+            if (prototype && prototype.hasOwnProperty('__cid__')) {
                 return obj.__cid__;
             }
         }

@@ -1,10 +1,9 @@
 module('mixin');
 
 test('basic', function() {
-    var mixinOpt = Fire.getMixinOptions();
-
     function Node () {}
     Node.prototype.getAge = function () {};
+
     var NodeWrapper = Fire.Class({
         extends: Fire.Runtime.NodeWrapper
     });
@@ -45,7 +44,7 @@ test('basic', function() {
         }
     });
 
-    mixinOpt.mixin(node, Script);
+    Fire.mixin(node, Script);
 
     strictEqual(node.constructor, Node, 'constructor should not changed');
 
@@ -59,6 +58,8 @@ test('basic', function() {
     strictEqual(Fire.attr(node, 'age').tooltip, 'Age', 'should mixin base attributes');
     notStrictEqual(node.getAge, originGetAge, 'should override origin methods');
     strictEqual(node.getAge(), 40, 'should mixin base methods');
+
+    strictEqual(Node.__props__, undefined, 'should not change origin class');
 
     Fire.JS.unregisterClass(Script);
 });

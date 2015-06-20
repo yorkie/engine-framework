@@ -330,6 +330,14 @@ Fire._isFireClass = function (constructor) {
 };
 
 /**
+ * @method _convertToFireClass
+ * @param {function} constructor
+ */
+Fire._convertToFireClass = function (constructor) {
+    constructor.prop = _metaClass.prop;
+};
+
+/**
  * Checks whether subclass is child of superclass or equals to superclass
  *
  * @method isChildClassOf

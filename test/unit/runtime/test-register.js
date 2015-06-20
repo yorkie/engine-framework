@@ -16,15 +16,15 @@ test('basic', function() {
 
     strictEqual(wrapper.target, node, 'wrapper target should be node');
 
-    var mixinOpt = Fire.getMixinOptions();
-    ok(mixinOpt, 'has default mixin options');
-
-    var newMixinOpt = {};
-    Fire.Runtime.registerMixin(newMixinOpt);
-    strictEqual(Fire.getMixinOptions(), newMixinOpt, 'can get registered mixin options');
-
-    // restore
-    Fire.Runtime.registerMixin(mixinOpt);
+    //var mixinOpt = Fire.getMixinOptions();
+    //ok(mixinOpt, 'has default mixin options');
+    //
+    //var newMixinOpt = {};
+    //Fire.Runtime.registerMixin(newMixinOpt);
+    //strictEqual(Fire.getMixinOptions(), newMixinOpt, 'can get registered mixin options');
+    //
+    //// restore
+    //Fire.Runtime.registerMixin(mixinOpt);
 });
 
 test('Fire.SceneWrapperImpl', function() {

@@ -1,4 +1,5 @@
 var JS = Fire.JS;
+var mixin = require('../mixin').mixin;
 
 /**
  * @module Fire.Runtime
@@ -24,15 +25,41 @@ var sceneProto = SceneWrapper.prototype;
 JS.mixin(sceneProto, {
     isScene: true,
 
-    _initWrappers: function (wrappers, parentWrapper) {
-        for (var i = 0, len = wrappers.length; i < len; i++) {
-            var child = wrappers[i];
+    _initNodes: function (datas, parentWrapper) {
+        for (var i = 0, len = datas.length; i < len; i++) {
+            var child = datas[i];
             var wrapper = child.w;
             wrapper.onAfterDeserialize();
             wrapper.parentNode = parentWrapper.target;
+            var classIdToMixin = child.m;
+            if (classIdToMixin) {
+                var ClassToMixin;
+                if (Array.isArray(classIdToMixin)) {
+                    for (var i = 0; i < classIdToMixin.length; i++) {
+                        ClassToMixin = JS._getClassById(classIdToMixin);
+                        if (ClassToMixin) {
+                            mixin(wrapper.target, ClassToMixin);
+                            Fire.deserialize.applyMixinProps(child.t, ClassToMixin, wrapper.target);
+                        }
+                        else {
+                            Fire.error('Failed to find class %s to mixin', classIdToMixin);
+                        }
+                    }
+                }
+                else {
+                    ClassToMixin = JS._getClassById(classIdToMixin);
+                    if (ClassToMixin) {
+                        mixin(wrapper.target, ClassToMixin);
+                        Fire.deserialize.applyMixinProps(child.t, ClassToMixin, wrapper.target);
+                    }
+                    else {
+                        Fire.error('Failed to find class %s to mixin', classIdToMixin);
+                    }
+                }
+            }
             var children = child.c;
             if (children) {
-                this._initWrappers(children, wrapper);
+                this._initNodes(children, wrapper);
             }
         }
     },
@@ -57,14 +84,12 @@ JS.mixin(sceneProto, {
         var recordAssets = true;
         var handle = Fire.AssetLibrary.loadJson(json, function (err, data) {
             self._dataToDeserialize = null;
-            var wrappers = data.wrappers;
-            var mixins = data.mixins;
+            var wrappers = data;
             // preload
             self.preloadAssets(handle.assetsNeedPostLoad, function () {
                 // 由 wrappers 创建 nodes
                 self.onAfterDeserialize();
-                self._initWrappers(wrappers, self);
-                // TODO - 挂 mixins 脚本，使用 exists target 模式 反序列化 mixins 数据
+                self._initNodes(wrappers, self);
                 callback();
             });
         }, true, recordAssets);
@@ -78,14 +103,9 @@ JS.mixin(sceneProto, {
      * @private
      */
     _deserialize: function (data, ctx) {
-        //
-        //var tdInfo = new Fire._DeserializeInfo();
-        //data = Fire.deserialize(data, tdInfo);
-
         // save temporarily for create()
         this._dataToDeserialize = {
-            json: data,
-            ctx: ctx
+            json: data
         };
     }
 });
@@ -94,21 +114,36 @@ if (FIRE_EDITOR) {
 
     var serialize = require('../../editor/serialize');
 
+    //var getMixinData = function (node) {
+    //
+    //};
+
     var parseWrappers = function (node) {
         var wrapper = Fire.node(node);
         wrapper.onBeforeSerialize();
+        var children;
         var childNodes = wrapper.childNodes;
         if (childNodes.length > 0) {
-            return {
-                w: wrapper,
-                c: childNodes.map(parseWrappers)
-            };
+            children = childNodes.map(parseWrappers);
         }
-        else {
-            return {
-                w: wrapper
-            };
+        var mixinClasses = node._mixinClasses;
+        var target = mixinClasses ? node : undefined;
+
+        var mixin;
+        if (mixinClasses) {
+            if (mixinClasses.length === 1) {
+                mixin = JS._getClassId(mixinClasses[0]);
+            }
+            else {
+                mixin = mixinClasses.map(JS._getClassId);
+            }
         }
+        return {
+            w: wrapper,
+            c: children,
+            t: target,
+            m: mixin
+        };
     };
 
     /**
@@ -121,14 +156,9 @@ if (FIRE_EDITOR) {
     sceneProto._serialize = function (exporting) {
         this.onBeforeSerialize();
 
-        // build hierarchy
         var childWrappers = parseWrappers(this.target).c || [];
-        var mixins = null;  // TODO
+        var toSerialize = childWrappers;
 
-        var toSerialize = {
-            wrappers: childWrappers,
-            mixins: mixins
-        };
         return serialize(toSerialize, {
             exporting: exporting,
             stringify: false
