@@ -61,7 +61,7 @@ var AssetLibrary = (function () {
         if (this.taskIndieCache) {
             this.taskIndieCache[uuid] = asset;
         }
-        if (this.assetsNeedPostLoad && asset._rawExt && !hasRawType) {
+        if (this.assetsNeedPostLoad && asset._rawFiles && !hasRawType) {
             this.assetsNeedPostLoad.push(asset);
         }
     };

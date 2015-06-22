@@ -2,5 +2,5 @@
     "__type__": "Fire.Texture",
     "width": 512,
     "height": 512,
-    "_rawext": "png"
+    "_rawFiles": ["png"]
 } 

@@ -109,14 +109,14 @@ test('test inherited FireClass', function() {
         __type__: 'MyAsset',
         _objFlags: 0,
         _name: '',
-        _rawExt: '',
+        _rawFiles: null,
         emptyArray: [],
         array: [1, '2',  {a:3}, [4, [5]], true],
         string: 'unknown',
         number: 1,
         boolean: true,
         emptyObj: {},
-        obj: {},
+        obj: {}
     };
 
     match(asset, expect, 'test');

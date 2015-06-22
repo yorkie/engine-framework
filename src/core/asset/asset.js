@@ -40,21 +40,23 @@ module.exports = Fire.Class({
 
     properties: {
         /**
-         * Returns the url of this asset's raw file, if extname of raw file is omitted,
-         * it will returns the url of the serialized asset.
+         * Returns the url of this asset's first raw file, if none of rawFile exists,
+         * it will returns the url of this serialized asset.
          * @property url
          * @type {string}
          * @readOnly
          */
         url: {
             get: function () {
-                if (Fire.AssetLibrary) {
-                    var url = Fire.AssetLibrary.getUrl(this._uuid);
-                    var ext = this._rawExt;
-                    return ext ? url + '.' + ext : url;
-                }
-                else {
-                    Fire.error('asset.url is not usable in core process');
+                if (this._rawFiles) {
+                    if (Fire.AssetLibrary) {
+                        var url = Fire.AssetLibrary.getUrl(this._uuid);
+                        var ext = this._rawFiles[0];
+                        return ext ? url + '.' + ext : url;
+                    }
+                    else {
+                        Fire.error('asset.url is not usable in core process');
+                    }
                 }
                 return '';
             },
@@ -62,14 +64,39 @@ module.exports = Fire.Class({
         },
 
         /**
+         * Returns the url of this asset's raw files, if none of rawFile exists,
+         * it will returns an empty array.
+         * @property urls
+         * @type {string[]}
+         * @readOnly
+         */
+        urls: {
+            get: function () {
+                if (this._rawFiles) {
+                    if (Fire.AssetLibrary) {
+                        var url = Fire.AssetLibrary.getUrl(this._uuid);
+                        return this._rawFiles.map(function (ext) {
+                            return ext ? url + '.' + ext : url;
+                        });
+                    }
+                    else {
+                        Fire.error('asset.urls is not usable in core process');
+                    }
+                }
+                return [];
+            },
+            visible: false
+        },
+
+        /**
          * 在 lite 版的 Fireball 里，raw asset 并不仅仅是在 properties 里声明了 rawType 才有，
          * 而是每个 asset 都能指定自己的 raw file url。但 AssetLibrary 并不会帮你加载这个 url，除非你声明了 rawType。
-         * @property _rawExt
-         * @type {string}
-         * @default ''
+         * @property _rawFiles
+         * @type {string[]}
+         * @default null
          * @private
          */
-        _rawExt: ''
+        _rawFiles: null
     },
 
     statics: {
@@ -128,15 +155,18 @@ module.exports = Fire.Class({
 
     /**
      * Set raw extname for this asset.
-     * @method _setRawExtname
-     * @param {string} extname
+     * @method _setRawFiles
+     * @param {string[]} rawFiles
      * @private
      */
-    _setRawExtname: function (extname) {
-        if (extname.charAt(0) === '.') {
-            extname = extname.slice(1);
-        }
-        this._rawExt = extname;
+    _setRawFiles: function (rawFiles) {
+        rawFiles = rawFiles.map(function (item) {
+            if (item.charAt(0) === '.') {
+                item = item.slice(1);
+            }
+            return item;
+        });
+        this._rawFiles = rawFiles;
     }
 });
 
