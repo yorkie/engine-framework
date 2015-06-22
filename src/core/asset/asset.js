@@ -111,20 +111,11 @@ module.exports = Fire.Class({
         },
 
         /**
-         * 这个方法给 AssetDB 专用，或许能让 AssetDB 不耦合 Editor.serialize()。
-         * @method serialize
-         * @return {string}
-         * @private
-         */
-        serialize: function () {
-            return Editor.serialize(this);
-        },
-
-        /**
          * 这个方法给 AssetDB 专用，或许能让 AssetDB 不耦合 Fire.deserialize()。
          * @method deserialize
          * @param {string} data
          * @return {Asset}
+         * @static
          * @private
          */
         deserialize: function (data) {
@@ -141,6 +132,16 @@ module.exports = Fire.Class({
             }
             return '';
         }
+    },
+
+    /**
+     * 这个方法为了让 AssetDB 不耦合 Editor.serialize()。
+     * @method serialize
+     * @return {string}
+     * @private
+     */
+    serialize: function () {
+        return Editor.serialize(this);
     },
 
     /**
@@ -166,7 +167,7 @@ module.exports = Fire.Class({
             }
             return item;
         });
-        this._rawFiles = rawFiles;
+        this._rawFiles = rawFiles.length > 0 ? rawFiles : null;
     }
 });
 
