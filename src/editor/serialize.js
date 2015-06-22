@@ -274,7 +274,7 @@ var _Serializer = (function () {
 
             return { __id__: id };
         }
-        else if (_isDomNode(obj)) {
+        else if (_isDomNode && _isDomNode(obj)) {
             // raw obj
             //Fire.warn("" + obj + " won't be serialized");
             return null;
@@ -318,7 +318,7 @@ var _Serializer = (function () {
             }
         }
         else if (typeof obj === 'object' && obj) {
-            if (_isDomNode(obj)) {
+            if (_isDomNode && _isDomNode(obj)) {
                 Fire.warn("" + obj + " won't be serialized");
                 self.serializedList.push(null);
                 return;
