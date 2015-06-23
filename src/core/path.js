@@ -139,7 +139,7 @@ Fire.Path.setExtname = function (path, newExtension) {
 /**
  * @method setEndWithSep
  * @param {string} path
- * @param {boolean} [endWithSep = true]
+ * @param {Boolean} [endWithSep = true]
  * @return {string} result
  */
 Fire.Path.setEndWithSep = function (path, endWithSep) {

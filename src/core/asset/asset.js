@@ -104,7 +104,7 @@ module.exports = Fire.Class({
          * Checks if this type asset can be created from given asset file. (Without actually creating the asset).
          * @method validateAsset
          * @param {string} fsPath - file system path of the asset file in asset database
-         * @return {boolean}
+         * @return {Boolean}
          */
         validateAsset: function (fsPath) {
             return true;

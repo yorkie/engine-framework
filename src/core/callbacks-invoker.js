@@ -15,7 +15,7 @@ var CallbacksHandler = (function () {
  * @method add
  * @param {string} key
  * @param {function} callback - can be null
- * @return {boolean} whether the key is new
+ * @return {Boolean} whether the key is new
  */
 CallbacksHandler.prototype.add = function (key, callback) {
     var list = this._callbackTable[key];
@@ -45,7 +45,7 @@ CallbacksHandler.prototype.add = function (key, callback) {
  * @method has
  * @param {string} key
  * @param {function} [callback]
- * @return {boolean}
+ * @return {Boolean}
  */
 CallbacksHandler.prototype.has = function (key, callback) {
     var list = this._callbackTable[key];
@@ -70,7 +70,7 @@ CallbacksHandler.prototype.removeAll = function (key) {
  * @method remove
  * @param {string} key
  * @param {function} callback
- * @return {boolean} removed
+ * @return {Boolean} removed
  */
 CallbacksHandler.prototype.remove = function (key, callback) {
     var list = this._callbackTable[key];
@@ -143,7 +143,7 @@ CallbacksInvoker.prototype.invokeAndRemove = function (key, p1, p2, p3, p4, p5) 
 /**
  * @method bindKey
  * @param {string} key
- * @param {boolean} [remove=false] - remove callbacks after invoked
+ * @param {Boolean} [remove=false] - remove callbacks after invoked
  * @return {function} the new callback which will invoke all the callbacks binded with the same supplied key
  */
 CallbacksInvoker.prototype.bindKey = function (key, remove) {

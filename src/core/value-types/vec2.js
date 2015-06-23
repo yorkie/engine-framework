@@ -45,7 +45,7 @@ JS.mixin(Vec2.prototype, {
     /**
      * @method equals
      * @param {Vec2} other
-     * @return {boolean}
+     * @return {Boolean}
      */
     equals: function (other) {
         return other && this.x === other.x && this.y === other.y;

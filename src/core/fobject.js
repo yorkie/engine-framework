@@ -118,7 +118,7 @@ FObject = (function () {
      * accessing it.
      *
      * @method destroy
-     * @return {boolean} whether it is the first time the destroy being called
+     * @return {Boolean} whether it is the first time the destroy being called
      */
     prototype.destroy = function () {
         if (this._objFlags & Destroyed) {
@@ -197,7 +197,7 @@ FObject = (function () {
     /**
      * The customized serialization for this object. (Editor Only)
      * @method _serialize
-     * @param {boolean} exporting
+     * @param {Boolean} exporting
      * @return {object} the serialized json data object
      * @private
      */
@@ -223,7 +223,7 @@ FObject = (function () {
  * Checks whether the object is non-nil and not yet destroyed
  * @method isValid
  * @param {object|any} value
- * @return {boolean} whether is valid
+ * @return {Boolean} whether is valid
  */
 Fire.isValid = function (value) {
     if (typeof value === 'object') {

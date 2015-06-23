@@ -340,7 +340,7 @@ Fire.JS.unregisterClass to remove the id of unused class';
  * @param {string} prop
  * @param {function} getter
  * @param {function} setter
- * @param {boolean} [enumerable=false]
+ * @param {Boolean} [enumerable=false]
  */
 JS.getset = function (obj, prop, getter, setter, enumerable) {
     Object.defineProperty(obj, prop, {
@@ -356,7 +356,7 @@ JS.getset = function (obj, prop, getter, setter, enumerable) {
  * @param {any} obj
  * @param {string} prop
  * @param {function} getter
- * @param {boolean} [enumerable=false]
+ * @param {Boolean} [enumerable=false]
  */
 JS.get = function (obj, prop, getter, enumerable) {
     Object.defineProperty(obj, prop, {
@@ -371,7 +371,7 @@ JS.get = function (obj, prop, getter, enumerable) {
  * @param {any} obj
  * @param {string} prop
  * @param {function} setter
- * @param {boolean} [enumerable=false]
+ * @param {Boolean} [enumerable=false]
  */
 JS.set = function (obj, prop, setter, enumerable) {
     Object.defineProperty(obj, prop, {
@@ -431,7 +431,7 @@ JS.Array = {
      * @method remove
      * @param {any[]} array
      * @param {any} value
-     * @return {boolean}
+     * @return {Boolean}
      */
     remove: function (array, value) {
         var index = array.indexOf(value);
@@ -459,7 +459,7 @@ JS.Array = {
      * @method contains
      * @param {any[]} array
      * @param {any} value
-     * @return {boolean}
+     * @return {Boolean}
      */
     contains: function (array, value) {
         return array.indexOf(value) !== -1;
@@ -477,7 +477,7 @@ JS.String = {
      * @param {string} string
      * @param {string} searchString - The characters to be searched for at the start of this string.
      * @param {string} [position=0] - Optional. The position in this string at which to begin searching for searchString; defaults to 0.
-     * @return {boolean}
+     * @return {Boolean}
      */
     startsWith: String.prototype.startsWith ?
         function (string, searchString, position) {
@@ -494,7 +494,7 @@ JS.String = {
      * @param {string} string
      * @param {string} searchString - The characters to be searched for at the end of this string.
      * @param {string} [position=0] - Optional. Search within this string as if this string were only this long; defaults to this string's actual length, clamped within the range established by this string's length.
-     * @return {boolean}
+     * @return {Boolean}
      */
     endsWith: String.prototype.endsWith ?
         function (string, searchString, position) {

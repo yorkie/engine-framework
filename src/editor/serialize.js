@@ -18,7 +18,7 @@ function _getType (obj) {
 var _Serializer = (function () {
 
     ///**
-    // * @param {boolean} [exporting=false] - if true, property with Fire.EditorOnly will be discarded
+    // * @param {Boolean} [exporting=false] - if true, property with Fire.EditorOnly will be discarded
     // */
     function _Serializer(obj, exporting) {
         this._exporting = exporting;

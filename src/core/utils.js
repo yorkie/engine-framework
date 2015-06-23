@@ -270,7 +270,7 @@ if (FIRE_DEV) {
     Fire.JS.mixin(module.exports, {
         ///**
         // * @param {object} obj
-        // * @return {boolean} is {} ?
+        // * @return {Boolean} is {} ?
         // */
         isPlainEmptyObj_DEV: function (obj) {
             if (!obj || obj.constructor !== ({}).constructor) {

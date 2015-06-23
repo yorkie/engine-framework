@@ -24,7 +24,7 @@ JS.mixin(ValueType.prototype, {
      * Compares this object with the other one.
      * @method equals
      * @param {ValueType} other
-     * @return {boolean}
+     * @return {Boolean}
      */
     equals: function (other) {
         Fire.error("%.equals not yet implemented.", JS.getClassName(this));

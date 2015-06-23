@@ -60,7 +60,7 @@ var Time = (function () {
     /**
      * @method Fire.Time._update
      * @param {number} timestamp
-     * @param {boolean} [paused=false] if true, only realTime will be updated
+     * @param {Boolean} [paused=false] if true, only realTime will be updated
      * @param {number} [maxDeltaTime=Time.maxDeltaTime]
      * @private
      */

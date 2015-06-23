@@ -96,7 +96,7 @@ Matrix23.prototype.set = function (other) {
 /**
  * @method equals
  * @param {Matrix23} other
- * @return {boolean}
+ * @return {Boolean}
  */
 Matrix23.prototype.equals = function (other) {
     return other &&

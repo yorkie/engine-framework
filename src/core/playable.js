@@ -22,7 +22,7 @@ var Playable = (function () {
      * This property ignores the paused state, so even it is currently paused, this property still true.
      *
      * @property isPlaying
-     * @type {boolean}
+     * @type {Boolean}
      * @default false
      * @readOnly
      */
@@ -35,7 +35,7 @@ var Playable = (function () {
      * This property is just the result of (this.isPlaying == true && this.isPaused == false)
      *
      * @property isUpdating
-     * @type {boolean}
+     * @type {Boolean}
      * @default false
      * @readOnly
      */
@@ -46,7 +46,7 @@ var Playable = (function () {
     /**
      * Is currently paused? This can be true even if in edit mode(isPlaying == false).
      * @property isPaused
-     * @type {boolean}
+     * @type {Boolean}
      * @default false
      * @readOnly
      */

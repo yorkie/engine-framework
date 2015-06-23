@@ -92,7 +92,7 @@ var Rect = (function () {
     /**
      * @method equals
      * @param {Rect} other
-     * @return {boolean}
+     * @return {Boolean}
      */
     Rect.prototype.equals = function (other) {
         return other &&
@@ -205,7 +205,7 @@ var Rect = (function () {
     /**
      * @method intersects
      * @param {Rect} rect
-     * @type {boolean}
+     * @type {Boolean}
      */
     Rect.prototype.intersects = function ( rect ) {
         return Fire.Intersection.rectRect( this, rect );
@@ -215,7 +215,7 @@ var Rect = (function () {
      * Returns true if the point inside this rectangle.
      * @method contains
      * @param {Vec2} point
-     * @type {boolean}
+     * @type {Boolean}
      */
     Rect.prototype.contains = function ( point ) {
         if ( this.x <= point.x &&
@@ -232,7 +232,7 @@ var Rect = (function () {
      * Returns true if the other rect totally inside this rectangle.
      * @method containsRect
      * @param {Rect} rect
-     * @type {boolean}
+     * @type {Boolean}
      */
     Rect.prototype.containsRect = function ( rect ) {
         if ( this.x <= rect.x &&

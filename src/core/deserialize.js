@@ -4,7 +4,7 @@ var ENABLE_TARGET = FIRE_EDITOR;
 
 var _Deserializer = (function () {
     ///**
-    // * @param {boolean} isEditor - if false, property with Fire.EditorOnly will be discarded
+    // * @param {Boolean} isEditor - if false, property with Fire.EditorOnly will be discarded
     // */
     function _Deserializer(jsonObj, result, target, isEditor, classFinder) {
         this._editor = isEditor;
@@ -456,7 +456,7 @@ Fire._DeserializeInfo.prototype.getUuidOf = function (obj, propName) {
 /**
  * @method assignAssetsBy
  * @param {function} getter
- * @return {boolean} success
+ * @return {Boolean} success
  */
 Fire._DeserializeInfo.prototype.assignAssetsBy = function (getter) {
     var success = true;

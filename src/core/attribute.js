@@ -398,7 +398,7 @@ Fire.Tooltip = function (tooltip) {
 /**
  * @method Nullable
  * @param {string} boolPropName
- * @param {boolean} hasValueByDefault
+ * @param {Boolean} hasValueByDefault
  * @return {object} the attribute
  * @private
  */

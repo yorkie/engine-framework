@@ -16,7 +16,7 @@ CallbackTester.OnDestroy = 'onDestroy';
 /**
  * @param {string} expect
  * @param {string} [message]
- * @param {boolean} [append=false]
+ * @param {Boolean} [append=false]
  */
 CallbackTester.prototype.expect = function (expect, message, append) {
     if (Array.isArray(expect) && expect.length > 0) {

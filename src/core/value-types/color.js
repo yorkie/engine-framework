@@ -111,7 +111,7 @@ var Color = (function () {
     /**
      * @method equals
      * @param {Color} other
-     * @return {boolean}
+     * @return {Boolean}
      */
     Color.prototype.equals = function (other) {
         return other &&

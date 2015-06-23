@@ -52,7 +52,7 @@
      * @param {function} callback - The callback that will be invoked when the event is dispatched.
      *                              The callback is ignored if it is a duplicate (the callbacks are unique).
      * @param {Event} callback.param event
-     * @param {boolean} [useCapture=false] - When set to true, the capture argument prevents callback
+     * @param {Boolean} [useCapture=false] - When set to true, the capture argument prevents callback
      *                              from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE.
      *                              When false, callback will NOT be invoked when event's eventPhase attribute value is CAPTURING_PHASE.
      *                              Either way, callback will be invoked when event's eventPhase attribute value is AT_TARGET.
@@ -82,7 +82,7 @@
      * @method off
      * @param {string} type - A string representing the event type being removed.
      * @param {function} callback - The callback to remove.
-     * @param {boolean} [useCapture=false] - Specifies whether the callback being removed was registered as a capturing callback or not.
+     * @param {Boolean} [useCapture=false] - Specifies whether the callback being removed was registered as a capturing callback or not.
      *                              If not specified, useCapture defaults to false. If a callback was registered twice,
      *                              one with capture and one without, each must be removed separately. Removal of a capturing callback
      *                              does not affect a non-capturing version of the same listener, and vice versa.
@@ -106,7 +106,7 @@
      * @param {function} callback - The callback that will be invoked when the event is dispatched.
      *                              The callback is ignored if it is a duplicate (the callbacks are unique).
      * @param {Event} callback.param event
-     * @param {boolean} [useCapture=false] - When set to true, the capture argument prevents callback
+     * @param {Boolean} [useCapture=false] - When set to true, the capture argument prevents callback
      *                              from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE.
      *                              When false, callback will NOT be invoked when event's eventPhase attribute value is CAPTURING_PHASE.
      *                              Either way, callback will be invoked when event's eventPhase attribute value is AT_TARGET.
@@ -124,7 +124,7 @@
     // * Checks whether the EventTarget object has any callback registered for a specific type of event.
     // *
     // * @param {string} type - The type of event.
-    // * @param {boolean} A value of true if a callback of the specified type is registered; false otherwise.
+    // * @param {Boolean} A value of true if a callback of the specified type is registered; false otherwise.
     // */
     //EventTarget.prototype.hasEventListener = function (type) {};
 
@@ -187,7 +187,7 @@
      *
      * @method dispatchEvent
      * @param {Event} event - The Event object that is dispatched into the event flow
-     * @return {boolean} - returns true if either the event's preventDefault() method was not invoked,
+     * @return {Boolean} - returns true if either the event's preventDefault() method was not invoked,
      *                      or its cancelable attribute value is false, and false otherwise.
      */
     EventTarget.prototype.dispatchEvent = function (event) {
@@ -243,7 +243,7 @@
     // * Send an event to this object directly, this method will not propagate the event to any other objects.
     // *
     // * @param {Event} event - The Event object that is sent to this event target.
-    // * @return {boolean} - returns true if either the event's preventDefault() method was not invoked,
+    // * @return {Boolean} - returns true if either the event's preventDefault() method was not invoked,
     // *                      or its cancelable attribute value is false, and false otherwise.
     // */
     //EventTarget.prototype.sendEvent = function (event) {

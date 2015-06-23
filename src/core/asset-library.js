@@ -79,8 +79,8 @@ var AssetLibrary = (function () {
          * @method loadAsset
          * @param {string} uuid
          * @param {loadCallback} callback - the callback function once load finished
-         * @param {boolean} [readMainCache=true] - If false, the asset and all its depends assets will reload and create new instances from library.
-         * @param {boolean} [writeMainCache=true] - If true, the result will cache to AssetLibrary, and MUST be unload by user manually.
+         * @param {Boolean} [readMainCache=true] - If false, the asset and all its depends assets will reload and create new instances from library.
+         * @param {Boolean} [writeMainCache=true] - If true, the result will cache to AssetLibrary, and MUST be unload by user manually.
          * @param {Asset} [existingAsset] - load to existing asset, this argument is only available in editor
          * @private
          */
@@ -186,8 +186,8 @@ var AssetLibrary = (function () {
          * @method loadJson
          * @param {string|object} json
          * @param {loadCallback} callback
-         * @param {boolean} [dontCache=false] - If false, the result will cache to AssetLibrary, and MUST be unload by user manually.
-         * @param {boolean} [recordAssets=false] - 是否统计新加载的需要让场景 preload 的 asset（所有包含 raw file 后缀名的 asset 并且不含 rawType 属性的 asset）
+         * @param {Boolean} [dontCache=false] - If false, the result will cache to AssetLibrary, and MUST be unload by user manually.
+         * @param {Boolean} [recordAssets=false] - 是否统计新加载的需要让场景 preload 的 asset（所有包含 raw file 后缀名的 asset 并且不含 rawType 属性的 asset）
          * @return {LoadingHandle}
          * @private
          */
@@ -358,7 +358,7 @@ var AssetLibrary = (function () {
          *
          * @method unloadAsset
          * @param {Asset|string} assetOrUuid
-         * @param {boolean} [destroy=false] - When destroyImmediate is true, if there are objects referencing the asset, the references will become invalid.
+         * @param {Boolean} [destroy=false] - When destroyImmediate is true, if there are objects referencing the asset, the references will become invalid.
          */
         unloadAsset: function (assetOrUuid, destroy) {
             var asset;
@@ -392,7 +392,7 @@ var AssetLibrary = (function () {
 
         ///**
         // * temporary flag for deserializing assets
-        // * @property {boolean} Fire.AssetLibrary.isLoadingAsset
+        // * @property {Boolean} Fire.AssetLibrary.isLoadingAsset
         // */
         //isLoadingAsset: false,
     };
