@@ -146,6 +146,7 @@ if (FIRE_EDITOR) {
         };
     };
 
+    JS.mixin(sceneProto, {
     /**
      * The implement of serialization for the whole scene.
      * @method _serialize
@@ -153,7 +154,7 @@ if (FIRE_EDITOR) {
      * @return {object} the serialized json data object
      * @private
      */
-    sceneProto._serialize = function (exporting) {
+        _serialize: function (exporting) {
         this.onBeforeSerialize();
 
         var childWrappers = parseWrappers(this.target).c || [];
@@ -163,7 +164,8 @@ if (FIRE_EDITOR) {
             exporting: exporting,
             stringify: false
         });
-    };
+        }
+    });
 
 
     /**

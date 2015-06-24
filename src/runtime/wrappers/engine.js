@@ -6,6 +6,7 @@ var Ticker = Fire._Ticker;
 var Time = Fire.Time;
 
 var NYI = require('./utils').NYI;
+//var SceneWrapper = require('./scene');
 
 /**
  * !#zh 这个类用来封装编辑器对引擎的操作，并且提供运行时的一些全局接口和状态。
@@ -152,8 +153,8 @@ var EngineWrapper = Fire.Class({
         }
 
         this.initRuntime(options, function (err) {
-            //if (FIRE_TEST && !err) {
-            //    this._scene = new Scene();
+            //if ((FIRE_EDITOR || FIRE_TEST) && !err) {
+            //    //var scene = SceneWrapper.getCurrentSceneNode()
             //    //if (editorCallback.onSceneLoaded) {
             //    //    editorCallback.onSceneLoaded(this._scene);
             //    //}

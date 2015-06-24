@@ -10,6 +10,8 @@ var NYI = require('./utils').NYI;
  * - getCurrentSceneNode (static)
  * - childNodes
  * - createNode
+ * - position
+ * - scale
  *
  * You may want to override:
  * - preloadAssets (so that scene can load synchronously)
@@ -37,6 +39,18 @@ var SceneWrapper = Fire.Class({
                 }
             }
         }
+        /**
+         * The local position in its parent's coordinate system.
+         * This is used to simulate the panning of preview camera in edit mode.
+         * @property position
+         * @type {Fire.Vec2}
+         */
+        /**
+         * The local scale factor relative to the parent.
+         * This is used to simulate the zoom in and out of preview camera in edit mode.
+         * @property scale
+         * @type {Fire.Vec2}
+         */
     },
 
     statics: {
