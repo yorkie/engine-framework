@@ -105,7 +105,12 @@ var AssetLibrary = (function () {
                 var basename = Fire.Path.basename(url);
 
                 var index = basename.indexOf('.');
-                return basename.slice(0, index);
+
+                if ( index != -1) {
+                    basename = basename.slice(0, index);
+                }
+
+                return basename;
             }
 
             // If url is not in the library, just return 0
