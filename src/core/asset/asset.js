@@ -147,7 +147,7 @@ module.exports = Fire.Class({
     /**
      * Create a new node using this asset in the scene.
      * If this type of asset dont have corresponding type of node, this method should be null.
-     * @createNode createNode
+     * @method createNode
      * @param {function} callback
      * @param {string} callback.error - null or the error info
      * @param {object} callback.node - the created node or null

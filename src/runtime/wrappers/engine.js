@@ -1,6 +1,7 @@
 /**
  * @module Fire.Runtime
  */
+
 var JS = Fire.JS;
 var Ticker = Fire._Ticker;
 var Time = Fire.Time;
@@ -21,7 +22,7 @@ var NYI = require('./utils').NYI;
  * - resize
  *
  * @class EngineWrapper
- * @extends Fire.Playable
+ * @extends Playable
  * @constructor
  * @param {boolean} useDefaultMainLoop - if true, tick() will be invoked every frame
  */
@@ -81,7 +82,7 @@ var EngineWrapper = Fire.Class({
     // TO OVERRIDE
 
     /**
-     * @callback initCallback
+     * @callback InitCallback
      * @param {string} [error] - null or the error info
      */
 
@@ -92,7 +93,7 @@ var EngineWrapper = Fire.Class({
      * @param {number} options.width
      * @param {number} options.height
      * @param {Canvas} [options.canvas]
-     * @param {initCallback} callback
+     * @param {InitCallback} callback
      */
     initRuntime: function (options, callback) {
         NYI();

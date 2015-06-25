@@ -5,10 +5,10 @@ var _cloneable_DEV = Utils.cloneable_DEV;
 
 require('./attribute');
 
-/**
- * both getter and prop must register the name into __props__ array
- * @param {string} name - prop name
- */
+///**
+// * both getter and prop must register the name into __props__ array
+// * @param {string} name - prop name
+// */
 var _appendProp = function (name/*, isGetter*/) {
     if (FIRE_DEV) {
         //var JsVarReg = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/;
@@ -37,10 +37,10 @@ var _appendProp = function (name/*, isGetter*/) {
     }
 };
 
-/**
- * the metaclass of the "fire class" created by Fire.define, all its static members
- * will inherited by fire class.
- */
+///**
+// * the metaclass of the "fire class" created by Fire.define, all its static members
+// * will inherited by fire class.
+// */
 var _metaClass = {
 
     // string[]
@@ -575,6 +575,7 @@ function _createCtor (constructor, baseClass, useTryCatch) {
 /**
  * Specially optimized define function only for internal base classes
  *
+ * @method _fastDefine
  * @param {string} className
  * @param {function} constructor
  * @param {string[]} serializableFields

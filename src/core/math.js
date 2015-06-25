@@ -164,8 +164,6 @@ JS.mixin (Math, {
      * Clamps a value between 0 and 1.
      * @method clamp01
      * @param {number} val
-     * @param {number} min
-     * @param {number} max
      * @return {number}
      */
     clamp01: function ( val ) {

@@ -80,6 +80,10 @@ function registerEngine (engineInstance) {
  */
 
 /**
+ * @property {EngineWrapper} Engine - The instance of current registered engine.
+ */
+
+/**
  * 返回已注册的 NodeWrapper 类型，如果 nodeOrNodeType 是实例，则返回自身类型对应的 NodeWrapper 或继承树上方的最近一个注册的 NodeWrapper。
  * 如果 nodeOrNodeType 是构造函数，则只返回自身对应的 NodeWrapper。
  * @method getWrapperType

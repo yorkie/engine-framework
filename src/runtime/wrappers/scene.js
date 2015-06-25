@@ -69,7 +69,7 @@ var SceneWrapper = Fire.Class({
     /**
      * Preload assets before scene loading.
      * @method preloadAssets
-     * @param {Fire.Asset[]}
+     * @param {Fire.Asset[]} assets
      * @param {function} callback
      * @param {string} callback.error
      */
