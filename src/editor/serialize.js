@@ -392,7 +392,7 @@ Editor.serialize.asAsset = function (uuid) {
     if ( !uuid ) {
         Fire.error('[Editor.serialize.asAsset] The uuid must be non-nil!');
     }
-    var pseudoAsset = new Asset();
+    var pseudoAsset = new Fire.Asset();
     pseudoAsset._uuid = uuid;
     return pseudoAsset;
 };
