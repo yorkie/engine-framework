@@ -23,17 +23,74 @@ JS.mixin(engineProto, {
         return Fire.node(this.getCurrentSceneNode());
     },
 
+    _initScene: function (sceneWrapper, callback) {
+        if (sceneWrapper._needCreate) {
+            sceneWrapper.create(callback);
+        }
+        else {
+            callback();
+        }
+    },
+
     /**
-     * Set the wrapper of current running scene.
-     * @method _setCurrentScene
-     * @param {SceneWrapper}
+     * Launch loaded scene.
+     * @method _launchScene
+     * @param {SceneWrapper} scene
+     * @param {function} [onBeforeLoadScene]
+     * @private
      */
-    _setCurrentScene: function (sceneWrapper) {
-        if (FIRE_EDITOR && sceneWrapper._needCreate) {
-            Fire.error('The scene wrapper %s is not yet fully created', sceneWrapper.name);
+    _launchScene: function (scene, onBeforeLoadScene) {
+        var self = this;
+
+        if (!scene) {
+            Fire.error('Argument must be non-nil');
             return;
         }
-        this._setCurrentSceneNode(sceneWrapper.target);
+
+        if (FIRE_EDITOR && scene._needCreate) {
+            Fire.error('The scene wrapper %s is not yet fully created', scene.name);
+            return;
+        }
+
+        //Engine._dontDestroyEntities.length = 0;
+
+        //// unload scene
+        //var oldScene = Engine._scene;
+        //
+        ////editorCallback.onStartUnloadScene(oldScene);
+        //
+        //if (Fire.isValid(oldScene)) {
+        //    // destroyed and unload
+        //    AssetLibrary.unloadAsset(oldScene, true);
+        //}
+        //
+        //// purge destroyed entities belongs to old scene
+        //FObject._deferredDestroy();
+        //
+        //Engine._scene = null;
+
+        if (onBeforeLoadScene) {
+            onBeforeLoadScene();
+        }
+
+        //// init scene
+        //Engine._renderContext.onSceneLoaded(scene);
+
+        ////if (editorCallback.onSceneLoaded) {
+        ////    editorCallback.onSceneLoaded(scene);
+        ////}
+
+        //// launch scene
+        //scene.entities = scene.entities.concat(Engine._dontDestroyEntities);
+        //Engine._dontDestroyEntities.length = 0;
+        self._setCurrentSceneNode(scene.target);
+        //Engine._renderContext.onSceneLaunched(scene);
+
+        //editorCallback.onBeforeActivateScene(scene);
+
+        //scene.activate();
+
+        //editorCallback.onSceneLaunched(scene);
     },
 
     /**
@@ -84,8 +141,8 @@ JS.mixin(engineProto, {
                 scene = null;
             }
             if (scene) {
-                scene.create(function () {
-                    //self._launchScene(scene, onUnloaded);
+                self._initScene(scene, function () {
+                    self._launchScene(scene, onUnloaded);
                     self._loadingScene = '';
                     if (onLaunched) {
                         onLaunched(scene, error);

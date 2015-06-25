@@ -13,6 +13,7 @@ var NYI = require('./utils').NYI;
  * - scale
  *
  * You may want to override:
+ * - onBeforeSerialize (so that the scene's properties can be serialized in wrapper)
  * - preloadAssets (so that scene can load synchronously)
  *
  * @class SceneWrapper
