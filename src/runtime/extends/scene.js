@@ -70,20 +70,35 @@ JS.mixin(sceneProto, {
         var self = this;
         // deserialize (create wrappers)
         var json = this._dataToDeserialize.json;
+
+        //
+        function doCreate (wrappers) {
+            // create scene node
+            self.onAfterDeserialize();
+            // create remainder nodes
+            self._initNodes(wrappers, self);
+            callback();
+        }
+
         // 统计所有需要 preload 的 Asset
         var recordAssets = true;
-        var handle = Fire.AssetLibrary.loadJson(json, function (err, data) {
-            self._dataToDeserialize = null;
-            var wrappers = data;
-            // preload
-            self.preloadAssets(handle.assetsNeedPostLoad, function () {
-                // create scene node
-                self.onAfterDeserialize();
-                // create remainder nodes
-                self._initNodes(wrappers, self);
-                callback();
-            });
-        }, true, recordAssets);
+        var handle = Fire.AssetLibrary.loadJson(
+            json,
+            function (err, data) {
+                self._dataToDeserialize = null;
+                var wrappers = data;
+                if (handle.assetsNeedPostLoad.length > 0) {
+                    // preload
+                    self.preloadAssets(handle.assetsNeedPostLoad, function () {
+                        doCreate(wrappers);
+                    });
+                }
+                else {
+                    doCreate(wrappers);
+                }
+            },
+            true, recordAssets
+        );
     },
 
     /**
