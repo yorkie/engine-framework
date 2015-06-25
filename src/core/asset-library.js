@@ -106,7 +106,7 @@ var AssetLibrary = (function () {
 
                 var index = basename.indexOf('.');
 
-                if ( index != -1) {
+                if ( index !== -1) {
                     basename = basename.slice(0, index);
                 }
 
