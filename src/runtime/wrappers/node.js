@@ -48,8 +48,8 @@ var ERR_NaN = 'The %s must not be NaN';
  * - worldScale
  * - getWorldBounds
  * - getWorldOrientedBounds
+ * - onBeforeSerialize (so that the node's properties can be serialized in wrapper)
  * - createNode
- * - onBeforeSerialize (so that node's properties can be serialized in wrapper)
  *
  * You may want to override:
  * - setSiblingIndex

@@ -77,8 +77,9 @@ JS.mixin(sceneProto, {
             var wrappers = data;
             // preload
             self.preloadAssets(handle.assetsNeedPostLoad, function () {
-                // 由 wrappers 创建 nodes
+                // create scene node
                 self.onAfterDeserialize();
+                // create remainder nodes
                 self._initNodes(wrappers, self);
                 callback();
             });
@@ -145,23 +146,23 @@ if (FIRE_EDITOR) {
     };
 
     JS.mixin(sceneProto, {
-    /**
-     * The implement of serialization for the whole scene.
-     * @method _serialize
-     * @param {boolean} exporting
-     * @return {object} the serialized json data object
-     * @private
-     */
+        /**
+         * The implement of serialization for the whole scene.
+         * @method _serialize
+         * @param {boolean} exporting
+         * @return {object} the serialized json data object
+         * @private
+         */
         _serialize: function (exporting) {
-        this.onBeforeSerialize();
+            this.onBeforeSerialize();
 
-        var childWrappers = parseWrappers(this.target).c || [];
-        var toSerialize = childWrappers;
+            var childWrappers = parseWrappers(this.target).c || [];
+            var toSerialize = childWrappers;
 
-        return serialize(toSerialize, {
-            exporting: exporting,
-            stringify: false
-        });
+            return serialize(toSerialize, {
+                exporting: exporting,
+                stringify: false
+            });
         }
     });
 
