@@ -7,7 +7,6 @@ var NYI = require('./utils').NYI;
 
 /**
  * You should override:
- * - getCurrentSceneNode (static)
  * - childNodes
  * - createNode
  * - position
@@ -51,19 +50,6 @@ var SceneWrapper = Fire.Class({
          * @property scale
          * @type {Fire.Vec2}
          */
-    },
-
-    statics: {
-        /**
-         * Get the current running scene.
-         * @method getCurrentSceneNode
-         * @return {RuntimeNode}
-         * @static
-         */
-        getCurrentSceneNode: function () {
-            NYI();
-            return null;
-        }
     },
 
     /**

@@ -15,6 +15,28 @@ var engineProto = EngineWrapper.prototype;
 JS.mixin(engineProto, {
 
     /**
+     * Get the wrapper of current running scene.
+     * @method getCurrentScene
+     * @return {SceneWrapper}
+     */
+    getCurrentScene: function () {
+        return Fire.node(this.getCurrentSceneNode());
+    },
+
+    /**
+     * Set the wrapper of current running scene.
+     * @method _setCurrentScene
+     * @param {SceneWrapper}
+     */
+    _setCurrentScene: function (sceneWrapper) {
+        if (FIRE_EDITOR && sceneWrapper._needCreate) {
+            Fire.error('The scene wrapper %s is not yet fully created', sceneWrapper.name);
+            return;
+        }
+        this._setCurrentSceneNode(sceneWrapper.target);
+    },
+
+    /**
      * Loads the scene by its name.
      * @method loadScene
      * @param {string} sceneName - the name of the scene to load

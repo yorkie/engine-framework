@@ -18,6 +18,8 @@ var NYI = require('./utils').NYI;
  * - initRuntime
  * - playRuntime
  * - stopRuntime
+ * - getCurrentSceneNode
+ * - _setCurrentSceneNode
  * - tick (if useDefaultMainLoop)
  * - resize
  *
@@ -111,6 +113,20 @@ var EngineWrapper = Fire.Class({
      * @method stopRuntime
      */
     stopRuntime: NYI,
+
+    /**
+     * Get the current running scene node.
+     * @method getCurrentSceneNode
+     * @return {RuntimeNode}
+     */
+    getCurrentSceneNode: NYI,
+
+    /**
+     * Set the current running scene node.
+     * @method _setCurrentSceneNode
+     * @param {RuntimeNode}
+     */
+    _setCurrentSceneNode: NYI,
 
     /**
      * @method tick

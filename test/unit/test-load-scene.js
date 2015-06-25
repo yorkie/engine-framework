@@ -69,16 +69,15 @@
                     }
                 }
             },
-            statics: {
-                getCurrentSceneNode: function () {
-                    return currentScene;
-                }
-            },
             createNode: function () {
                 var node = new MyScene();
                 return node;
             }
         });
+
+        Fire.Engine.getCurrentSceneNode = function () {
+            return currentScene;
+        };
 
         Fire.Runtime.registerNodeType(MyNode, MyNodeWrapper);
         Fire.Runtime.registerNodeType(MyScene, MySceneWrapper);
@@ -212,7 +211,7 @@
             var sprite = asset;
             var texture = sprite.texture;
 
-            var wrapper = Fire.SceneWrapperImpl.getCurrentScene();
+            var wrapper = Fire.Engine.getCurrentScene();
             var actual = Editor.serialize(wrapper, {stringify: false});
             var expect = {
                 "__type__": "MySceneWrapper",

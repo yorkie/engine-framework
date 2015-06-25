@@ -10,16 +10,6 @@ var mixin = require('../mixin').mixin;
  */
 var SceneWrapper = require('../wrappers/scene');
 
-/**
- * Get the current running scene.
- * @method getCurrentScene
- * @return {SceneWrapper}
- * @static
- */
-SceneWrapper.getCurrentScene = function () {
-    return Fire.node(Fire.SceneWrapperImpl.getCurrentSceneNode());
-};
-
 var sceneProto = SceneWrapper.prototype;
 
 JS.mixin(sceneProto, {
@@ -110,6 +100,14 @@ JS.mixin(sceneProto, {
     }
 });
 
+/**
+ * @property {Boolean} _needCreate - Needs to call create().
+ * @private
+ */
+JS.get(sceneProto, '_needCreate', function () {
+    return !!this._dataToDeserialize;
+});
+
 if (FIRE_EDITOR) {
 
     var serialize = require('../../editor/serialize');
@@ -186,7 +184,7 @@ if (FIRE_EDITOR) {
      * @return {object[]}
      */
     Fire.takeHierarchySnapshot = function () {
-        var root = register.getRegisteredSceneWrapper().getCurrentSceneNode();
+        var root = Fire.Engine.getCurrentSceneNode();
         var children = Fire.node(root).childNodes;
         return children.map(getChildNodes);
     };
