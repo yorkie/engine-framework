@@ -8,8 +8,8 @@ global.paths = {
     outFile: 'engine-framework.js',
 
     test: {
-        src: 'test/unit/**/*.js',
-        runner: 'test/lib/runner.html',
+        src: 'qunit/unit/**/*.js',
+        runner: 'qunit/lib/runner.html',
         lib_dev: [
             'bin/engine-framework.test.dev.js',
         ],

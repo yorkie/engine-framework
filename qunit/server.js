@@ -13,7 +13,7 @@ function error(status, msg) {
 
 // routes
 app.get('/', function(req, res) {
-    res.sendFile( cwd + '/test/index.html');
+    res.sendFile( cwd + '/qunit/index.html');
 });
 
 // serves all the static files
