@@ -18,7 +18,7 @@ function ImageLoader(url, callback, onProgress) {
     };
     var onerror = function (msg, line, url) {
         if (callback) {
-            var error = 'Failed to load image: ' + msg + ' Url: ' + url;
+            var error = new Error('Failed to load image: ' + msg + ' Url: ' + url);
             callback(error, null);
         }
         image.removeEventListener('load', onload);
@@ -51,7 +51,7 @@ function _LoadFromXHR(url, callback, onProgress, responseType) {
                     callback(null, xhr);
                 }
                 else {
-                    callback('LoadFromXHR: Could not load "' + url + '", status: ' + xhr.status, null);
+                    callback(new Error('LoadFromXHR: Could not load "' + url + '", status: ' + xhr.status), null);
                 }
             }
             xhr.onreadystatechange = null;
@@ -109,8 +109,8 @@ function TextLoader(url, callback, onProgress) {
             callback(null, xhr.responseText);
         }
         else {
-            callback('TextLoader: "' + url +
-                '" seems to be unreachable or the file is empty. InnerMessage: ' + error, null);
+            callback(new Error('TextLoader: "' + url +
+                '" seems to be unreachable or the file is empty. InnerMessage: ' + error), null);
         }
     };
     _LoadFromXHR(url, cb, onProgress);
@@ -139,8 +139,8 @@ function JsonLoader(url, callback, onProgress) {
             callback(null, json);
         }
         else {
-            callback('JsonLoader: "' + url +
-                '" seems to be unreachable or the file is empty. InnerMessage: ' + error, null);
+            callback(new Error('JsonLoader: "' + url +
+                '" seems to be unreachable or the file is empty. InnerMessage: ' + error), null);
         }
     };
     _LoadFromXHR(url, cb, onProgress);

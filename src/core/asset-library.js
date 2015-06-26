@@ -99,7 +99,6 @@ var AssetLibrary = (function () {
         },
 
         getUuid: function (url) {
-
             var hasUuid = url.indexOf(_libraryBase) === 0;
             if ( hasUuid ) {
                 var basename = Fire.Path.basename(url);
@@ -133,7 +132,7 @@ var AssetLibrary = (function () {
          */
         _loadAssetByUuid: function (uuid, callback, handle, existingAsset) {
             if (typeof uuid !== 'string') {
-                callInNextTick(callback, '[AssetLibrary] uuid must be string', null);
+                callInNextTick(callback, new Error('[AssetLibrary] uuid must be string'), null);
                 return;
             }
             // step 1
@@ -157,7 +156,7 @@ var AssetLibrary = (function () {
             // step 3
 
             if (FIRE_EDITOR && !_libraryBase) {
-                callInNextTick(callback, 'Cannot load ' + uuid + ' in editor because AssetLibrary not yet initialized!', null);
+                callInNextTick(callback, new Error('Cannot load ' + uuid + ' in editor because AssetLibrary not yet initialized!'), null);
                 return;
             }
             var url = this.getUrl(uuid);

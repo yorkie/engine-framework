@@ -126,11 +126,11 @@ var LoadManager = {
                 this.loadByLoader(typeInfo.loader, rawUrl, callback);
             }
             else {
-                callback('Undefined extname for the raw ' + rawType + ' file of ' + url, null);
+                callback(new Error('Undefined extname for the raw ' + rawType + ' file of ' + url), null);
             }
         }
         else {
-            callback('Unknown raw type "' + rawType + '" of ' + url, null);
+            callback(new Error('Unknown raw type "' + rawType + '" of ' + url), null);
         }
     },
 
