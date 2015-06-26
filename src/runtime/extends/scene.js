@@ -200,7 +200,7 @@ if (FIRE_EDITOR) {
      * @return {object[]}
      */
     Fire.takeHierarchySnapshot = function () {
-        var root = Fire.Engine.getCurrentSceneNode();
+        var root = Fire.engine.getCurrentSceneNode();
         var children = Fire.node(root).childNodes;
         return children.map(getChildNodes);
     };

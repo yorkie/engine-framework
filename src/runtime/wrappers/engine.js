@@ -6,7 +6,10 @@ var JS = Fire.JS;
 var Ticker = Fire._Ticker;
 var Time = Fire.Time;
 
-var NYI = require('./utils').NYI;
+var Utils = require('./utils');
+var NYI = Utils.NYI;
+var NYI_Accessor = Utils.NYI_Accessor;
+
 //var SceneWrapper = require('./scene');
 
 /**
@@ -21,7 +24,7 @@ var NYI = require('./utils').NYI;
  * - getCurrentSceneNode
  * - _setCurrentSceneNode
  * - tick (if useDefaultMainLoop)
- * - resize
+ * - canvasSize
  *
  * @class EngineWrapper
  * @extends Playable
@@ -78,7 +81,12 @@ var EngineWrapper = Fire.Class({
             get: function () {
                 return this._loadingScene;
             }
-        }
+        },
+
+        /**
+         * @property {Fire.Vec2} canvasSize - Resize the rendering canvas.
+         */
+        canvasSize: NYI_Accessor(Fire.Vec2.zero)
     },
 
     // TO OVERRIDE
@@ -181,16 +189,6 @@ var EngineWrapper = Fire.Class({
         });
     },
 
-    /**
-     * Resize the rendering canvas.
-     * @method resize
-     * @param {number} width
-     * @param {number} height
-     */
-    resize: function (width, height) {
-        NYI();
-    },
-
     // OVERRIDE
 
     onError: function (error) {
@@ -277,5 +275,7 @@ var EngineWrapper = Fire.Class({
         //}
     }
 });
+
+JS.obsolete(EngineWrapper.prototype, 'EngineWrapper.resize', 'resizeCanvas');
 
 module.exports = EngineWrapper;

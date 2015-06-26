@@ -19,7 +19,7 @@ var Color = Fire.Color;
 var Ticker = Fire._Ticker;
 var Time = Fire.Time;
 //var Entity = Fire.Entity;
-//var Engine = Fire.Engine;
+//var Engine = Fire.engine;
 //var Camera = Fire.Camera;
 //var Component = Fire.Component;
 var LoadManager = Fire.LoadManager;
@@ -254,7 +254,7 @@ var EngineWrapper = Fire.Class({
 });
 Fire.Runtime.registerEngine(new EngineWrapper(true));
 
-var Engine = Fire.Engine;
+var Engine = Fire.engine;
 Engine._reset = function (w, h) {
     if (!Engine.isInitialized) {
         Engine.init({

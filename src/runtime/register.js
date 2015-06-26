@@ -57,7 +57,7 @@ function registerMixin (mixinOptions) {
 }
 
 /**
- * 注册一份引擎实例，注册后的引擎可以通过 Fire.Engine 进行访问。
+ * 注册一份引擎实例，注册后的引擎可以通过 Fire.engine 进行访问。
  * @method registerEngine
  * @param {EngineWrapper} engineInstance
  */
@@ -67,12 +67,13 @@ function registerEngine (engineInstance) {
             Fire.error('The engine to register must be child class of %s', getClassName(EngineWrapper));
             return;
         }
-        if (Fire.Engine) {
+        if (Fire.engine) {
             Fire.error('The engine is already registered!');
             return;
         }
     }
-    Fire.Engine = engineInstance;
+    Fire.engine = engineInstance;
+    JS.obsolete(Fire, 'Fire.Engine', 'Fire.engine');
 }
 
 /**

@@ -231,12 +231,12 @@ var AssetLibrary = (function () {
                 Fire.warn('Can not get class "%s"', id);
                 return Object;
             };
-            //Fire.Engine._canModifyCurrentScene = false;
+            //Fire.engine._canModifyCurrentScene = false;
             var asset = Fire.deserialize(json, _tdInfo, {
                 classFinder: classFinder,
                 target: existingAsset
             });
-            //Fire.Engine._canModifyCurrentScene = true;
+            //Fire.engine._canModifyCurrentScene = true;
 
             // load depends
             var pendingCount = _tdInfo.uuidList.length;

@@ -22,7 +22,7 @@ test('SceneNode', function() {
     var MySceneWrapper = Fire.Class({
         extends: Fire.Runtime.SceneWrapper,
     });
-    //Fire.Engine.getCurrentSceneNode = function () {
+    //Fire.engine.getCurrentSceneNode = function () {
     //    return dummyScene;
     //};
 
@@ -31,7 +31,7 @@ test('SceneNode', function() {
     dummyScene = new MyScene();
     var dummySceneWrapper = Fire.node(dummyScene);
 
-    //strictEqual(Fire.Engine.getCurrentScene(), dummySceneWrapper, 'could get current scene wrapper');
+    //strictEqual(Fire.engine.getCurrentScene(), dummySceneWrapper, 'could get current scene wrapper');
 
     strictEqual(dummySceneWrapper.isScene, true, 'isScene');
 });

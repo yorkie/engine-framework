@@ -75,7 +75,7 @@
             }
         });
 
-        Fire.Engine.getCurrentSceneNode = function () {
+        Fire.engine.getCurrentSceneNode = function () {
             return currentScene;
         };
 
@@ -211,7 +211,7 @@
             var sprite = asset;
             var texture = sprite.texture;
 
-            var wrapper = Fire.Engine.getCurrentScene();
+            var wrapper = Fire.engine.getCurrentScene();
             var actual = Editor.serialize(wrapper, {stringify: false});
             var expect = {
                 "__type__": "MySceneWrapper",

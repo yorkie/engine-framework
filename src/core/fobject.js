@@ -132,7 +132,7 @@ FObject = (function () {
         objectsToDestroy.push(this);
 
         // @ifdef EDITOR
-        if (deferredDestroyTimer === -1 && Fire.Engine && ! Fire.Engine._isUpdating) {
+        if (deferredDestroyTimer === -1 && Fire.engine && ! Fire.engine._isUpdating) {
             // auto destroy immediate in edit mode
             deferredDestroyTimer = setTimeout(FObject._deferredDestroy, 1);
         }

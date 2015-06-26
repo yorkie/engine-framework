@@ -5,25 +5,9 @@
 var JS = Fire.JS;
 var Vec2 = Fire.Vec2;
 var Rect = Fire.Rect;
-var NYI = require('./utils').NYI;
-
-function NYI_Accessor (defVal, attrs, noSetter) {
-    var prop = {
-        get: function () {
-            NYI();
-            return defVal;
-        }
-    };
-    if (!noSetter) {
-        prop.set = NYI;
-    }
-    if (attrs) {
-        return JS.mixin(prop, attrs);
-    }
-    else {
-        return prop;
-    }
-}
+var Utils = require('./utils');
+var NYI = Utils.NYI;
+var NYI_Accessor = Utils.NYI_Accessor;
 
 var INVISIBLE = {
     visible: false
