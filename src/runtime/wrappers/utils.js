@@ -1,3 +1,5 @@
+var JS = Fire.JS;
+
 function NYI () {
     if (FIRE_EDITOR) {
         Fire.error('Not yet implemented');
