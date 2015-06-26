@@ -2,7 +2,8 @@
  * @module Fire.Runtime
  */
 
-var getClassName = Fire.JS.getClassName;
+var JS = Fire.JS;
+var getClassName = JS.getClassName;
 
 var NodeWrapper = require('./wrappers/node');
 var SceneWrapper = require('./wrappers/scene');
