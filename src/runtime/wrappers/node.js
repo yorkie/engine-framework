@@ -89,6 +89,15 @@ var NodeWrapper = Fire.Class({
             }
         },
 
+        /**
+         * !#en the instance id, must be type string
+         * !#zh 节点ID，是字符串类型
+         * @property id
+         * @type {string}
+         * @readOnly
+         */
+        id: NYI_Accessor('', INVISIBLE, true),
+
         // HIERARCHY
 
         /**

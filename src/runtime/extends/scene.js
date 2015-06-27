@@ -191,6 +191,7 @@ if (FIRE_EDITOR) {
         var childNodes = wrapper.childNodes;
         return {
             name: wrapper.name,
+            id: wrapper.id,
             children: childNodes.length > 0 ? childNodes.map(getChildNodes) : null
         };
     };
