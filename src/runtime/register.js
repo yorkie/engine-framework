@@ -74,7 +74,7 @@ function registerEngine (engineInstance) {
         }
     }
     Fire.engine = engineInstance;
-    JS.obsolete(Fire, 'Fire.Engine', 'Fire.engine');
+    JS.obsolete(Fire, 'Fire.Engine', 'engine');
 }
 
 /**

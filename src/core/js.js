@@ -385,23 +385,23 @@ JS.set = function (obj, prop, setter, enumerable) {
  * @method obsolete
  * @param {any} obj - YourObject or YourClass.prototype
  * @param {string} obsoleted - "OldParam" or "YourClass.OldParam"
- * @param {string} newName - "NewParam"
+ * @param {string} newPropName - "NewParam"
  * @param {bool} [writable=false]
  */
-JS.obsolete = function (obj, obsoleted, newName, writable) {
+JS.obsolete = function (obj, obsoleted, newPropName, writable) {
     var oldName = obsoleted.split('.').slice(-1);
     JS.get(obj, oldName, function () {
         if (FIRE_DEV) {
-            Fire.warn('"%s" is deprecated, use "%s" instead please.', obsoleted, newName);
+            Fire.warn('"%s" is deprecated, use "%s" instead please.', obsoleted, newPropName);
         }
-        return obj[newName];
+        return obj[newPropName];
     });
     if (writable) {
         JS.set(obj, oldName, function (value) {
             if (FIRE_DEV) {
-                Fire.warn('"%s" is deprecated, use "%s" instead please.', obsoleted, newName);
+                Fire.warn('"%s" is deprecated, use "%s" instead please.', obsoleted, newPropName);
             }
-            obj[newName] = value;
+            obj[newPropName] = value;
         });
     }
 };
