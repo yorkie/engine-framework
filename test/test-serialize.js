@@ -1,5 +1,5 @@
 ﻿require('../src');
-require('./_init');
+require('./lib/init');
 
 describe('Serialize', function () {
 
@@ -356,4 +356,10 @@ describe('Serialize', function () {
             expect(data).to.deep.equal(expected);
         });
     });
+
+    if (Fire.isEditorCore) {
+        // test in page-level
+        var spawnRunner = require('./lib/spawn-runner');
+        spawnRunner(this.title, __filename);
+    }
 });
