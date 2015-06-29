@@ -9,7 +9,7 @@ var NodeWrapper = require('./wrappers/node');
 var SceneWrapper = require('./wrappers/scene');
 var EngineWrapper = require('./wrappers/engine');
 
-var runtimeSceneWrapper = null;
+//var runtimeSceneWrapper = null;
 var runtimeMixinOptions = null;
 
 var menuToWrapper = {};
@@ -30,14 +30,14 @@ function registerNodeType (nodeType, nodeWrapper, menuPath) {
         Fire.error('%s is already registered!', getClassName(nodeType));
         return;
     }
-    if (Fire.isChildClassOf(nodeWrapper, SceneWrapper)) {
-        if (!FIRE_TEST && runtimeSceneWrapper) {
-            Fire.error('The %s can only register once!', getClassName(SceneWrapper));
-        }
-        else {
-            runtimeSceneWrapper = nodeWrapper;
-        }
-    }
+    //if (Fire.isChildClassOf(nodeWrapper, SceneWrapper)) {
+    //    if (!FIRE_TEST && runtimeSceneWrapper) {
+    //        Fire.error('The %s can only register once!', getClassName(SceneWrapper));
+    //    }
+    //    else {
+    //        runtimeSceneWrapper = nodeWrapper;
+    //    }
+    //}
 
     nodeType.prototype._FB_WrapperType = nodeWrapper;
 
@@ -109,9 +109,9 @@ function getWrapperType (nodeOrNodeType) {
 module.exports = {
     registerNodeType: registerNodeType,
     getWrapperType: getWrapperType,
-    getRegisteredSceneWrapper: function () {
-        return runtimeSceneWrapper;
-    },
+    //getRegisteredSceneWrapper: function () {
+    //    return runtimeSceneWrapper;
+    //},
     /**
      * This dictionary stores all the registered WrapperTypes, and use MenuPath as key.
      * @property menuToWrapper

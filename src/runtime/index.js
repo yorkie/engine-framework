@@ -39,12 +39,12 @@ Fire.menuToWrapper = register.menuToWrapper;
 Fire.node = NodeWrapper.getWrapper;
 Fire.mixin = register.getMixinOptions().mixin;
 
-/**
- * The SceneWrapper class registered by runtime.
- * @property SceneWrapperImpl
- * @type {Fire.Runtime.SceneWrapper}
- */
-Fire.JS.get(Fire, 'SceneWrapperImpl', register.getRegisteredSceneWrapper);
+///**
+// * The SceneWrapper class registered by runtime.
+// * @property SceneWrapperImpl
+// * @type {Fire.Runtime.SceneWrapper}
+// */
+//Fire.JS.get(Fire, 'SceneWrapperImpl', register.getRegisteredSceneWrapper);
 
 
 
