@@ -25,6 +25,7 @@ var NYI_Accessor = Utils.NYI_Accessor;
  * - _setCurrentSceneNode
  * - tick (if useDefaultMainLoop)
  * - canvasSize
+ * - getInstanceById
  *
  * @class EngineWrapper
  * @extends Playable
@@ -135,6 +136,14 @@ var EngineWrapper = Fire.Class({
      * @param {RuntimeNode}
      */
     _setCurrentSceneNode: NYI,
+
+    /**
+     * Returns the node which id is id.
+     * @method getInstanceById
+     * @param {String} id
+     * @return {Object}
+     */
+    getInstanceById: NYI,
 
     /**
      * @method tick
