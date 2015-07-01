@@ -7,10 +7,10 @@ var nicifySerialized = require('./serialize-nicify');
 function _getType (obj) {
     var p = obj.constructor.prototype;
     if (p.hasOwnProperty('__cid__')) {
-        return obj.__cid__;
+        return p.__cid__;
     }
     //if (p.hasOwnProperty('__classname__')) {
-    //    return obj.__classname__;
+    //    return p.__classname__;
     //}
     return '';
 }

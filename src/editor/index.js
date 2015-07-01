@@ -16,5 +16,6 @@ if (!root.Editor) {
 //require('./extends/runtime');
 
 require('./serialize');
+require('./get-node-dump');
 
 module.exports = Editor;
