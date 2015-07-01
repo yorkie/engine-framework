@@ -585,6 +585,6 @@ Fire._fastDefine = function (className, constructor, serializableFields) {
     JS.setClassName(className, constructor);
     constructor.__props__ = serializableFields;
     for (var i = 0; i < serializableFields.length; i++) {
-        Fire.attr(constructor, serializableFields[i], Fire.HideInInspector);
+        Fire.attr(constructor, serializableFields[i], { visible: false });
     }
 };

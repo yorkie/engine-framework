@@ -1,6 +1,7 @@
 require('./attribute');
 require('./class');
 var FObject = require('./fobject');
+var getTypeChecker = require('./attribute').getTypeChecker;
 
 // 不能使用于get方法的属性
 var _propertyNotForGet = [
@@ -260,16 +261,22 @@ function parseAttributes (attrs, className, propName) {
             }
         }
         if (type === Fire.Integer) {
-            result.push(Fire.Integer_Obsoleted);
+            result.push( { type: Fire.Integer } );
         }
         else if (type === Fire.Float || type === Number) {
-            result.push(Fire.Float_Obsoleted);
+            result.push( { type: Fire.Float } );
         }
         else if (type === Fire.Boolean || type === Boolean) {
-            result.push(Fire.Boolean_Obsoleted);
+            result.push({
+                type: Fire.Boolean,
+                _onAfterProp: getTypeChecker(Fire.Boolean, 'Fire.Boolean')
+            });
         }
         else if (type === Fire.String || type === String) {
-            result.push(Fire.String_Obsoleted);
+            result.push({
+                type: Fire.String,
+                _onAfterProp: getTypeChecker(Fire.String, 'Fire.Boolean')
+            });
         }
         else if (type === 'Object' || type === Object) {
             if (FIRE_EDITOR) {
@@ -278,13 +285,16 @@ function parseAttributes (attrs, className, propName) {
         }
         else if (type === Fire._ScriptUuid) {
             var attr = Fire.ObjectType(Fire.ScriptAsset);
-            attr.type = 'script-uuid';
+            attr.type = 'Script';
             result.push(attr);
         }
         else {
             if (typeof type === 'object') {
-                if (type.hasOwnProperty('__enums__')) {
-                    result.push(Fire.Enum(type));
+                if (Fire.isEnumType(type)) {
+                    result.push({
+                        type: 'Enum',
+                        enumList: Fire.getEnumList(type)
+                    });
                 }
                 else if (FIRE_EDITOR) {
                     Fire.error('Please define "type" parameter of %s.%s as the constructor of %s.', className, propName, type);
@@ -303,7 +313,14 @@ function parseAttributes (attrs, className, propName) {
         var val = attrs[attrName];
         if (val) {
             if (typeof val === expectType) {
-                result.push(typeof attrCreater === 'function' ? attrCreater(val) : attrCreater);
+                if (typeof attrCreater === 'undefined') {
+                    var attr = {};
+                    attr[attrName] = val;
+                    result.push(attr);
+                }
+                else {
+                    result.push(typeof attrCreater === 'function' ? attrCreater(val) : attrCreater);
+                }
             }
             else if (FIRE_EDITOR) {
                 Fire.error('The %s of %s.%s must be type %s', attrName, className, propName, expectType);
@@ -313,10 +330,10 @@ function parseAttributes (attrs, className, propName) {
 
     parseSimpleAttr('rawType', 'string', Fire.RawType);
     parseSimpleAttr('editorOnly', 'boolean', Fire.EditorOnly);
-    parseSimpleAttr('displayName', 'string', Fire.DisplayName);
-    parseSimpleAttr('multiline', 'boolean', Fire.MultiText);
-    parseSimpleAttr('readonly', 'boolean', Fire.ReadOnly);
-    parseSimpleAttr('tooltip', 'string', Fire.Tooltip);
+    parseSimpleAttr('displayName', 'string');
+    parseSimpleAttr('multiline', 'boolean', { multiline: true });
+    parseSimpleAttr('readonly', 'boolean', { readOnly: true });
+    parseSimpleAttr('tooltip', 'string');
 
     if (attrs.serializable === false) {
         result.push(Fire.NonSerialized);
@@ -325,18 +342,18 @@ function parseAttributes (attrs, className, propName) {
     var visible = attrs.visible;
     if (typeof visible !== 'undefined') {
         if ( !attrs.visible ) {
-            result.push(Fire.HideInInspector);
+            result.push({ visible: false });
         }
     }
     else {
         var startsWithUS = (propName.charCodeAt(0) === 95);
         if (startsWithUS) {
-            result.push(Fire.HideInInspector);
+            result.push({ visible: false });
         }
     }
 
     //if (attrs.custom) {
-    //    result.push(Fire.Custom(attrs.custom));
+    //    result.push( { custom: attrs.custom });
     //}
 
     var range = attrs.range;

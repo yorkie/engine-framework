@@ -9,9 +9,9 @@ function _getType (obj) {
     if (p.hasOwnProperty('__cid__')) {
         return obj.__cid__;
     }
-    if (p.hasOwnProperty('__classname__')) {
-        return obj.__classname__;
-    }
+    //if (p.hasOwnProperty('__classname__')) {
+    //    return obj.__classname__;
+    //}
     return '';
 }
 

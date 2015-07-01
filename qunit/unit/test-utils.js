@@ -23,6 +23,9 @@ test('enum', function () {
         Area: 15,
     });
 
+    strictEqual(Fire.isEnumType({}), false, '{} is not enum type');
+    strictEqual(Fire.isEnumType(TestEnum), true, 'TestEnum is enum ');
+
     deepEqual ( Fire.getEnumList(TestEnum),
                [
                    { name: "UseBest", value: 0 },

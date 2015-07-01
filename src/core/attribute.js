@@ -141,19 +141,12 @@ Fire.EditorOnly = {
  */
 Fire.Integer = 'Integer';
 
-Fire.Integer_Obsoleted = { type: 'int' };
-
 /**
  * Indicates that the type of elements in array or the type of value in dictionary is double.
  * @property Float
  * @type object
  */
 Fire.Float = 'Float';
-
-Fire.Float_Obsoleted = { type: 'float' };
-
-Fire.SingleText = { textMode: 'single' };
-Fire.MultiText = { textMode: 'multi' };
 
 function getTypeChecker (type, attrName, objectTypeCtor) {
     if (FIRE_DEV) {
@@ -207,22 +200,12 @@ function getTypeChecker (type, attrName, objectTypeCtor) {
  */
 Fire.Boolean = 'Boolean';
 
-Fire.Boolean_Obsoleted = {
-    type: 'boolean',
-    _onAfterProp: getTypeChecker('boolean', 'Fire.Boolean')
-};
-
 /**
  * Indicates that the type of elements in array or the type of value in dictionary is string.
  * @property String
  * @type object
  */
 Fire.String = 'String';
-
-Fire.String_Obsoleted = {
-    type: 'string',
-    _onAfterProp: getTypeChecker('string', 'Fire.String')
-};
 
 // the value will be represented as a uuid string
 Fire._ScriptUuid = {};
@@ -248,7 +231,7 @@ Fire.ObjectType = function (typeCtor) {
         }
     }
     return {
-        type: 'object',
+        type: 'Object',
         ctor: typeCtor,
         _onAfterProp: (function () {
             if (FIRE_EDITOR) {
@@ -278,18 +261,6 @@ Fire.ObjectType = function (typeCtor) {
             }
         })()
     };
-};
-
-/**
- * Makes a property show up as a enum in Inspector.
- *
- * @method Enum
- * @param {object} enumType
- * @return {object} the enum attribute
- * @private
- */
-Fire.Enum = function (enumType) {
-    return { type: 'enum', enumList: Fire.getEnumList(enumType) };
 };
 
 /**
@@ -342,60 +313,6 @@ Fire.RawType = function (typename) {
 };
 
 /**
- * Makes a custom property
- *
- * @method Custom
- * @param {string} name
- * @return {object}
- * @private
- */
-Fire.Custom = function (type) {
-    return { custom: type };
-};
-
-/**
- * Makes a property not show up in the Inspector but be serialized.
- * @property HideInInspector
- * @type object
- * @private
- */
-Fire.HideInInspector = { hideInInspector: true };
-
-/**
- * Set a custom property name for display in the editor
- *
- * @method Fire.DisplayName
- * @param {string} name
- * @return {object} the attribute
- * @private
- */
-Fire.DisplayName = function (name) {
-    return { displayName: name };
-};
-
-/**
- * The ReadOnly attribute indicates that the property field is disabled in Inspector.
- * @property ReadOnly
- * @type object
- * @private
- */
-Fire.ReadOnly = {
-    readOnly: true
-};
-
-/**
- * Specify a tooltip for a property
- *
- * @method Tooltip
- * @param {string} tooltip
- * @return {object} the attribute
- * @private
- */
-Fire.Tooltip = function (tooltip) {
-    return { tooltip: tooltip };
-};
-
-/**
  * @method Nullable
  * @param {string} boolPropName
  * @param {Boolean} hasValueByDefault
@@ -408,7 +325,7 @@ Fire.Nullable = function (boolPropName, hasValueByDefault) {
 
         _onAfterProp: function (constructor, mainPropName) {
             // declare boolean
-            constructor.prop(boolPropName, hasValueByDefault, Fire.HideInInspector);
+            constructor.prop(boolPropName, hasValueByDefault, { visible: false });
             // copy attributes from main property
             var mainPropAttr = Fire.attr(constructor, mainPropName) || {};
             if (mainPropAttr.serializable === false) {
@@ -446,4 +363,8 @@ Fire.Watch = function (names, callback) {
  */
 Fire.Range = function (min, max) {
    return { min: min, max: max };
+};
+
+module.exports = {
+    getTypeChecker: getTypeChecker
 };
