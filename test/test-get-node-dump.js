@@ -1,4 +1,6 @@
 require('../src');
+require('./lib/init');
+
 // make runtime available in core-level
 Fire.Runtime = require('../src/runtime');
 
@@ -116,6 +118,10 @@ describe('Editor.getNodeDump', function () {
                 wrapMode: {
                     default: FilterMode.Bilinear,
                     type: FilterMode
+                },
+                texture: {
+                    default: null,
+                    type: Fire.Texture
                 }
             },
             getName: function () {
@@ -145,6 +151,10 @@ describe('Editor.getNodeDump', function () {
 
         var dump;
         before(function () {
+            // test wrong type
+            node.texture = new Fire.Sprite();
+            node.texture._uuid = '43728e743120';
+            //
             dump = Editor.getNodeDump(node);
         });
 
@@ -234,6 +244,10 @@ describe('Editor.getNodeDump', function () {
                                     "value": 2
                                 }
                             ]
+                        },
+                        texture: {
+                            default: null,
+                            type: 'Fire.Texture'
                         }
                     }
                 }
@@ -283,7 +297,11 @@ describe('Editor.getNodeDump', function () {
                     _objFlags: 0,
                     age: 40,
                     name: 'ha',
-                    wrapMode: 1
+                    wrapMode: 1,
+                    texture: {
+                        __type__: 'Fire.Sprite',
+                        uuid: node.texture._uuid
+                    }
                 }]
             });
         });

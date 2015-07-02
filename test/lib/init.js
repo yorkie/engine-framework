@@ -193,45 +193,6 @@ if (!Fire.Texture) {
                     readonly: true
                 }
             },
-            getPixel: function (x, y) {
-                if (!canvasCtxToGetPixel) {
-                    var canvas = document.createElement('canvas');
-                    canvas.width = 1;
-                    canvas.height = 1;
-                    canvasCtxToGetPixel = canvas.getContext('2d');
-                }
-                if (this.wrapMode === Texture.WrapMode.Clamp) {
-                    x = Math.clamp(x, 0, this.image.width);
-                    y = Math.clamp(y, 0, this.image.height);
-                }
-                else if (this.wrapMode === Texture.WrapMode.Repeat) {
-                    x = x % this.image.width;
-                    if (x < 0) {
-                        x += this.image.width;
-                    }
-                    y = y % this.image.width;
-                    if (y < 0) {
-                        y += this.image.width;
-                    }
-                }
-                canvasCtxToGetPixel.clearRect(0, 0, 1, 1);
-                canvasCtxToGetPixel.drawImage(this.image, x, y, 1, 1, 0, 0, 1, 1);
-
-                var imgBytes = null;
-                try {
-                    imgBytes = canvasCtxToGetPixel.getImageData(0, 0, 1, 1).data;
-                }
-                catch (e) {
-                    Fire.error("An error has occurred. This is most likely due to security restrictions on reading canvas pixel data with local or cross-domain images.");
-                    return Fire.Color.transparent;
-                }
-                var result = new Fire.Color();
-                result.r = imgBytes[0] / 255;
-                result.g = imgBytes[1] / 255;
-                result.b = imgBytes[2] / 255;
-                result.a = imgBytes[3] / 255;
-                return result;
-            }
         });
 
         Texture.WrapMode = WrapMode;
@@ -241,7 +202,6 @@ if (!Fire.Texture) {
     })();
     Fire.Texture = Texture;
 
-    var canvasCtxToGetPixel = null;
 }
 
 if (Fire.isWeb) {

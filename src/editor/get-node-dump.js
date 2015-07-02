@@ -5,7 +5,7 @@ var JS = Fire.JS;
  * @module Editor
  */
 
-function getType (obj) {
+function getTypeId (obj) {
     if (typeof obj === 'object') {
         obj = obj.constructor;
     }
@@ -106,7 +106,17 @@ function dumpType (obj) {
     }
 }
 
-function dumpObject (types, obj) {
+function getExpectedTypeInClassDef (types, klass, propName) {
+    var typeId = JS._getClassId(klass);
+    if (typeId) {
+        var typeInfo = types[typeId];
+        if (typeInfo) {
+            return typeInfo.properties[propName].type;
+        }
+    }
+}
+
+function dumpObject (types, obj, expectedType) {
     if (!obj) {
         return null;
     }
@@ -119,9 +129,8 @@ function dumpObject (types, obj) {
         var uuid = obj._uuid;
         if (uuid) {
             // Asset
-            attrType = getAttrType(types, obj);
             actualType = JS._getClassId(obj);
-            if (attrType !== actualType) {
+            if (expectedType !== actualType) {
                 return {
                     __type__: actualType,
                     uuid: uuid
@@ -136,9 +145,8 @@ function dumpObject (types, obj) {
         // TODO - 支持嵌套对象 and 循环引用?
 
         if (obj instanceof Fire.Runtime.NodeWrapper) {
-            attrType = getAttrType(types, obj);
             actualType = JS._getClassId(obj);
-            if (attrType !== actualType) {
+            if (expectedType !== actualType) {
                 return {
                     __type__: actualType,
                     id: obj.id
@@ -161,9 +169,9 @@ function dumpObject (types, obj) {
     return null;
 }
 
-function dumpField (types, val) {
+function dumpField (types, val, expectedType) {
     if (typeof val === 'object') {
-        return dumpObject(types, val);
+        return dumpObject(types, val, expectedType);
     }
     else if (typeof val !== 'function') {
         return val;
@@ -179,7 +187,8 @@ function dumpByClass (types, data, obj, klass) {
     if (props) {
         for (var p = 0; p < props.length; p++) {
             var propName = props[p];
-            data[propName] = dumpField(types, obj[propName]);
+            var expectedType = getExpectedTypeInClassDef(types, klass, propName);
+            data[propName] = dumpField(types, obj[propName], expectedType);
             //console.log('dumpField(types, obj[' + propName + ']) ' + data[propName]);
         }
     }
@@ -190,8 +199,7 @@ function dumpMain (types, wrapper) {
     var data = {};
 
     // dump main type
-    var typeId = getType(wrapper);
-    console.log('typeId: ' + typeId);
+    var typeId = JS._getClassId(wrapper);
     if (typeId) {
         data.__type__ = typeId;
         types[typeId] = dumpType(wrapper);
@@ -206,7 +214,7 @@ function dumpMain (types, wrapper) {
         data.__mixins__ = [];
         for (var i = 0; i < mixinClasses.length; i++) {
             var klass = mixinClasses[i];
-            typeId = getType(klass);
+            typeId = JS._getClassId(klass);
             if (typeId) {
                 types[typeId] = dumpType(klass);
                 var mixinData = {
