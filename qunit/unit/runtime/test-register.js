@@ -27,12 +27,12 @@ test('basic', function() {
     //Fire.Runtime.registerMixin(mixinOpt);
 });
 
-test('Fire.SceneWrapperImpl', function() {
-    var MyScene = Fire.Class();
-    var MySceneWrapper = Fire.Class({
-        extends: Fire.Runtime.SceneWrapper
-    });
-    Fire.Runtime.registerNodeType(MyScene, MySceneWrapper);
-
-    strictEqual(Fire.SceneWrapperImpl, MySceneWrapper, 'Fire.SceneWrapperImpl should return registered SceneWrapper');
-});
+//test('Fire.SceneWrapperImpl', function() {
+//    var MyScene = Fire.Class();
+//    var MySceneWrapper = Fire.Class({
+//        extends: Fire.Runtime.SceneWrapper
+//    });
+//    Fire.Runtime.registerNodeType(MyScene, MySceneWrapper);
+//
+//    strictEqual(Fire.SceneWrapperImpl, MySceneWrapper, 'Fire.SceneWrapperImpl should return registered SceneWrapper');
+//});

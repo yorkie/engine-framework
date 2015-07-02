@@ -275,7 +275,7 @@ function parseAttributes (attrs, className, propName) {
         else if (type === Fire.String || type === String) {
             result.push({
                 type: Fire.String,
-                _onAfterProp: getTypeChecker(Fire.String, 'Fire.Boolean')
+                _onAfterProp: getTypeChecker(Fire.String, 'Fire.String')
             });
         }
         else if (type === 'Object' || type === Object) {

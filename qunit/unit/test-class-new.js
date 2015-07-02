@@ -376,3 +376,26 @@ test('property notify', function () {
     strictEqual(string1, "0 : 4", 'dogs has 4 legs');
     strictEqual(string2, "0 : 2", 'dogs has 2 eyes');
 });
+
+//test('type', 0, function () {
+//    var Animal = Fire.Class({
+//        properties: {
+//            legs: {
+//                default: 0,
+//                type: 'Float'
+//            },
+//            eyes: {
+//                default: 0,
+//                type: 'Integer'
+//            },
+//            foo: {
+//                default: '',
+//                type: 'String'
+//            },
+//            bar: {
+//                default: null,
+//                type: Fire.Texture
+//            }
+//        }
+//    });
+//});

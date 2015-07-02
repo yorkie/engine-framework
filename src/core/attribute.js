@@ -169,8 +169,9 @@ function getTypeChecker (type, attrName, objectTypeCtor) {
                 return;
             }
             var defaultType = typeof defaultVal;
-            if (defaultType === type) {
-                if (type === 'object') {
+            var type_lowerCase = type.toLowerCase();
+            if (defaultType === type_lowerCase) {
+                if (type_lowerCase === 'object') {
                     if (defaultVal && !(defaultVal instanceof objectTypeCtor)) {
                         Fire.warn('The default value of %s.%s is not instance of %s.',
                             JS.getClassName(constructor), mainPropName, JS.getClassName(objectTypeCtor));
@@ -234,9 +235,9 @@ Fire.ObjectType = function (typeCtor) {
         type: 'Object',
         ctor: typeCtor,
         _onAfterProp: (function () {
-            if (FIRE_EDITOR) {
+            if (FIRE_DEV) {
                 return function (classCtor, mainPropName) {
-                    var check = getTypeChecker('object', 'Fire.ObjectType', typeCtor);
+                    var check = getTypeChecker('Object', 'Fire.ObjectType', typeCtor);
                     check(classCtor, mainPropName);
                     // check ValueType
                     var mainPropAttrs = Fire.attr(classCtor, mainPropName) || {};
