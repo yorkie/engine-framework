@@ -16,8 +16,6 @@ function getType (obj) {
     return '';
 }
 
-var enumTypeId = 0;
-
 function dumpAttrs (data, attrs) {
     if (attrs.ctor) {
         data.type = JS._getClassId(attrs.ctor);
@@ -272,7 +270,6 @@ function dumpMain (types, wrapper) {
  * ```
  */
 Editor.getNodeDump = function (node) {
-    enumTypeId = 0;
     var types = {};
 
     if (!node) {

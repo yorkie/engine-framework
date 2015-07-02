@@ -81,6 +81,12 @@ describe('Editor.getNodeDump', function () {
 
         node = new Node();
 
+        var FilterMode = Fire.defineEnum({
+            Point: -1,
+            Bilinear: -1,
+            Trilinear: -1
+        });
+
         var Script = Fire.Class({
             name: '2154648724566',
             extends: Fire.Class({
@@ -106,6 +112,10 @@ describe('Editor.getNodeDump', function () {
                         return this._name;
                     },
                     displayName: 'Name'
+                },
+                wrapMode: {
+                    default: FilterMode.Bilinear,
+                    type: FilterMode
                 }
             },
             getName: function () {
@@ -206,6 +216,24 @@ describe('Editor.getNodeDump', function () {
                         },
                         name: {
                             displayName: 'Name'
+                        },
+                        "wrapMode": {
+                            "default": 1,
+                            "type": "Enum",
+                            "enumList": [
+                                {
+                                    "name": "Point",
+                                    "value": 0
+                                },
+                                {
+                                    "name": "Bilinear",
+                                    "value": 1
+                                },
+                                {
+                                    "name": "Trilinear",
+                                    "value": 2
+                                }
+                            ]
                         }
                     }
                 }
@@ -254,7 +282,8 @@ describe('Editor.getNodeDump', function () {
                     _name: 'ha',
                     _objFlags: 0,
                     age: 40,
-                    name: 'ha'
+                    name: 'ha',
+                    wrapMode: 1
                 }]
             });
         });
