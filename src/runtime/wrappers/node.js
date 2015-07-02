@@ -44,6 +44,7 @@ var ERR_NaN = 'The %s must not be NaN';
  * - worldY
  * - scaleX
  * - scaleY
+ * - attached
  *
  * @class NodeWrapper
  * @constructor
@@ -58,6 +59,9 @@ var NodeWrapper = Fire.Class({
          * @type {RuntimeNode}
          */
         this.target = arguments[0];
+        if (this.target) {
+            this.attached();
+        }
 
         //if (FIRE_EDITOR && !this.target) {
         //    Fire.warn('target of %s must be non-nil', JS.getClassName(this));
@@ -343,6 +347,14 @@ var NodeWrapper = Fire.Class({
         var node = this.createNode();
         this.target = node;
         node._FB_wrapper = this;
+        this.attached();
+    },
+
+    /**
+     * Invoked after the wrapper's target is assigned. Override this method if you need to initialize your node.
+     * @method attached
+     */
+    attached: function () {
     },
 
     ///**
