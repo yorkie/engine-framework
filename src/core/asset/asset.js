@@ -101,16 +101,6 @@ module.exports = Fire.Class({
 
     statics: {
         /**
-         * Checks if this type asset can be created from given asset file. (Without actually creating the asset).
-         * @method validateAsset
-         * @param {string} fsPath - file system path of the asset file in asset database
-         * @return {Boolean}
-         */
-        validateAsset: function (fsPath) {
-            return true;
-        },
-
-        /**
          * 这个方法给 AssetDB 专用，或许能让 AssetDB 不耦合 Fire.deserialize()。
          * @method deserialize
          * @param {string} data
@@ -124,8 +114,10 @@ module.exports = Fire.Class({
 
         urlToUuid: function (url) {
             if (Fire.AssetLibrary) {
-                var uuid = Fire.AssetLibrary.getUuid(url);
-                return uuid;
+                if (url) {
+                    var uuid = Fire.AssetLibrary.getUuid(url);
+                    return uuid;
+                }
             }
             else {
                 Fire.error('Asset.urlToUuid is not usable in core process');
