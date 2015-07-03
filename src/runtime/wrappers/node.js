@@ -52,6 +52,8 @@ var ERR_NaN = 'The %s must not be NaN';
  */
 var NodeWrapper = Fire.Class({
     name: 'Fire.Runtime.NodeWrapper',
+    extends: Fire.FObject,
+
     constructor: function () {
         /**
          * The target node to wrap.

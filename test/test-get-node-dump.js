@@ -214,12 +214,6 @@ describe('Editor.getNodeDump', function () {
                 },
                 '2154648724566': {
                     properties: {
-                        _name: {
-                            visible: false
-                        },
-                        _objFlags: {
-                            visible: false
-                        },
                         age: {
                             default: 40,
                             tooltip: 'Age'
@@ -293,8 +287,6 @@ describe('Editor.getNodeDump', function () {
 
                 __mixins__: [{
                     __type__: '2154648724566',
-                    _name: 'ha',
-                    _objFlags: 0,
                     age: 40,
                     name: 'ha',
                     wrapMode: 1,

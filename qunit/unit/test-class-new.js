@@ -135,8 +135,8 @@ test('Inherit', function () {
     strictEqual(dog.myName, 'doge', 'can override property');
     strictEqual(husky.myName, 'doge', 'can inherit property');
 
-    deepEqual(Husky.__props__, FObject.__props__.concat(['myName', 'weight']), 'can inherit prop list');
-    deepEqual(Dog.__props__, FObject.__props__.concat(['myName']), 'base prop list not changed');
+    deepEqual(Husky.__props__, /*FObject.__props__.concat*/(['myName', 'weight']), 'can inherit prop list');
+    deepEqual(Dog.__props__, /*FObject.__props__.concat*/(['myName']), 'base prop list not changed');
 
     Fire.JS.unregisterClass(Animal, Dog, Husky);
 });

@@ -254,8 +254,6 @@ describe('Serialize', function () {
         var expected = [
             {
                 "__type__": "Scene",
-                "_name": "",
-                "_objFlags": 0,
                 "entities": [
                     {
                         "__id__": 1
@@ -263,9 +261,7 @@ describe('Serialize', function () {
                 ]
             },
             {
-                "__type__": "Entity",
-                "_name": "",
-                "_objFlags": 0
+                "__type__": "Entity"
             }
         ];
 

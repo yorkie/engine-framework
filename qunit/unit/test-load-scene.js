@@ -279,8 +279,6 @@
                         "_objFlags": 0
                     },
                     {
-                        "_name": "",
-                        "_objFlags": 0,
                         "age": 30,
                         "target": {
                             "__id__": 2

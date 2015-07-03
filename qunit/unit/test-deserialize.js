@@ -286,6 +286,7 @@ test('target', function () {
 test('custom deserialization', function () {
     var Asset = Fire.Class({
         name: 'a a b b',
+        extend: Fire.FObject,
         properties: {
             prop1: 1,
             prop2: 2

@@ -238,8 +238,6 @@ test('main asset', function () {
     var expected = [
         {
             "__type__": "Scene",
-            "_name": "",
-            "_objFlags": 0,
             "entities": [
                 {
                     "__id__": 1
@@ -248,8 +246,6 @@ test('main asset', function () {
         },
         {
             "__type__": "Entity",
-            "_name": "",
-            "_objFlags": 0
         }
     ];
 

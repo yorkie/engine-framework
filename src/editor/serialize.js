@@ -238,17 +238,19 @@ var _Serializer = (function () {
             return { __id__: id }; // no need to parse again
         }
 
-        if (obj instanceof FObject) {
+        var isFObj = obj instanceof FObject;
+        if (isFObj) {
             // FObject
-            if ( !obj.isValid ) {
+            if (!obj.isValid) {
                 return null;
             }
             var uuid = obj._uuid;
             if (uuid) {
                 // Asset
-                return { __uuid__: uuid };
+                return {__uuid__: uuid};
             }
-
+        }
+        if (isFObj || Fire._isFireClass(obj.constructor)) {
             // assign id for FObject
             id = self.serializedList.length;
             obj.__id__ = id;        // we add this prop dynamically to simply lookup whether an obj has been serialized.
@@ -265,10 +267,14 @@ var _Serializer = (function () {
             }
             if (! obj._serialize) {
                 _enumerateObject(self, obj, data);
-                data._objFlags &= PersistentMask;
+                if (isFObj) {
+                    data._objFlags &= PersistentMask;
+                }
             }
             else {
-                //obj._objFlags &= PersistentMask;
+                //if (isFObj) {
+                //    obj._objFlags &= PersistentMask;
+                //}
                 data.content = obj._serialize(self._exporting);
             }
 
@@ -303,7 +309,7 @@ var _Serializer = (function () {
     // * @param {object} obj - The object to serialize
     // */
     var _serializeMainObj = function (self, obj) {
-        if (obj instanceof FObject) {
+        if (obj instanceof FObject || Fire._isFireClass(obj.constructor)) {
             var uuid = obj._uuid;
             if (typeof uuid !== 'undefined') {
                 // force Asset serializable, or _serializeObj will just return { __uuid__: ... }

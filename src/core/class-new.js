@@ -1,6 +1,6 @@
 require('./attribute');
 require('./class');
-var FObject = require('./fobject');
+//var FObject = require('./fobject');
 var getTypeChecker = require('./attribute').getTypeChecker;
 
 // 不能使用于get方法的属性
@@ -74,7 +74,7 @@ Fire.Class = function (options) {
     }
 
     var name = options.name;
-    var base = options.extends || FObject;
+    var base = options.extends/* || FObject*/;
     var ctor = (options.hasOwnProperty('constructor') && options.constructor) || undefined;
 
     // create constructor
