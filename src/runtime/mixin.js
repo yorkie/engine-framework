@@ -1,5 +1,6 @@
 // The default mixin solution
 var JS = Fire.JS;
+var Wrapper = require('./wrappers/node');
 
 //var tmpArray = [];
 
@@ -12,6 +13,15 @@ var mixin = {
         var newMixinClassId = JS._getClassId(classToMix);
         if (FIRE_EDITOR && !newMixinClassId) {
             Fire.error("The class to mixin must have class name or script's uuid.");
+            return;
+        }
+
+        if (node instanceof Wrapper) {
+            node = node.target;
+        }
+
+        if (!node) {
+            Fire.error("The node to mixin must be non-nil.");
             return;
         }
 

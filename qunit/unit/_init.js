@@ -249,6 +249,8 @@ var EngineWrapper = Fire.Class({
     extends: Fire.Runtime.EngineWrapper,
     initRuntime: function () {},
     playRuntime: function () {},
+    pauseRuntime: function () {},
+    resumeRuntime: function () {},
     stopRuntime: function () {},
     tick: function () {}
 });

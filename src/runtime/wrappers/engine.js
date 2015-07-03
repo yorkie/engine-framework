@@ -21,6 +21,8 @@ var NYI_Accessor = Utils.NYI_Accessor;
  * - initRuntime
  * - playRuntime
  * - stopRuntime
+ * - pauseRuntime
+ * - resumeRuntime
  * - getCurrentSceneNode
  * - _setCurrentSceneNode
  * - tick (if useDefaultMainLoop)
@@ -135,11 +137,11 @@ var EngineWrapper = Fire.Class({
      */
     resumeRuntime: NYI,
 
-    /**
-     * Steps playback.
-     * @method stepRuntime
-     */
-    stepRuntime: NYI,
+    ///**
+    // * Steps playback.
+    // * @method stepRuntime
+    // */
+    //stepRuntime: NYI,
 
     /**
      * Get the current running scene node.
