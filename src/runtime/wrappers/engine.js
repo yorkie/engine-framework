@@ -124,6 +124,24 @@ var EngineWrapper = Fire.Class({
     stopRuntime: NYI,
 
     /**
+     * Pauses playback.
+     * @method pauseRuntime
+     */
+    pauseRuntime: NYI,
+
+    /**
+     * Resumes playback.
+     * @method resumeRuntime
+     */
+    resumeRuntime: NYI,
+
+    /**
+     * Steps playback.
+     * @method stepRuntime
+     */
+    stepRuntime: NYI,
+
+    /**
      * Get the current running scene node.
      * @method getCurrentSceneNode
      * @return {RuntimeNode}
@@ -209,17 +227,19 @@ var EngineWrapper = Fire.Class({
             }
         }
     },
-    //onResume: function () {
-    //    if (FIRE_EDITOR) {
-    //        FObject._clearDeferredDestroyTimer();
-    //        editorCallback.onEnginePlayed(true);
-    //    }
-    //},
-    //onPause: function () {
-    //    if (FIRE_EDITOR) {
-    //        editorCallback.onEnginePaused();
-    //    }
-    //},
+    onResume: function () {
+       // if (FIRE_EDITOR) {
+       //     FObject._clearDeferredDestroyTimer();
+       //     editorCallback.onEnginePlayed(true);
+       // }
+       this.resumeRuntime();
+    },
+    onPause: function () {
+       // if (FIRE_EDITOR) {
+       //     editorCallback.onEnginePaused();
+       // }
+       this.pauseRuntime();
+    },
     onPlay: function () {
         //if (FIRE_EDITOR && ! this._isPaused) {
         //    FObject._clearDeferredDestroyTimer();
