@@ -135,10 +135,12 @@ var JS = {
  * @return {string}
  */
 JS.getClassName = function (obj) {
-    if (typeof obj === 'function' && obj.prototype.__classname__) {
-        return obj.prototype.__classname__;
+    if (typeof obj === 'function') {
+        if (obj.prototype.__classname__) {
+            return obj.prototype.__classname__;
+        }
     }
-    if (obj && obj.constructor) {
+    else if (obj && obj.constructor) {
         if (obj.constructor.prototype && obj.constructor.prototype.hasOwnProperty('__classname__')) {
             return obj.__classname__;
         }

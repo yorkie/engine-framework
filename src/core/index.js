@@ -59,6 +59,10 @@ require('./deserialize');
 require('./event/event-target');
 require('./playable');
 
+// script management
+
+require('./requiring-frame');
+
 if (Fire.isWeb) {
     // codes only available in page level
     require('./ticker');

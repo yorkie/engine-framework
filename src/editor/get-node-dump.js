@@ -9,16 +9,12 @@ function getTypeId (obj) {
     if (typeof obj === 'object') {
         obj = obj.constructor;
     }
-    var p = obj.prototype;
-    if (p.hasOwnProperty('__cid__')) {
-        return p.__cid__;
-    }
-    return '';
+    return JS.getClassName(obj);
 }
 
 function dumpAttrs (data, attrs) {
     if (attrs.ctor) {
-        data.type = JS._getClassId(attrs.ctor);
+        data.type = getTypeId(attrs.ctor);
     }
     else if (attrs.type) {
         data.type = attrs.type;
@@ -107,7 +103,7 @@ function dumpType (obj) {
 }
 
 function getExpectedTypeInClassDef (types, klass, propName) {
-    var typeId = JS._getClassId(klass);
+    var typeId = getTypeId(klass);
     if (typeId) {
         var typeInfo = types[typeId];
         if (typeInfo) {
@@ -129,7 +125,7 @@ function dumpObject (types, obj, expectedType) {
         var uuid = obj._uuid;
         if (uuid) {
             // Asset
-            actualType = JS._getClassId(obj);
+            actualType = getTypeId(obj);
             if (expectedType !== actualType) {
                 return {
                     __type__: actualType,
@@ -145,7 +141,7 @@ function dumpObject (types, obj, expectedType) {
         // TODO - 支持嵌套对象 and 循环引用?
 
         if (obj instanceof Fire.Runtime.NodeWrapper) {
-            actualType = JS._getClassId(obj);
+            actualType = getTypeId(obj);
             if (expectedType !== actualType) {
                 return {
                     __type__: actualType,
@@ -199,7 +195,7 @@ function dumpMain (types, wrapper) {
     var data = {};
 
     // dump main type
-    var typeId = JS._getClassId(wrapper);
+    var typeId = getTypeId(wrapper);
     if (typeId) {
         data.__type__ = typeId;
         types[typeId] = dumpType(wrapper);
@@ -214,7 +210,7 @@ function dumpMain (types, wrapper) {
         data.__mixins__ = [];
         for (var i = 0; i < mixinClasses.length; i++) {
             var klass = mixinClasses[i];
-            typeId = JS._getClassId(klass);
+            typeId = getTypeId(klass);
             if (typeId) {
                 types[typeId] = dumpType(klass);
                 var mixinData = {

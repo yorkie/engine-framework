@@ -27,6 +27,8 @@ test('test', function() {
     notEqual(Fire.JS.getClassName(myAsset), Fire.JS.getClassName(asset), 'class name should not achieved from its super');
 
     Fire.JS.unregisterClass(MyAsset);
+
+    equal(Fire.JS.getClassName(function () {}), null, 'class name should be null if undefined');
 });
 
 // jshint ignore: end
