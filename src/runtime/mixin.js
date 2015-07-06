@@ -5,14 +5,32 @@ var Wrapper = require('./wrappers/node');
 //var tmpArray = [];
 
 var mixin = {
-    mixin: function (node, classToMix) {
+    mixin: function (node, typeOrTypename) {
+
+        var classToMix;
+        if (typeof typeOrTypename === 'string') {
+            classToMix = JS.getClassByName(typeOrTypename);
+            if ( !classToMix ) {
+                Fire.error('Fire.mixin: Failed to get class "%s"');
+                if (Fire._RFpeek()) {
+                    Fire.error('You should not mixin %s when the scripts are still loading.', typeOrTypename);
+                }
+            }
+        }
+        else {
+            if ( !typeOrTypename ) {
+                Fire.error('Fire.mixin: The class to mixin must be non-nil');
+            }
+            classToMix = typeOrTypename;
+        }
+
         if (FIRE_EDITOR && !Fire._isFireClass(classToMix)) {
-            Fire.error('The class to mixin must be FireClass.');
+            Fire.error('Fire.mixin: The class to mixin must be FireClass.');
             return;
         }
         var newMixinClassId = JS._getClassId(classToMix);
         if (FIRE_EDITOR && !newMixinClassId) {
-            Fire.error("The class to mixin must have class name or script's uuid.");
+            Fire.error("Fire.mixin: The class to mixin must have class name or script's uuid.");
             return;
         }
 
@@ -21,7 +39,7 @@ var mixin = {
         }
 
         if (!node) {
-            Fire.error("The node to mixin must be non-nil.");
+            Fire.error("Fire.mixin: The node to mixin must be non-nil.");
             return;
         }
 

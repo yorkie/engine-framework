@@ -498,6 +498,10 @@ var NodeWrapper = Fire.Class({
  * @return {Fire.Runtime.NodeWrapper}
  */
 NodeWrapper.getWrapper = function (node) {
+    if (node instanceof NodeWrapper) {
+        Fire.warn('Fire.node accept argument of type runtime node, not wrapper.');
+        return node;
+    }
     var wrapper = node._FB_wrapper;
     if (!wrapper) {
         var Wrapper = Fire.getWrapperType(node);
