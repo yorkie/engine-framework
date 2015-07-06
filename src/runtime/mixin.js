@@ -17,7 +17,7 @@ var mixin = {
         }
 
         if (node instanceof Wrapper) {
-            node = node.target;
+            node = node.runtimeTarget;
         }
 
         if (!node) {

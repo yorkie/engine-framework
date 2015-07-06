@@ -22,8 +22,8 @@ var ERR_NaN = 'The %s must not be NaN';
  * You should override:
  * - createEmpty (static)
  * - name
- * - parentNode
- * - childNodes
+ * - runtimeParent
+ * - runtimeChildNodes
  * - position
  * - worldPosition
  * - rotation
@@ -33,7 +33,7 @@ var ERR_NaN = 'The %s must not be NaN';
  * - getWorldBounds
  * - getWorldOrientedBounds
  * - onBeforeSerialize (so that the node's properties can be serialized in wrapper)
- * - createNode
+ * - createRuntimeNode
  *
  * You may want to override:
  * - setSiblingIndex
@@ -56,17 +56,17 @@ var NodeWrapper = Fire.Class({
 
     constructor: function () {
         /**
-         * The target node to wrap.
-         * @property target
+         * The runtimeTarget node to wrap.
+         * @property runtimeTarget
          * @type {RuntimeNode}
          */
-        this.target = arguments[0];
-        if (this.target) {
+        this.runtimeTarget = arguments[0];
+        if (this.runtimeTarget) {
             this.attached();
         }
 
-        //if (FIRE_EDITOR && !this.target) {
-        //    Fire.warn('target of %s must be non-nil', JS.getClassName(this));
+        //if (FIRE_EDITOR && !this.runtimeTarget) {
+        //    Fire.warn('runtimeTarget of %s must be non-nil', JS.getClassName(this));
         //}
     },
 
@@ -107,23 +107,23 @@ var NodeWrapper = Fire.Class({
         // HIERARCHY
 
         /**
-         * The parent of the node.
+         * The runtime parent of the node.
          * If this is the top most node in hierarchy, the returns value of Fire.node(this.parent) must be type SceneWrapper.
          * Changing the parent will keep the transform's local space position, rotation and scale the same but modify
          * the world space position, scale and rotation.
-         * @property parentNode
+         * @property runtimeParent
          * @type {RuntimeNode}
          */
-        parentNode: NYI_Accessor(null, INVISIBLE),
+        runtimeParent: NYI_Accessor(null, INVISIBLE),
 
         /**
          * Returns the array of children. If no child, this method should return an empty array.
          * The returns array can be modified ONLY in setSiblingIndex.
-         * @property childNodes
+         * @property runtimeChildNodes
          * @type {RuntimeNode[]}
          * @readOnly
          */
-        childNodes: NYI_Accessor([], INVISIBLE, true),
+        runtimeChildNodes: NYI_Accessor([], INVISIBLE, true),
 
         // TRANSFORM
 
@@ -324,18 +324,18 @@ var NodeWrapper = Fire.Class({
 
     /**
      * Creates a new node using the properties defined in this wrapper, the properties will be serialized in the scene.
-     * Note: 不需要设置新节点的父子关系，也不需要设置 wrapper 的 target 为新节点.
-     * @method createNode
+     * Note: 不需要设置新节点的父子关系，也不需要设置 wrapper 的 runtimeTarget 为新节点.
+     * @method createRuntimeNode
      * @return {RuntimeNode} - the created node
      */
-    createNode: function () {
+    createRuntimeNode: function () {
         NYI();
         return null;
     },
 
     /**
      * 这个方法会在场景保存前调用，你可以将 node 的属性保存到 wrapper 的可序列化的 properties 中，
-     * 以便在 createNode() 方法中重新设置好 node。
+     * 以便在 createRuntimeNode() 方法中重新设置好 node。
      * @method onBeforeSerialize
      */
     onBeforeSerialize: function () {
@@ -346,14 +346,14 @@ var NodeWrapper = Fire.Class({
      * @method onAfterDeserialize
      */
     onAfterDeserialize: function () {
-        var node = this.createNode();
-        this.target = node;
+        var node = this.createRuntimeNode();
+        this.runtimeTarget = node;
         node._FB_wrapper = this;
         this.attached();
     },
 
     /**
-     * Invoked after the wrapper's target is assigned. Override this method if you need to initialize your node.
+     * Invoked after the wrapper's runtimeTarget is assigned. Override this method if you need to initialize your node.
      * @method attached
      */
     attached: function () {
@@ -364,7 +364,7 @@ var NodeWrapper = Fire.Class({
     // * When the scene is later loaded, the data you returned is passed to the wrapper's deserialize method so you can
     // * restore the node.
     // * @method serialize
-    // * @return {object} - a JSON represents the state of the target node
+    // * @return {object} - a JSON represents the state of the runtimeTarget node
     // */
     //serialize: function (data) {
     //    if (FIRE_EDITOR) {
@@ -415,7 +415,7 @@ var NodeWrapper = Fire.Class({
      * @return {number}
      */
     getSiblingIndex: function () {
-        return Fire.node(this.parentNode).childNodes.indexOf(this.target);
+        return Fire.node(this.runtimeParent).runtimeChildNodes.indexOf(this.runtimeTarget);
     },
 
     /**
@@ -426,8 +426,8 @@ var NodeWrapper = Fire.Class({
      * @param {number} index - new zero-based index of the node, -1 will move to the end of children.
      */
     setSiblingIndex: function (index) {
-        var siblings = Fire.node(this.parentNode).childNodes;
-        var item = this.target;
+        var siblings = Fire.node(this.runtimeParent).runtimeChildNodes;
+        var item = this.runtimeTarget;
         index = index !== -1 ? index : siblings.length - 1;
         var oldIndex = siblings.indexOf(item);
         if (index !== oldIndex) {

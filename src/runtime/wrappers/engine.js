@@ -23,11 +23,11 @@ var NYI_Accessor = Utils.NYI_Accessor;
  * - stopRuntime
  * - pauseRuntime
  * - resumeRuntime
- * - getCurrentSceneNode
- * - _setCurrentSceneNode
+ * - getCurrentRuntimeScene
+ * - _setCurrentRuntimeScene
  * - tick (if useDefaultMainLoop)
  * - canvasSize
- * - getInstanceById
+ * - getRuntimeInstanceById
  *
  * @class EngineWrapper
  * @extends Playable
@@ -144,26 +144,26 @@ var EngineWrapper = Fire.Class({
     //stepRuntime: NYI,
 
     /**
-     * Get the current running scene node.
-     * @method getCurrentSceneNode
+     * Get the current running runtime scene.
+     * @method getCurrentRuntimeScene
      * @return {RuntimeNode}
      */
-    getCurrentSceneNode: NYI,
+    getCurrentRuntimeScene: NYI,
 
     /**
-     * Set the current running scene node.
-     * @method _setCurrentSceneNode
+     * Set the current running runtime scene.
+     * @method _setCurrentRuntimeScene
      * @param {RuntimeNode}
      */
-    _setCurrentSceneNode: NYI,
+    _setCurrentRuntimeScene: NYI,
 
     /**
      * Returns the node which id is id.
-     * @method getInstanceById
+     * @method getRuntimeInstanceById
      * @param {String} id
      * @return {Object}
      */
-    getInstanceById: NYI,
+    getRuntimeInstanceById: NYI,
 
     /**
      * @method tick
@@ -208,7 +208,7 @@ var EngineWrapper = Fire.Class({
 
         this.initRuntime(options, function (err) {
             //if ((FIRE_EDITOR || FIRE_TEST) && !err) {
-            //    //var scene = SceneWrapper.getCurrentSceneNode()
+            //    //var scene = SceneWrapper.getCurrentRuntimeScene()
             //    //if (editorCallback.onSceneLoaded) {
             //    //    editorCallback.onSceneLoaded(this._scene);
             //    //}

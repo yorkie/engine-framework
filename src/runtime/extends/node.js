@@ -21,11 +21,11 @@ var nodeProto = NodeWrapper.prototype;
  */
 JS.getset(nodeProto, 'parent',
     function () {
-        var parent = this.parentNode;
+        var parent = this.runtimeParent;
         return parent && Fire.node(parent);
     },
     function (value) {
-        this.parentNode = value.target;
+        this.runtimeParent = value.runtimeTarget;
     }
 );
 
@@ -36,7 +36,7 @@ JS.getset(nodeProto, 'parent',
  */
 JS.get(nodeProto, 'children',
     function () {
-        return this.childNodes.map(Fire.node);
+        return this.runtimeChildNodes.map(Fire.node);
     }
 );
 
