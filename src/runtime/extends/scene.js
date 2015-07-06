@@ -136,9 +136,9 @@ if (FIRE_EDITOR) {
         var wrapper = Fire.node(node);
         wrapper.onBeforeSerialize();
         var children;
-        var runtimeChildNodes = wrapper.runtimeChildNodes;
-        if (runtimeChildNodes.length > 0) {
-            children = runtimeChildNodes.map(parseWrappers);
+        var runtimeChildren = wrapper.runtimeChildren;
+        if (runtimeChildren.length > 0) {
+            children = runtimeChildren.map(parseWrappers);
         }
         var mixinClasses = node._mixinClasses;
         var runtimeTarget = mixinClasses ? node : undefined;
@@ -186,13 +186,13 @@ if (FIRE_EDITOR) {
      * @module Fire
      */
 
-    var getruntimeChildNodes = function (node) {
+    var getruntimeChildren = function (node) {
         var wrapper = Fire.node(node);
-        var runtimeChildNodes = wrapper.runtimeChildNodes;
+        var runtimeChildren = wrapper.runtimeChildren;
         return {
             name: wrapper.name,
             id: wrapper.id,
-            children: runtimeChildNodes.length > 0 ? runtimeChildNodes.map(getruntimeChildNodes) : null
+            children: runtimeChildren.length > 0 ? runtimeChildren.map(getruntimeChildren) : null
         };
     };
 
@@ -202,7 +202,7 @@ if (FIRE_EDITOR) {
      */
     Fire.takeHierarchySnapshot = function () {
         var root = Fire.engine.getCurrentRuntimeScene();
-        var children = Fire.node(root).runtimeChildNodes;
-        return children.map(getruntimeChildNodes);
+        var children = Fire.node(root).runtimeChildren;
+        return children.map(getruntimeChildren);
     };
 }

@@ -36,7 +36,7 @@ JS.getset(nodeProto, 'parent',
  */
 JS.get(nodeProto, 'children',
     function () {
-        return this.runtimeChildNodes.map(Fire.node);
+        return this.runtimeChildren.map(Fire.node);
     }
 );
 

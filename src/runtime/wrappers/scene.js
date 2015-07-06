@@ -7,7 +7,7 @@ var NYI = require('./utils').NYI;
 
 /**
  * You should override:
- * - runtimeChildNodes
+ * - runtimeChildren
  * - createRuntimeNode
  * - position
  * - scale

@@ -23,7 +23,7 @@ var ERR_NaN = 'The %s must not be NaN';
  * - createEmpty (static)
  * - name
  * - runtimeParent
- * - runtimeChildNodes
+ * - runtimeChildren
  * - position
  * - worldPosition
  * - rotation
@@ -119,11 +119,11 @@ var NodeWrapper = Fire.Class({
         /**
          * Returns the array of children. If no child, this method should return an empty array.
          * The returns array can be modified ONLY in setSiblingIndex.
-         * @property runtimeChildNodes
+         * @property runtimeChildren
          * @type {RuntimeNode[]}
          * @readOnly
          */
-        runtimeChildNodes: NYI_Accessor([], INVISIBLE, true),
+        runtimeChildren: NYI_Accessor([], INVISIBLE, true),
 
         // TRANSFORM
 
@@ -415,7 +415,7 @@ var NodeWrapper = Fire.Class({
      * @return {number}
      */
     getSiblingIndex: function () {
-        return Fire.node(this.runtimeParent).runtimeChildNodes.indexOf(this.runtimeTarget);
+        return Fire.node(this.runtimeParent).runtimeChildren.indexOf(this.runtimeTarget);
     },
 
     /**
@@ -426,7 +426,7 @@ var NodeWrapper = Fire.Class({
      * @param {number} index - new zero-based index of the node, -1 will move to the end of children.
      */
     setSiblingIndex: function (index) {
-        var siblings = Fire.node(this.runtimeParent).runtimeChildNodes;
+        var siblings = Fire.node(this.runtimeParent).runtimeChildren;
         var item = this.runtimeTarget;
         index = index !== -1 ? index : siblings.length - 1;
         var oldIndex = siblings.indexOf(item);
