@@ -18,4 +18,10 @@ if (!root.Editor) {
 require('./serialize');
 require('./get-node-dump');
 
+// redirect log methods to fireball console
+Fire.log = Editor.log;
+Fire.info = Editor.info;
+Fire.warn = Editor.warn;
+Fire.error = Editor.error;
+
 module.exports = Editor;
