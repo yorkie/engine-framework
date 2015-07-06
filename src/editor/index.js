@@ -17,6 +17,7 @@ if (!root.Editor) {
 
 require('./serialize');
 require('./get-node-dump');
+require('./set-property-by-path');
 
 // redirect log methods to fireball console
 Fire.log = Editor.log;
