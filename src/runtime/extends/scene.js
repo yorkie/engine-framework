@@ -20,7 +20,7 @@ JS.mixin(sceneProto, {
             var child = datas[i];
             var wrapper = child.w;
             wrapper.onAfterDeserialize();
-            wrapper.parentNode = parentWrapper.target;
+            wrapper.runtimeParent = parentWrapper.runtimeTarget;
             var classIdToMixin = child.m;
             if (classIdToMixin) {
                 var ClassToMixin;
@@ -28,8 +28,8 @@ JS.mixin(sceneProto, {
                     for (var i = 0; i < classIdToMixin.length; i++) {
                         ClassToMixin = JS._getClassById(classIdToMixin);
                         if (ClassToMixin) {
-                            mixin(wrapper.target, ClassToMixin);
-                            Fire.deserialize.applyMixinProps(child.t, ClassToMixin, wrapper.target);
+                            mixin(wrapper.runtimeTarget, ClassToMixin);
+                            Fire.deserialize.applyMixinProps(child.t, ClassToMixin, wrapper.runtimeTarget);
                         }
                         else {
                             Fire.error('Failed to find class %s to mixin', classIdToMixin);
@@ -39,8 +39,8 @@ JS.mixin(sceneProto, {
                 else {
                     ClassToMixin = JS._getClassById(classIdToMixin);
                     if (ClassToMixin) {
-                        mixin(wrapper.target, ClassToMixin);
-                        Fire.deserialize.applyMixinProps(child.t, ClassToMixin, wrapper.target);
+                        mixin(wrapper.runtimeTarget, ClassToMixin);
+                        Fire.deserialize.applyMixinProps(child.t, ClassToMixin, wrapper.runtimeTarget);
                     }
                     else {
                         Fire.error('Failed to find class %s to mixin', classIdToMixin);
@@ -136,12 +136,12 @@ if (FIRE_EDITOR) {
         var wrapper = Fire.node(node);
         wrapper.onBeforeSerialize();
         var children;
-        var childNodes = wrapper.childNodes;
-        if (childNodes.length > 0) {
-            children = childNodes.map(parseWrappers);
+        var runtimeChildren = wrapper.runtimeChildren;
+        if (runtimeChildren.length > 0) {
+            children = runtimeChildren.map(parseWrappers);
         }
         var mixinClasses = node._mixinClasses;
-        var target = mixinClasses ? node : undefined;
+        var runtimeTarget = mixinClasses ? node : undefined;
 
         var mixin;
         if (mixinClasses) {
@@ -155,7 +155,7 @@ if (FIRE_EDITOR) {
         return {
             w: wrapper,
             c: children,
-            t: target,
+            t: runtimeTarget,
             m: mixin
         };
     };
@@ -171,7 +171,7 @@ if (FIRE_EDITOR) {
         _serialize: function (exporting) {
             this.onBeforeSerialize();
 
-            var childWrappers = parseWrappers(this.target).c || [];
+            var childWrappers = parseWrappers(this.runtimeTarget).c || [];
             var toSerialize = childWrappers;
 
             return serialize(toSerialize, {
@@ -186,13 +186,13 @@ if (FIRE_EDITOR) {
      * @module Fire
      */
 
-    var getChildNodes = function (node) {
+    var getruntimeChildren = function (node) {
         var wrapper = Fire.node(node);
-        var childNodes = wrapper.childNodes;
+        var runtimeChildren = wrapper.runtimeChildren;
         return {
             name: wrapper.name,
             id: wrapper.id,
-            children: childNodes.length > 0 ? childNodes.map(getChildNodes) : null
+            children: runtimeChildren.length > 0 ? runtimeChildren.map(getruntimeChildren) : null
         };
     };
 
@@ -201,8 +201,8 @@ if (FIRE_EDITOR) {
      * @return {object[]}
      */
     Fire.takeHierarchySnapshot = function () {
-        var root = Fire.engine.getCurrentSceneNode();
-        var children = Fire.node(root).childNodes;
-        return children.map(getChildNodes);
+        var root = Fire.engine.getCurrentRuntimeScene();
+        var children = Fire.node(root).runtimeChildren;
+        return children.map(getruntimeChildren);
     };
 }

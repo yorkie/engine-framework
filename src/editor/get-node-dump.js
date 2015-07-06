@@ -205,7 +205,7 @@ function dumpMain (types, wrapper) {
     dumpByClass(types, data, wrapper, wrapper.constructor);
 
     // iterate mixins
-    var mixinClasses = wrapper.target._mixinClasses;
+    var mixinClasses = wrapper.runtimeTarget._mixinClasses;
     if (mixinClasses) {
         data.__mixins__ = [];
         for (var i = 0; i < mixinClasses.length; i++) {
@@ -218,7 +218,7 @@ function dumpMain (types, wrapper) {
                 };
 
                 // dump mixin values
-                dumpByClass(types, mixinData, wrapper.target, klass);
+                dumpByClass(types, mixinData, wrapper.runtimeTarget, klass);
 
                 data.__mixins__.push(mixinData);
             }

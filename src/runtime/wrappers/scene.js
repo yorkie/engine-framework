@@ -7,8 +7,8 @@ var NYI = require('./utils').NYI;
 
 /**
  * You should override:
- * - childNodes
- * - createNode
+ * - runtimeChildren
+ * - createRuntimeNode
  * - position
  * - scale
  *
@@ -29,7 +29,7 @@ var SceneWrapper = Fire.Class({
     },
 
     properties: {
-        parentNode: {
+        runtimeParent: {
             get: function () {
                 return null;
             },
