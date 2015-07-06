@@ -25,14 +25,14 @@ JS.mixin(sceneProto, {
             if (classIdToMixin) {
                 var ClassToMixin;
                 if (Array.isArray(classIdToMixin)) {
-                    for (var i = 0; i < classIdToMixin.length; i++) {
-                        ClassToMixin = JS._getClassById(classIdToMixin);
+                    for (var j = 0; j < classIdToMixin.length; j++) {
+                        ClassToMixin = JS._getClassById(classIdToMixin[j]);
                         if (ClassToMixin) {
                             mixin(wrapper.runtimeTarget, ClassToMixin);
                             Fire.deserialize.applyMixinProps(child.t, ClassToMixin, wrapper.runtimeTarget);
                         }
                         else {
-                            Fire.error('Failed to find class %s to mixin', classIdToMixin);
+                            Fire.error('Failed to find class %s to mixin', classIdToMixin[j]);
                         }
                     }
                 }
