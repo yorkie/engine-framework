@@ -37,7 +37,10 @@ register.registerMixin(mixin);
 Fire.getWrapperType = register.getWrapperType;
 Fire.menuToWrapper = register.menuToWrapper;
 Fire.node = NodeWrapper.getWrapper;
-Fire.mixin = register.getMixinOptions().mixin;
+
+var mixin = register.getMixinOptions();
+Fire.mixin = mixin.mixin;
+Fire.hasMixin = mixin.hasMixin;
 
 ///**
 // * The SceneWrapper class registered by runtime.

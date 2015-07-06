@@ -12,7 +12,7 @@ test('Node', function() {
     var node = new MyNode();
     var nodeWrapper = Fire.node(node);
 
-    strictEqual(nodeWrapper.target, node, 'target of wrapper');
+    strictEqual(nodeWrapper.runtimeTarget, node, 'target of wrapper');
     strictEqual(nodeWrapper.isScene, false, 'not scene');
 });
 

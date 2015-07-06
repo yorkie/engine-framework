@@ -23,21 +23,21 @@
             name: 'MyNodeWrapper',
             extends: Fire.Runtime.NodeWrapper,
             properties: {
-                childNodes: {
+                runtimeChildren: {
                     get: function () {
-                        return this.target.children;
+                        return this.runtimeTarget.children;
                     }
                 },
-                parentNode: {
+                runtimeParent: {
                     get: function () {
-                        return this.target.parent;
+                        return this.runtimeTarget.parent;
                     },
                     set: function (value) {
-                        if (this.target.parent) {
-                            Fire.JS.Array.remove(this.target.parent.children, this.target);
+                        if (this.runtimeTarget.parent) {
+                            Fire.JS.Array.remove(this.runtimeTarget.parent.children, this.runtimeTarget);
                         }
-                        this.target.parent = value;
-                        value.children.push(this.target);
+                        this.runtimeTarget.parent = value;
+                        value.children.push(this.runtimeTarget);
                     }
                 },
                 _color: {
@@ -46,10 +46,10 @@
                 _asset: null
             },
             onBeforeSerialize: function () {
-                this._color = this.target.color;
-                this._asset = this.target.asset;
+                this._color = this.runtimeTarget.color;
+                this._asset = this.runtimeTarget.asset;
             },
-            createNode: function () {
+            createRuntimeNode: function () {
                 var node = new MyNode(this._asset);
                 node.color = this._color;
                 return node;
@@ -63,19 +63,19 @@
             name: 'MySceneWrapper',
             extends: Fire.Runtime.SceneWrapper,
             properties: {
-                childNodes: {
+                runtimeChildren: {
                     get: function () {
-                        return this.target.children;
+                        return this.runtimeTarget.children;
                     }
                 }
             },
-            createNode: function () {
+            createRuntimeNode: function () {
                 var node = new MyScene();
                 return node;
             }
         });
 
-        Fire.engine.getCurrentSceneNode = function () {
+        Fire.engine.getCurrentRuntimeScene = function () {
             return currentScene;
         };
 
@@ -220,10 +220,10 @@
             deepEqual(actual, expect, 'serializing empty scene');
 
             var node1 = new MyNode();
-            node1.parent = wrapper.target;
+            node1.parent = wrapper.runtimeTarget;
             node1.color = {r: 123, g: 0, b: 255, a: 255};
             node1.asset = sprite;
-            wrapper.target.children.push(node1);
+            wrapper.runtimeTarget.children.push(node1);
 
             var node2 = new MyNode();
             node2.parent = node1;
@@ -306,21 +306,21 @@
                 loaded.preloadAssets.once('should call preloadAssets');
 
                 strictEqual(loaded.constructor, MySceneWrapper, 'loaded scene should be MySceneWrapper');
-                strictEqual(loaded.childNodes.length, 1, 'loaded scene should have 1 child');
-                strictEqual(loaded.parentNode, null, 'loaded scene should have no parent');
+                strictEqual(loaded.runtimeChildren.length, 1, 'loaded scene should have 1 child');
+                strictEqual(loaded.runtimeParent, null, 'loaded scene should have no parent');
 
-                var rootNode = loaded.childNodes[0];
+                var rootNode = loaded.runtimeChildren[0];
                 strictEqual(rootNode.constructor, MyNode, 'root node should be MyNode');
                 deepEqual(rootNode.color, node1.color, 'color of root node should equals to node1');
                 strictEqual(rootNode.asset._uuid, sprite._uuid, 'asset of root node should equals to sprite');
-                strictEqual(Fire.node(rootNode).childNodes.length, 1, 'root node should have 1 child');
+                strictEqual(Fire.node(rootNode).runtimeChildren.length, 1, 'root node should have 1 child');
                 strictEqual(Fire.node(rootNode).parent, loaded, 'parent of root node should be scene');
 
-                var childNode = Fire.node(rootNode).childNodes[0];
+                var childNode = Fire.node(rootNode).runtimeChildren[0];
                 deepEqual(childNode.color, node2.color, 'color of child node should equals to node2');
                 strictEqual(childNode.asset._uuid, texture._uuid, 'asset of child node should equals to texture');
-                strictEqual(Fire.node(childNode).childNodes.length, 0, 'child node should have no child');
-                strictEqual(Fire.node(childNode).parentNode, rootNode, 'parent of child node should be root node');
+                strictEqual(Fire.node(childNode).runtimeChildren.length, 0, 'child node should have no child');
+                strictEqual(Fire.node(childNode).runtimeParent, rootNode, 'parent of child node should be root node');
 
                 strictEqual(rootNode.asset.texture, childNode.asset, 'references of the same asset should be equal');
 
