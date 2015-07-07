@@ -75,8 +75,8 @@ module.exports = Fire.Class({
                 if (this._rawFiles) {
                     if (Fire.AssetLibrary) {
                         var url = Fire.AssetLibrary.getRawBase(this._uuid);
-                        return this._rawFiles.map(function (ext) {
-                            return ext ? url + '.' + ext : url;
+                        return this._rawFiles.map(function (filename) {
+                            return url + Fire.Path.sep + filename;
                         });
                     }
                     else {
