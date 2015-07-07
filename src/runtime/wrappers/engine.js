@@ -165,6 +165,10 @@ var EngineWrapper = Fire.Class({
      */
     getRuntimeInstanceById: NYI,
 
+    tickInEditMode: function () {
+
+    },
+
     /**
      * @method tick
      * @param {number} deltaTime
