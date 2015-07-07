@@ -44,7 +44,12 @@ test('basic', function() {
         }
     });
 
+    strictEqual(Fire.hasMixin(node, Script), false, 'Fire.hasMixin should be false before calling Fire.mixin');
+
     Fire.mixin(node, Script);
+
+    strictEqual(Fire.hasMixin(node, Fire.Class()), false, 'Fire.hasMixin should be false if not class Script');
+    strictEqual(Fire.hasMixin(node, Script), true, 'Fire.hasMixin should be true if is class Script');
 
     strictEqual(node.constructor, Node, 'constructor should not changed');
 

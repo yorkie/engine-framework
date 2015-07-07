@@ -14,7 +14,7 @@ test('basic', function() {
     ok(wrapper instanceof MyNodeWrapper, 'Fire.node should create registered wrapper');
     strictEqual(Fire.node(node), wrapper, 'Fire.node should return created registered wrapper');
 
-    strictEqual(wrapper.target, node, 'wrapper target should be node');
+    strictEqual(wrapper.runtimeTarget, node, 'wrapper target should be node');
 
     //var mixinOpt = Fire.getMixinOptions();
     //ok(mixinOpt, 'has default mixin options');

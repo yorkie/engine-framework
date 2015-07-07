@@ -70,6 +70,36 @@ var mixin = {
         }
 
         // TODO - behaviours
+    },
+
+    hasMixin: function (node, typeOrTypename) {
+        if (node instanceof Wrapper) {
+            node = node.runtimeTarget;
+        }
+
+        if (!node) {
+            return false;
+        }
+
+        var mixinClasses = node._mixinClasses;
+        if (mixinClasses) {
+            var classToMix;
+            if (typeof typeOrTypename === 'string') {
+                classToMix = JS.getClassByName(typeOrTypename);
+                if ( !classToMix ) {
+                    Fire.error('Fire.hasMixin: Failed to get class "%s"');
+                    return false;
+                }
+            }
+            else {
+                if ( !typeOrTypename ) {
+                    return false;
+                }
+                classToMix = typeOrTypename;
+            }
+            return mixinClasses.indexOf(classToMix) !== -1;
+        }
+        return false;
     }
 };
 
