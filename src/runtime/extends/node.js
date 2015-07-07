@@ -25,7 +25,7 @@ JS.getset(nodeProto, 'parent',
         return parent && Fire.node(parent);
     },
     function (value) {
-        this.runtimeParent = value.runtimeTarget;
+        this.runtimeParent = value && value.runtimeTarget;
     }
 );
 

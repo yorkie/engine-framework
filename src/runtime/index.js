@@ -30,6 +30,8 @@ require('./extends/engine');
 var mixin = require('./mixin');
 register.registerMixin(mixin);
 
+Runtime.Settings = require('./settings');
+
 /**
  * @module Fire
  */
