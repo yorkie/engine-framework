@@ -50,9 +50,9 @@ module.exports = Fire.Class({
             get: function () {
                 if (this._rawFiles) {
                     if (Fire.AssetLibrary) {
-                        var url = Fire.AssetLibrary.getUrl(this._uuid);
-                        var ext = this._rawFiles[0];
-                        return ext ? url + '.' + ext : url;
+                        var url = Fire.AssetLibrary.getRawBase(this._uuid);
+                        var filename = this._rawFiles[0];
+                        return Fire.Path.join(url, filename);
                     }
                     else {
                         Fire.error('asset.url is not usable in core process');
@@ -74,7 +74,7 @@ module.exports = Fire.Class({
             get: function () {
                 if (this._rawFiles) {
                     if (Fire.AssetLibrary) {
-                        var url = Fire.AssetLibrary.getUrl(this._uuid);
+                        var url = Fire.AssetLibrary.getRawBase(this._uuid);
                         return this._rawFiles.map(function (ext) {
                             return ext ? url + '.' + ext : url;
                         });

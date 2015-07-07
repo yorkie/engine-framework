@@ -94,14 +94,20 @@ var AssetLibrary = (function () {
 
         _LoadingHandle: LoadingHandle,
 
-        getUrl: function (uuid) {
+        getRawBase: function (uuid) {
             return _libraryBase + uuid.slice(0, 2) + Fire.Path.sep + uuid;
+        },
+
+        getUrl: function (uuid) {
+            var url = this.getRawBase(uuid);
+            return url + '.json';
         },
 
         getUuid: function (url) {
             var hasUuid = url.indexOf(_libraryBase) === 0;
             if ( hasUuid ) {
-                var basename = Fire.Path.basename(url);
+                var dir = Fire.Path.dirname(url);
+                var basename = Fire.Path.basename(dir);
 
                 var index = basename.indexOf('.');
 
