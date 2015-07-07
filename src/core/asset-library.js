@@ -107,15 +107,26 @@ var AssetLibrary = (function () {
             var hasUuid = url.indexOf(_libraryBase) === 0;
             if ( hasUuid ) {
                 var dir = Fire.Path.dirname(url);
-                var basename = Fire.Path.basename(dir);
+                var dirBasename = Fire.Path.basename(dir);
 
-                var index = basename.indexOf('.');
+                var isAssetUrl = dirBasename.length === 2;
 
-                if ( index !== -1) {
-                    basename = basename.slice(0, index);
+                var uuid;
+
+                if (isAssetUrl) {
+                    uuid = Fire.Path.basename(url);
+
+                    var index = uuid.indexOf('.');
+
+                    if ( index !== -1) {
+                        uuid = uuid.slice(0, index);
+                    }
+                }
+                else {
+                    uuid = Fire.Path.basename(dir);
                 }
 
-                return basename;
+                return uuid;
             }
 
             // If url is not in the library, just return 0
