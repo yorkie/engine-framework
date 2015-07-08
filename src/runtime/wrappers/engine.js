@@ -186,20 +186,12 @@ var EngineWrapper = Fire.Class({
     },
 
     /**
-     * Pick node in scene.
-     * @method pick
-     * @param {Vec2} position - the world position in scene
-     * @return {RuntimeNode} - The first node in rendering order, under the picking
-     */
-    pick: NYI,
-
-    /**
      * Pick nodes that lie within a specified screen rectangle.
-     * @method pickRect
+     * @method getIntersectionList
      * @param {Rect} rect - An rectangle specified with world coordinates.
      * @return {RuntimeNode[]}
      */
-    pickRect: NYI,
+    getIntersectionList: NYI,
 
     // PUBLIC
 
