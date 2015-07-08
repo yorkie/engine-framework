@@ -473,17 +473,17 @@ var NodeWrapper = Fire.Class({
 
     /**
      * Transforms positions from local space to world space.
-     * @method transformPoints
+     * @method convertPointsToWorld
      * @param {Vec2[]} points
      */
-    transformPoints: NYI,
+    convertPointsToWorld: NYI,
 
     /**
      * Transforms positions from world space to local space.
-     * @method inverseTransformPoints
+     * @method convertPointsToLocal
      * @param {Vec2[]} points
      */
-    inverseTransformPoints: NYI,
+    convertPointsToLocal: NYI,
 
     // RENDERER
 
