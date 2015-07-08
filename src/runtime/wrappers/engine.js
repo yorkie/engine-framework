@@ -28,6 +28,8 @@ var NYI_Accessor = Utils.NYI_Accessor;
  * - tick (if useDefaultMainLoop)
  * - canvasSize
  * - getRuntimeInstanceById
+ * - pick
+ * - pickRect
  *
  * @class EngineWrapper
  * @extends Playable
@@ -182,6 +184,22 @@ var EngineWrapper = Fire.Class({
         }
         // render scene
     },
+
+    /**
+     * Pick node in scene.
+     * @method pick
+     * @param {Vec2} position - the world position in scene
+     * @return {RuntimeNode} - The first node in rendering order, under the picking
+     */
+    pick: NYI,
+
+    /**
+     * Pick nodes that lie within a specified screen rectangle.
+     * @method pickRect
+     * @param {Rect} rect - An rectangle specified with world coordinates.
+     * @return {RuntimeNode[]}
+     */
+    pickRect: NYI,
 
     // PUBLIC
 
