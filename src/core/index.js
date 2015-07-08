@@ -51,6 +51,8 @@ require('./class-new');
 require('./value-types');
 require('./callbacks-invoker');
 require('./path');
+require('./intersection');
+require('./polygon');
 
 // engine toolkit
 
