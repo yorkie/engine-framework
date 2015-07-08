@@ -179,6 +179,7 @@ describe('Editor.getNodeDump', function () {
                             visible: false
                         },
                         position: {},
+                        root: {},
                         rotation: {
                             tooltip: "The counterclockwise degrees of rotation relative to the parent"
                         },
@@ -284,6 +285,10 @@ describe('Editor.getNodeDump', function () {
                 worldY: 0,
                 x: 123,
                 y: 456,
+                root: {
+                    __type__: "MyNodeWrapper",
+                    id: 554
+                },
 
                 __mixins__: [{
                     __type__: '2154648724566',

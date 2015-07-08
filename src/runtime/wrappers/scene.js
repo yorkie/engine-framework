@@ -38,6 +38,15 @@ var SceneWrapper = Fire.Class({
                     Fire.error("Disallow to set scene's parent.");
                 }
             }
+        },
+        scenePosition: {
+            get: function () {
+                return new Fire.Vec2(0, 0);
+            },
+            set: function () {
+                Fire.error("Disallow to set scene's scenePosition.");
+            },
+            visible: false
         }
         /**
          * The local position in its parent's coordinate system.

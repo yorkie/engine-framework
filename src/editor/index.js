@@ -20,10 +20,12 @@ require('./get-node-dump');
 require('./set-property-by-path');
 require('./utils');
 
-// redirect log methods to fireball console
-Fire.log = Editor.log;
-Fire.info = Editor.info;
-Fire.warn = Editor.warn;
-Fire.error = Editor.error;
+if (!FIRE_TEST) {
+    // redirect log methods to fireball console
+    Fire.log = Editor.log;
+    Fire.info = Editor.info;
+    Fire.warn = Editor.warn;
+    Fire.error = Editor.error;
+}
 
 module.exports = Editor;

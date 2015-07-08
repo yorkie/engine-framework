@@ -32,6 +32,8 @@ var ERR_NaN = 'The %s must not be NaN';
  * - worldScale
  * - getWorldBounds
  * - getWorldOrientedBounds
+ * - transformPoints
+ * - inverseTransformPoints
  * - onBeforeSerialize (so that the node's properties can be serialized in wrapper)
  * - createRuntimeNode
  *
@@ -44,6 +46,7 @@ var ERR_NaN = 'The %s must not be NaN';
  * - worldY
  * - scaleX
  * - scaleY
+ * - scenePosition
  * - attached
  *
  * @class NodeWrapper
@@ -108,7 +111,7 @@ var NodeWrapper = Fire.Class({
 
         /**
          * The runtime parent of the node.
-         * If this is the top most node in hierarchy, the returns value of Fire.node(this.parent) must be type SceneWrapper.
+         * If this is the top most node in hierarchy, the wrapper of its parent must be type SceneWrapper.
          * Changing the parent will keep the transform's local space position, rotation and scale the same but modify
          * the world space position, scale and rotation.
          * @property runtimeParent
@@ -302,7 +305,19 @@ var NodeWrapper = Fire.Class({
          * @type {Fire.Vec2}
          * @readOnly
          */
-        worldScale: NYI_Accessor(Vec2.one, INVISIBLE, true)
+        worldScale: NYI_Accessor(Vec2.one, INVISIBLE, true),
+
+        root: {
+            get: function () {
+                var node = this;
+                var next = node.parent;
+                while (next) {
+                    node = next;
+                    next = next.parent;
+                }
+                return node;
+            }
+        }
     },
 
     statics: {
@@ -456,6 +471,20 @@ var NodeWrapper = Fire.Class({
         this.rotation += angle;
     },
 
+    /**
+     * Transforms positions from local space to world space.
+     * @method transformPoints
+     * @param {Vec2[]} points
+     */
+    transformPoints: NYI,
+
+    /**
+     * Transforms positions from world space to local space.
+     * @method inverseTransformPoints
+     * @param {Vec2[]} points
+     */
+    inverseTransformPoints: NYI,
+
     // RENDERER
 
     /**
@@ -486,6 +515,50 @@ var NodeWrapper = Fire.Class({
         return [Vec2.zero, Vec2.zero, Vec2.zero, Vec2.zero];
     }
 });
+
+var p = NodeWrapper.prototype;
+
+/**
+ * The position relative to the scene.
+ * @property scenePosition
+ * @type {Fire.Vec2}
+ * @private
+ */
+JS.getset(p, 'scenePosition',
+    function () {
+        var scene = this.root;
+        if (!scene.isScene) {
+            Fire.error('Can not set scenePosition if not in scene');
+            return Fire.Vec2.zero;
+        }
+        var originParent = this.parent;
+        var originWP = this.worldPosition;
+
+        this.parent = scene;
+        this.worldPosition = originWP;
+        var pos = this.position;
+
+        this.parent = originParent;
+        this.worldPosition = originWP;
+
+        return pos;
+    },
+    function (value) {
+        var scene = this.root;
+        if (!scene.isScene) {
+            Fire.error('Can not set scenePosition if not in scene');
+            return;
+        }
+        var originParent = this.parent;
+
+        this.parent = scene;
+        this.position = value;
+        var newWP = this.worldPosition;
+
+        this.parent = originParent;
+        this.worldPosition = newWP;
+    }
+);
 
 /**
  * @module Fire
