@@ -528,37 +528,22 @@ var p = NodeWrapper.prototype;
  */
 JS.getset(p, 'scenePosition',
     function () {
-        var scene = Fire.engine && Fire.engine.getCurrentRuntimeScene();
+        var scene = Fire.engine && Fire.engine.getCurrentScene();
         if (!scene) {
             Fire.error('Can not access scenePosition if no running scene');
             return Fire.Vec2.zero;
         }
-        var originParent = this.runtimeParent;
-        var originWP = this.worldPosition;
 
-        this.runtimeParent = scene;
-        this.worldPosition = originWP;
-        var pos = this.position;
-
-        this.runtimeParent = originParent;
-        this.worldPosition = originWP;
-
-        return pos;
+        return scene.transformPointToLocal( this.worldPosition );
     },
     function (value) {
-        var scene = Fire.engine && Fire.engine.getCurrentRuntimeScene();
+        var scene = Fire.engine && Fire.engine.getCurrentScene();
         if (!scene) {
             Fire.error('Can not access scenePosition if no running scene');
             return;
         }
-        var originParent = this.runtimeParent;
 
-        this.runtimeParent = scene;
-        this.position = value;
-        var newWP = this.worldPosition;
-
-        this.runtimeParent = originParent;
-        this.worldPosition = newWP;
+        this.worldPosition = scene.transformPointToWorld(value);
     }
 );
 
