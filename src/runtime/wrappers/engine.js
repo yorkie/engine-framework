@@ -331,6 +331,12 @@ var EngineWrapper = Fire.Class({
  * @private
  */
 
+/**
+ * @event post-update
+ * @param {CustomEvent} event
+ * @private
+ */
+
 JS.obsolete(EngineWrapper.prototype, 'EngineWrapper.resize', 'resizeCanvas');
 
 module.exports = EngineWrapper;

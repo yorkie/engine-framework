@@ -518,35 +518,6 @@ var NodeWrapper = Fire.Class({
     }
 });
 
-var p = NodeWrapper.prototype;
-
-/**
- * The position relative to the scene.
- * @property scenePosition
- * @type {Fire.Vec2}
- * @private
- */
-JS.getset(p, 'scenePosition',
-    function () {
-        var scene = Fire.engine && Fire.engine.getCurrentScene();
-        if (!scene) {
-            Fire.error('Can not access scenePosition if no running scene');
-            return Fire.Vec2.zero;
-        }
-
-        return scene.transformPointToLocal( this.worldPosition );
-    },
-    function (value) {
-        var scene = Fire.engine && Fire.engine.getCurrentScene();
-        if (!scene) {
-            Fire.error('Can not access scenePosition if no running scene');
-            return;
-        }
-
-        this.worldPosition = scene.transformPointToWorld(value);
-    }
-);
-
 /**
  * @module Fire
  */

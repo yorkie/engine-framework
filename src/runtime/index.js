@@ -22,9 +22,9 @@ Fire.JS.mixin(Runtime, {
 });
 
 // load utility methods
-require('./extends/node');
-require('./extends/scene');
-require('./extends/engine');
+require('./extends/node-extends');
+require('./extends/scene-extends');
+require('./extends/engine-extends');
 
 // register a default mixin solution
 var mixin = require('./mixin');

@@ -40,6 +40,79 @@ JS.get(nodeProto, 'children',
     }
 );
 
+/**
+ * The position relative to the scene.
+ * @property scenePosition
+ * @type {Fire.Vec2}
+ * @private
+ */
+JS.getset(nodeProto, 'scenePosition',
+    function () {
+        var scene = Fire.engine && Fire.engine.getCurrentScene();
+        if (!scene) {
+            Fire.error('Can not access scenePosition if no running scene');
+            return Fire.Vec2.zero;
+        }
+
+        return scene.transformPointToLocal( this.worldPosition );
+    },
+    function (value) {
+        var scene = Fire.engine && Fire.engine.getCurrentScene();
+        if (!scene) {
+            Fire.error('Can not access scenePosition if no running scene');
+            return;
+        }
+
+        this.worldPosition = scene.transformPointToWorld(value);
+    }
+);
+
+/**
+ * The rotation relative to the scene.
+ * @property sceneRotation
+ * @type {Number}
+ * @private
+ */
+JS.getset(nodeProto, 'sceneRotation',
+    function () {
+        var scene = Fire.engine && Fire.engine.getCurrentScene();
+        if (!scene) {
+            Fire.error('Can not access sceneRotation if no running scene');
+            return 0;
+        }
+
+        return this.worldRotation - scene.rotation;
+    },
+    function (value) {
+        var scene = Fire.engine && Fire.engine.getCurrentScene();
+        if (!scene) {
+            Fire.error('Can not access sceneRotation if no running scene');
+            return;
+        }
+
+        this.worldRotation = scene.rotation + value;
+    }
+);
+
+/**
+ * The lossy scale relative to the scene. (Read Only)
+ * @property sceneScale
+ * @type {Fire.Vec2}
+ * @readOnly
+ * @private
+ */
+JS.getset(nodeProto, 'sceneScale',
+    function () {
+        var scene = Fire.engine && Fire.engine.getCurrentScene();
+        if (!scene) {
+            Fire.error('Can not access sceneScale if no running scene');
+            return Fire.Vec2.one;
+        }
+
+        return this.worldScale.div(scene.scale);
+    }
+);
+
 JS.mixin(nodeProto, {
     /**
      * Is this node an instance of Scene?
