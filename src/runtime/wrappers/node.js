@@ -528,36 +528,36 @@ var p = NodeWrapper.prototype;
  */
 JS.getset(p, 'scenePosition',
     function () {
-        var scene = this.root;
-        if (!scene.isScene) {
-            Fire.error('Can not set scenePosition if not in scene');
+        var scene = Fire.engine && Fire.engine.getCurrentRuntimeScene();
+        if (!scene) {
+            Fire.error('Can not access scenePosition if no running scene');
             return Fire.Vec2.zero;
         }
-        var originParent = this.parent;
+        var originParent = this.runtimeParent;
         var originWP = this.worldPosition;
 
-        this.parent = scene;
+        this.runtimeParent = scene;
         this.worldPosition = originWP;
         var pos = this.position;
 
-        this.parent = originParent;
+        this.runtimeParent = originParent;
         this.worldPosition = originWP;
 
         return pos;
     },
     function (value) {
-        var scene = this.root;
-        if (!scene.isScene) {
-            Fire.error('Can not set scenePosition if not in scene');
+        var scene = Fire.engine && Fire.engine.getCurrentRuntimeScene();
+        if (!scene) {
+            Fire.error('Can not access scenePosition if no running scene');
             return;
         }
-        var originParent = this.parent;
+        var originParent = this.runtimeParent;
 
-        this.parent = scene;
+        this.runtimeParent = scene;
         this.position = value;
         var newWP = this.worldPosition;
 
-        this.parent = originParent;
+        this.runtimeParent = originParent;
         this.worldPosition = newWP;
     }
 );

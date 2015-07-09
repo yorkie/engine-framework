@@ -317,6 +317,20 @@ var EngineWrapper = Fire.Class({
     }
 });
 
+/**
+ * @event node-attach-to-scene
+ * @param {CustomEvent} event
+ * @param {RuntimeNode} event.runtimeTarget
+ * @private
+ */
+
+/**
+ * @event node-detach-from-scene
+ * @param {CustomEvent} event
+ * @param {RuntimeNode} event.runtimeTarget
+ * @private
+ */
+
 JS.obsolete(EngineWrapper.prototype, 'EngineWrapper.resize', 'resizeCanvas');
 
 module.exports = EngineWrapper;
