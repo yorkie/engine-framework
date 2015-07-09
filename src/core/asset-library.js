@@ -123,7 +123,7 @@ var AssetLibrary = (function () {
                     }
                 }
                 else {
-                    uuid = Fire.Path.basename(dir);
+                    uuid = dirBasename;
                 }
 
                 return uuid;

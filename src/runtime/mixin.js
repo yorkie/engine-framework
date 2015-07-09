@@ -43,6 +43,11 @@ var mixin = {
             return;
         }
 
+        if (FIRE_EDITOR && node._mixinClasses && node._mixinClasses.indexOf(newMixinClassId) !== -1) {
+            Fire.warn("Fire.mixin: The class has already mixined.");
+            return;
+        }
+
         // call constructor on node
         classToMix.call(node);
 
