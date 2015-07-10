@@ -533,6 +533,9 @@ NodeWrapper.getWrapper = function (node) {
         Fire.warn('Fire.node accept argument of type runtime node, not wrapper.');
         return node;
     }
+    if (!node) {
+        return null;
+    }
     var wrapper = node._FB_wrapper;
     if (!wrapper) {
         var Wrapper = Fire.getWrapperType(node);
