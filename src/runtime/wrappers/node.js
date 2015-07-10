@@ -68,6 +68,9 @@ var NodeWrapper = Fire.Class({
             this.attached();
         }
 
+        this.gizmo = null;
+        this.mixinGizmos = [];
+
         //if (FIRE_EDITOR && !this.runtimeTarget) {
         //    Fire.warn('runtimeTarget of %s must be non-nil', JS.getClassName(this));
         //}
