@@ -161,6 +161,7 @@ describe('Editor.getNodeDump', function () {
         it('should contain types', function () {
             expect(dump.types).to.deep.equal({
                 'MyNodeWrapper': {
+                    extends: ['Fire.Runtime.NodeWrapper', 'Fire.FObject'],
                     properties: {
                         _name: {
                             visible: false
@@ -301,6 +302,63 @@ describe('Editor.getNodeDump', function () {
                     }
                 }]
             });
+        });
+    });
+    describe('dumpInheritanceChain', function () {
+        it('should return empty array if is anonymous function', function () {
+            function Node () {}
+            var actual = Editor.getNodeDump.dumpInheritanceChain(Node);
+            expect(actual).to.deep.equal([]);
+        });
+        it('should return empty array if is anonymous fire class', function () {
+            var Node = Fire.Class();
+            var actual = Editor.getNodeDump.dumpInheritanceChain(Node);
+            expect(actual).to.deep.equal([]);
+        });
+        it('should not contain self class', function () {
+            var Sprite = Fire.Class({
+                name: 'Sprite'
+            });
+            var actual = Editor.getNodeDump.dumpInheritanceChain(Sprite);
+            expect(actual).to.deep.equal([]);
+            Fire.JS.unregisterClass(Sprite);
+        });
+        it('should ignore anonymous type', function () {
+            var Obj = Fire.Class({
+                name: 'Object',
+            });
+            var HashObj = Fire.Class({
+                extends: Obj
+            });
+            var Node = Fire.Class({
+                name: 'Node',
+                extends: HashObj
+            });
+            var Sprite = Fire.Class({
+                name: 'Sprite',
+                extends: Node
+            });
+            var actual = Editor.getNodeDump.dumpInheritanceChain(Sprite);
+            expect(actual).to.deep.equal(['Node', 'Object']);
+            Fire.JS.unregisterClass(Sprite, Node, Obj);
+        });
+        it('should traversal primitive inheritance chain', function () {
+            function Obj () {}
+            Fire.JS.setClassName('Object', Obj);
+            function HashObj () {}
+            Fire.JS.extend(HashObj, Obj);
+            Fire.JS.setClassName('HashObject', HashObj);
+            var Node = Fire.Class({
+                name: 'Node',
+                extends: HashObj
+            });
+            var Sprite = Fire.Class({
+                name: 'Sprite',
+                extends: Node
+            });
+            var actual = Editor.getNodeDump.dumpInheritanceChain(Sprite);
+            expect(actual).to.deep.equal(['Node', 'HashObject', 'Object']);
+            Fire.JS.unregisterClass(Sprite, Node, HashObj, Obj);
         });
     });
 });

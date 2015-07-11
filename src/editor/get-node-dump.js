@@ -58,6 +58,41 @@ function dumpAttrs (data, attrs) {
     }
 }
 
+function dumpInheritanceChain (klass) {
+    var chain = [];
+    var typeId;
+
+    // fireclass
+    var superCls = klass;
+    for (;;) {
+        if (superCls !== klass) {
+            typeId = getTypeId(superCls);
+            if (typeId) {
+                chain.push(typeId);
+            }
+        }
+        if (superCls.$super) {
+            superCls = superCls.$super;
+        }
+        else {
+            break;
+        }
+    }
+    // js class
+    var dunderProto = Object.getPrototypeOf(superCls.prototype);
+    while (dunderProto) {
+        superCls = dunderProto.constructor;
+        if (superCls && superCls !== klass) {
+            typeId = getTypeId(superCls);
+            if (typeId) {
+                chain.push(typeId);
+            }
+        }
+        dunderProto = Object.getPrototypeOf(superCls.prototype);
+    }
+    return chain;
+}
+
 // assert(obj)
 function dumpType (obj) {
     var klass;
@@ -76,12 +111,19 @@ function dumpType (obj) {
         klass = obj;
     }
 
+    var retval = {};
+
     // dump FireClass
     if (klass) {
         // TODO - cache
-        var properties = {};
+        var chain = dumpInheritanceChain(klass);
+        if (chain.length > 0) {
+            retval.extends = chain;
+        }
+        // dump props
         var propNames = klass.__props__;
         if (propNames) {
+            var properties = {};
             for (var p = 0; p < propNames.length; p++) {
                 var propName = propNames[p];
                 var dumpProp = {};
@@ -92,14 +134,11 @@ function dumpType (obj) {
                 }
                 properties[propName] = dumpProp;
             }
+            retval.properties = properties;
         }
-        return {
-            properties: properties
-        };
     }
-    else {
-        return {};
-    }
+
+    return retval;
 }
 
 function getExpectedTypeInClassDef (types, klass, propName) {
@@ -237,6 +276,7 @@ function dumpMain (types, wrapper) {
  *  {
  *      types: {
  *          type1: {
+ *              extends: ["type_base", "object"]
  *              properties: {
  *                  key1: {
  *                      default: 0,
@@ -293,3 +333,6 @@ Editor.getNodeDump = function (node) {
 };
 
 module.exports = Editor.getNodeDump;
+
+// for unit tests
+Editor.getNodeDump.dumpInheritanceChain = dumpInheritanceChain;

@@ -168,6 +168,8 @@ test('isChildClassOf', function () {
 
     strictEqual(Fire.isChildClassOf(Object, Object), true, 'any obj is child of itself');
 
+    strictEqual(Fire.isChildClassOf(Object, function () {}), false, 'Object is not child class of other class');
+
     var Base = function () {};
 
     strictEqual(Fire.isChildClassOf(Base, Object) &&
