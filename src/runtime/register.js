@@ -118,11 +118,14 @@ module.exports = {
 
     registerToCoreLevel: function () {
         if (FIRE_EDITOR) {
-            var menuPathToWrapperId = {};
+            var nodeCreateMenus = [];
             for (var key in menuToWrapper) {
-                menuPathToWrapperId[key] = JS._getClassId(menuToWrapper[key]);
+                nodeCreateMenus.push({
+                    menuPath: key,
+                    id: JS._getClassId(menuToWrapper[key])
+                });
             }
-            Editor.remote.nodeCreateMenu = menuPathToWrapperId;
+            Editor.remote.nodeCreateMenus = nodeCreateMenus;
         }
     },
 
