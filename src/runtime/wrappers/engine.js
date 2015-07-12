@@ -217,13 +217,16 @@ var EngineWrapper = Fire.Class({
         }
 
         this.initRuntime(options, function (err) {
-            //if ((FIRE_EDITOR || FIRE_TEST) && !err) {
-            //    //var scene = SceneWrapper.getCurrentRuntimeScene()
-            //    //if (editorCallback.onSceneLoaded) {
-            //    //    editorCallback.onSceneLoaded(this._scene);
-            //    //}
-            //    editorCallback.onSceneLaunched(this._scene);
-            //}
+            if (!err) {
+                if (FIRE_EDITOR && Editor.isPageLevel) {
+                    var Register = require('../register');
+                    Register.registerToCoreLevel();
+                }
+                //var scene = SceneWrapper.getCurrentRuntimeScene()
+                //if (editorCallback.onSceneLoaded) {
+                //    editorCallback.onSceneLoaded(this._scene);
+                //}
+            }
             callback(err);
         });
     },

@@ -12,6 +12,9 @@ var EngineWrapper = require('./wrappers/engine');
 //var runtimeSceneWrapper = null;
 var runtimeMixinOptions = null;
 
+//This dictionary stores all the registered WrapperTypes, and use MenuPath as key.
+//@property menuToWrapper
+//@type {object}
 var menuToWrapper = {};
 
 /**
@@ -112,12 +115,16 @@ module.exports = {
     //getRegisteredSceneWrapper: function () {
     //    return runtimeSceneWrapper;
     //},
-    /**
-     * This dictionary stores all the registered WrapperTypes, and use MenuPath as key.
-     * @property menuToWrapper
-     * @type {object}
-     */
-    menuToWrapper: menuToWrapper,
+
+    registerToCoreLevel: function () {
+        if (FIRE_EDITOR) {
+            var menuPathToWrapperId = {};
+            for (var key in menuToWrapper) {
+                menuPathToWrapperId[key] = JS._getClassId(menuToWrapper[key]);
+            }
+            Editor.remote.nodeCreateMenu = menuPathToWrapperId;
+        }
+    },
 
     registerMixin: registerMixin,
     /**

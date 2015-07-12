@@ -28,4 +28,9 @@ if (!FIRE_TEST) {
     Fire.error = Editor.error;
 }
 
+if (Editor.isCoreLevel) {
+    // declare global variables that can be accessed remotely in page-level
+    Editor.nodeCreateMenu = null;
+}
+
 module.exports = Editor;
