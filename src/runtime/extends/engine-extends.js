@@ -23,6 +23,16 @@ JS.mixin(engineProto, {
         return Fire.node(this.getCurrentRuntimeScene());
     },
 
+    /**
+     * Returns the wrapper of the node which id is id.
+     * @method getRuntimeInstanceById
+     * @param {String} id
+     * @return {Object}
+     */
+    getInstanceById: function (id) {
+        return Fire.node(this.getRuntimeInstanceById(id));
+    },
+
     _initScene: function (sceneWrapper, callback) {
         if (sceneWrapper._needCreate) {
             sceneWrapper.create(callback);
