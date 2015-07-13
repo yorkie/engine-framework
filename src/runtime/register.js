@@ -118,6 +118,7 @@ module.exports = {
 
     registerToCoreLevel: function () {
         if (FIRE_EDITOR) {
+            // register create node menu
             var nodeCreateMenus = [];
             for (var key in menuToWrapper) {
                 nodeCreateMenus.push({
@@ -125,7 +126,7 @@ module.exports = {
                     id: JS._getClassId(menuToWrapper[key])
                 });
             }
-            Editor.remote.nodeCreateMenus = nodeCreateMenus;
+            Editor.sendToCore('app:register-menu', 'create-node', nodeCreateMenus);
         }
     },
 
