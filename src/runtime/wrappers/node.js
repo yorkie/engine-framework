@@ -236,16 +236,16 @@ var NodeWrapper = Fire.Class({
         },
 
         /**
-         * The counterclockwise degrees of rotation relative to the parent
+         * The clockwise degrees of rotation relative to the parent
          * @property rotation
          * @type {number}
          */
         rotation: NYI_Accessor(0, {
-            tooltip: "The counterclockwise degrees of rotation relative to the parent"
+            tooltip: "The clockwise degrees of rotation relative to the parent"
         }),
 
         /**
-         * The counterclockwise degrees of rotation in world space
+         * The clockwise degrees of rotation in world space
          * @property worldRotation
          * @type {number}
          */
