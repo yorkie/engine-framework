@@ -146,9 +146,12 @@ JS.mixin(engineProto, {
                     console.assert(false, error);
                 }
             }
-            else if (!(scene instanceof SceneWrapper)) {
-                error = 'The asset ' + uuid + ' is not a scene';
-                scene = null;
+            else {
+                scene = scene.scene;    // Currently our scene not inherited from Asset, so need to extract scene from dummy asset
+                if (!(scene instanceof SceneWrapper)) {
+                    error = 'The asset ' + uuid + ' is not a scene';
+                    scene = null;
+                }
             }
             if (scene) {
                 self._initScene(scene, function () {
@@ -167,5 +170,12 @@ JS.mixin(engineProto, {
                 }
             }
         });
-    }
+    },
+
+    //launchNewScene: function () {
+    //    var SceneWrapperImpl = Fire.engine.getCurrentScene().constructor;
+    //    var sceneWrapper = new SceneWrapperImpl();
+    //    sceneWrapper.onAfterDeserialize();
+    //    Fire.engine._launchScene(sceneWrapper);
+    //}
 });
