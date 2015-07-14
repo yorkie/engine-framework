@@ -158,7 +158,7 @@ JS.mixin(engineProto, {
                     self._launchScene(scene, onUnloaded);
                     self._loadingScene = '';
                     if (onLaunched) {
-                        onLaunched(scene, error);
+                        onLaunched(error, scene);
                     }
                 });
             }
@@ -166,7 +166,7 @@ JS.mixin(engineProto, {
                 Fire.error(error);
                 self._loadingScene = '';
                 if (onLaunched) {
-                    onLaunched(scene, error);
+                    onLaunched(error, scene);
                 }
             }
         });
