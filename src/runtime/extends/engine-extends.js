@@ -146,16 +146,19 @@ JS.mixin(engineProto, {
                     console.assert(false, error);
                 }
             }
-            else if (!(scene instanceof SceneWrapper)) {
-                error = 'The asset ' + uuid + ' is not a scene';
-                scene = null;
+            else {
+                scene = scene.scene;    // Currently our scene not inherited from Asset, so need to extract scene from dummy asset
+                if (!(scene instanceof SceneWrapper)) {
+                    error = 'The asset ' + uuid + ' is not a scene';
+                    scene = null;
+                }
             }
             if (scene) {
                 self._initScene(scene, function () {
                     self._launchScene(scene, onUnloaded);
                     self._loadingScene = '';
                     if (onLaunched) {
-                        onLaunched(scene, error);
+                        onLaunched(error, scene);
                     }
                 });
             }
@@ -163,9 +166,16 @@ JS.mixin(engineProto, {
                 Fire.error(error);
                 self._loadingScene = '';
                 if (onLaunched) {
-                    onLaunched(scene, error);
+                    onLaunched(error, scene);
                 }
             }
         });
-    }
+    },
+
+    //launchNewScene: function () {
+    //    var SceneWrapperImpl = Fire.engine.getCurrentScene().constructor;
+    //    var sceneWrapper = new SceneWrapperImpl();
+    //    sceneWrapper.onAfterDeserialize();
+    //    Fire.engine._launchScene(sceneWrapper);
+    //}
 });
