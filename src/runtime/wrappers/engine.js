@@ -73,7 +73,7 @@ var EngineWrapper = Fire.Class({
 
         if (FIRE_EDITOR) {
             this.maxDeltaTimeInEM = 1 / 30;
-            this.animatingInEM = false;
+            this.animatingInEditMode = false;
             this._shouldRepaintInEM = false;
         }
     },
@@ -384,7 +384,7 @@ var EngineWrapper = Fire.Class({
             // edit mode
             Time._update(now, false, this.maxDeltaTimeInEM);
             if (this._shouldRepaintInEM) {
-                this.tickInEditMode(Time.deltaTime, this.animatingInEM);
+                this.tickInEditMode(Time.deltaTime, this.animatingInEditMode);
                 this._shouldRepaintInEM = false;
             }
         }
