@@ -102,28 +102,6 @@ asyncTest('stop -> play -> stop', function () {
     Engine.play();
 });
 
-asyncTest('stop -> play -> stop, all in 1 frame', 4, function () {
-    var tolerance = 0.01;   // Ticker获取当前时间时，就算是同一帧也可能拿到不同的时间，因为每行代码都有时间开销。
-
-    Engine.tick = function (deltaTime, updateLogic) {
-        // first frame
-        close(Time.time, 0, tolerance, 'reset time');
-        close(Time.realTime, 0, tolerance, 'reset realTime');
-        strictEqual(Time.frameCount, 1, 'reset frameCount');
-        strictEqual(updateLogic, true, 'update logic');
-
-        Engine.tick = function () {
-            ok(false, 'should not update after stopped');
-        };
-    };
-    Engine.play();
-    Engine.stop();
-
-    setTimeout(function () {
-        asyncEnd();
-    }, 30);
-});
-
 asyncTest('play -> pause -> play', function () {
     Engine.tick = function (deltaTime, updateLogic) {
         // frame 1
@@ -133,18 +111,14 @@ asyncTest('play -> pause -> play', function () {
             var lastRealTime = Time.realTime;
             var lastFrame = Time.frameCount;
 
-            Engine.tick = function (deltaTime, updateLogic) {
+            Engine.tickInEditMode = function (deltaTime, updateAnimate) {
                 // frame 3
-                strictEqual(updateLogic, false, 'should not update logic if paused');
-
-                strictEqual(Time.time, lastTime, 'time unchaned');
                 ok(Time.realTime > lastRealTime, 'real time elpased');
-                strictEqual(Time.frameCount, lastFrame, 'time unchaned');
-
                 asyncEnd();
             };
 
             Engine.pause();
+            Engine.repaintInEditMode();
         };
     };
     Engine.play();
@@ -159,12 +133,9 @@ asyncTest('stop -> step -> step', function () {
         var lastFrame = Time.frameCount;
         //Fire.log('Ticker.now() ' + Ticker.now());
 
-        Engine.tick = function (deltaTime, updateLogic) {
+        Engine.tickInEditMode = function (deltaTime, animating) {
             // render frame 2, step frame 1
-            strictEqual(updateLogic, false, 'should not update logic between steps');
-            strictEqual(Time.time, lastTime, 'time unchaned between steps');
             ok(Time.realTime >= lastRealTime);
-            strictEqual(Time.frameCount, lastFrame, 'frame count unchaned between steps');
 
             Engine.tick = function (deltaTime, updateLogic) {
                 // render frame 3, step frame 2
@@ -172,13 +143,14 @@ asyncTest('stop -> step -> step', function () {
                 ok(Time.time > lastTime, 'time elapsed');
                 //Fire.log('Ticker.now() ' + Ticker.now());
                 ok(Time.realTime > lastRealTime, 'real time should elpased between at least 2 frame');
-                strictEqual(Time.frameCount, lastFrame + 1, 'frame increased');
+                strictEqual(Time.frameCount, lastFrame + 2, 'frame increased');
 
                 asyncEnd();
             };
 
             Engine.step();
         };
+        Engine.repaintInEditMode();
     };
     Engine.step();
 });

@@ -23,13 +23,18 @@ var NYI_Accessor = Utils.NYI_Accessor;
  * - stopRuntime
  * - pauseRuntime
  * - resumeRuntime
+ * - updateRuntime
+ * - animateRuntime
+ * - renderRuntime
  * - getCurrentRuntimeScene
  * - _setCurrentRuntimeScene
- * - tick (if useDefaultMainLoop)
  * - canvasSize
  * - getRuntimeInstanceById
- * - pick
- * - pickRect
+ * - getIntersectionList
+ *
+ * You may want to override:
+ * - tick (if useDefaultMainLoop)
+ * - tickInEditMode
  *
  * @class EngineWrapper
  * @extends Playable
@@ -64,7 +69,13 @@ var EngineWrapper = Fire.Class({
 
         this._loadingScene = '';
 
-        this._bindedTick = useDefaultMainLoop && this._tick.bind(this);
+        this._bindedTick = (FIRE_EDITOR || useDefaultMainLoop) && this._tick.bind(this);
+
+        if (FIRE_EDITOR) {
+            this.maxDeltaTimeInEM = 1 / 30;
+            this.animatingInEM = false;
+            this._shouldRepaintInEM = false;
+        }
     },
 
     properties: {
@@ -120,24 +131,40 @@ var EngineWrapper = Fire.Class({
      * @method playRuntime
      */
     playRuntime: NYI,
-
     /**
      * Stops playback.
      * @method stopRuntime
      */
     stopRuntime: NYI,
-
     /**
      * Pauses playback.
      * @method pauseRuntime
      */
     pauseRuntime: NYI,
-
     /**
      * Resumes playback.
      * @method resumeRuntime
      */
     resumeRuntime: NYI,
+
+    /**
+     * Update phase, will not invoked in edit mode.
+     * Use this method to update your engine logic, such as input logic and game logic.
+     * @method updateRuntime
+     */
+    updateRuntime: NYI,
+    /**
+     * Animate phase, called after updateRuntime.
+     * Use this method to update your particle and animation.
+     * @method animateRuntime
+     */
+    animateRuntime: NYI,
+    /**
+     * Render phase, called after animateRuntime.
+     * Use this method to render your scene.
+     * @method renderRuntime
+     */
+    renderRuntime: NYI,
 
     ///**
     // * Steps playback.
@@ -168,21 +195,32 @@ var EngineWrapper = Fire.Class({
     getRuntimeInstanceById: NYI,
 
     /**
+     * This method will be invoke only if useDefaultMainLoop is true.
      * @method tick
      * @param {number} deltaTime
      * @param {boolean} updateLogic
      */
     tick: function (deltaTime, updateLogic) {
-        NYI();
-
-        // Example: (not required)
         if (updateLogic) {
-            // update input
-            // update logic
-            // update particle
-            // update animation
+            this.updateRuntime(deltaTime);
+            this.animateRuntime(deltaTime);
         }
-        // render scene
+        this.renderRuntime();
+    },
+
+    /**
+     * This method will be invoked in edit mode even if useDefaultMainLoop is false.
+     * @method tickInEditMode
+     * @param {number} deltaTime
+     * @param {boolean} updateAnimate
+     */
+    tickInEditMode: function (deltaTime, updateAnimate) {
+        if (FIRE_EDITOR) {
+            if (updateAnimate) {
+                this.animateRuntime(deltaTime);
+            }
+            this.renderRuntime();
+        }
     },
 
     /**
@@ -216,6 +254,8 @@ var EngineWrapper = Fire.Class({
             //Resources._resBundle.init(options.resBundle);
         }
 
+        var self = this;
+
         this.initRuntime(options, function (err) {
             if (!err) {
                 if (FIRE_EDITOR && Editor.isPageLevel) {
@@ -228,7 +268,16 @@ var EngineWrapper = Fire.Class({
                 //}
             }
             callback(err);
+
+            if (FIRE_EDITOR) {
+                // start main loop for editor after initialized
+                self._tickStart();
+            }
         });
+    },
+
+    repaintInEditMode: function () {
+        this._shouldRepaintInEM = true;
     },
 
     // OVERRIDE
@@ -243,17 +292,26 @@ var EngineWrapper = Fire.Class({
         }
     },
     onResume: function () {
-       // if (FIRE_EDITOR) {
-       //     FObject._clearDeferredDestroyTimer();
-       //     editorCallback.onEnginePlayed(true);
-       // }
-       this.resumeRuntime();
+        // if (FIRE_EDITOR) {
+        //     FObject._clearDeferredDestroyTimer();
+        //     editorCallback.onEnginePlayed(true);
+        // }
+        this.resumeRuntime();
+
+        if (FIRE_EDITOR && !this._useDefaultMainLoop) {
+            this._tickStop();
+        }
     },
     onPause: function () {
-       // if (FIRE_EDITOR) {
-       //     editorCallback.onEnginePaused();
-       // }
-       this.pauseRuntime();
+        // if (FIRE_EDITOR) {
+        //     editorCallback.onEnginePaused();
+        // }
+        this.pauseRuntime();
+
+        if (FIRE_EDITOR) {
+            // start tick for edit mode
+            this._tickStart();
+        }
     },
     onPlay: function () {
         //if (FIRE_EDITOR && ! this._isPaused) {
@@ -263,9 +321,17 @@ var EngineWrapper = Fire.Class({
         this.playRuntime();
 
         if (this._useDefaultMainLoop) {
+            // reset timer for default main loop
             var now = Ticker.now();
             Time._restart(now);
-            this._tick();
+            //
+            if (FIRE_EDITOR) {
+                this._tickStart();
+            }
+        }
+        else if (FIRE_EDITOR) {
+            // dont tick in play mode
+            this._tickStop();
         }
 
         //if (FIRE_EDITOR) {
@@ -281,11 +347,9 @@ var EngineWrapper = Fire.Class({
         // reset states
         this._loadingScene = ''; // TODO: what if loading scene ?
 
-        if (this._useDefaultMainLoop) {
-            if (this._requestId !== -1) {
-                Ticker.cancelAnimationFrame(this._requestId);
-                this._requestId = -1;
-            }
+        if (FIRE_EDITOR) {
+            // start tick for edit mode
+            this._tickStart();
         }
 
         //if (FIRE_EDITOR) {
@@ -300,23 +364,43 @@ var EngineWrapper = Fire.Class({
      * @private
      */
     _tick: function (unused) {
-        if (!this._isPlaying) {
-            return;
-        }
         this._requestId = Ticker.requestAnimationFrame(this._bindedTick);
 
-        //if (sceneLoadingQueue) {
-        //    return;
-        //}
-
-        var updateLogic = !this._isPaused || this._stepOnce;
         var now = Ticker.now();
-        Time._update(now, !updateLogic, this._stepOnce ? 1 / 60 : 0);
-        this._stepOnce = false;
+        if (this._isUpdating || this._stepOnce) {
+            // play mode
 
-        //if (this._scene) {
-            this.tick(Time.deltaTime, updateLogic);
-        //}
+            //if (sceneLoadingQueue) {
+            //    return;
+            //}
+            Time._update(now, false, this._stepOnce ? 1 / 60 : 0);
+            this._stepOnce = false;
+
+            //if (this._scene) {
+                this.tick(Time.deltaTime, true);
+            //}
+        }
+        else if (FIRE_EDITOR) {
+            // edit mode
+            Time._update(now, false, this.maxDeltaTimeInEM);
+            if (this._shouldRepaintInEM) {
+                this.tickInEditMode(Time.deltaTime, this.animatingInEM);
+                this._shouldRepaintInEM = false;
+            }
+        }
+    },
+
+    _tickStart: function () {
+        if (this._requestId === -1) {
+            this._tick();
+        }
+    },
+
+    _tickStop: function () {
+        if (this._requestId !== -1) {
+            Ticker.cancelAnimationFrame(this._requestId);
+            this._requestId = -1;
+        }
     }
 });
 
@@ -339,7 +423,5 @@ var EngineWrapper = Fire.Class({
  * @param {CustomEvent} event
  * @private
  */
-
-JS.obsolete(EngineWrapper.prototype, 'EngineWrapper.resize', 'resizeCanvas');
 
 module.exports = EngineWrapper;
