@@ -275,12 +275,14 @@ Engine._reset = function (w, h) {
 var SetupEngine = {
     setup: function () {
         Engine.tick = function () {};
+        Engine.tickInEditMode = function () {};
         Engine._reset(256, 512);
         //// check error
         //Engine._renderContext.checkMatchCurrentScene(true);
     },
     teardown: function () {
         Engine.tick = function () {};
+        Engine.tickInEditMode = function () {};
         //Engine._launchScene(new Fire._Scene());
         Engine.stop();
         //// check error
@@ -292,6 +294,7 @@ var SetupEngine = {
 function asyncEnd () {
     Engine.stop();
     Engine.tick = function () {};
+    Engine.tickInEditMode = function () {};
     start();
 }
 
