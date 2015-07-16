@@ -64,12 +64,10 @@ test('step state transition', function() {
 });
 
 asyncTest('stop -> play -> stop', function () {
-    var tolerance = 0.01;   // Ticker获取当前时间时，就算是同一帧也可能拿到不同的时间，因为每行代码都有时间开销。
-
     Engine.tick = function (deltaTime, updateLogic) {
         // first frame
-        close(Time.time, 0, tolerance, 'reset Time.time');
-        close(Time.realTime, 0, tolerance, 'reset Time.realTime');
+        strictEqual(Time.time, 0, 'reset Time.time');
+        strictEqual(Time.realTime, 0, 'reset Time.realTime');
         strictEqual(Time.frameCount, 1, 'reset Time.frameCount');
         strictEqual(updateLogic, true, 'update logic');
 

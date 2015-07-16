@@ -38,6 +38,7 @@ var ERR_NaN = 'The %s must not be NaN';
  * - createRuntimeNode
  *
  * You may want to override:
+ * - animatableInEditor (static)
  * - setSiblingIndex
  * - getSiblingIndex
  * - x
@@ -48,6 +49,8 @@ var ERR_NaN = 'The %s must not be NaN';
  * - scaleY
  * - scenePosition
  * - attached
+ * - onFocusInEditor
+ * - onLostFocusInEditor
  *
  * @class NodeWrapper
  * @constructor
@@ -335,7 +338,15 @@ var NodeWrapper = Fire.Class({
         //        Fire.error('Not yet implemented');
         //    }
         //    return null;
-        //},
+        //}
+
+        /**
+         * If true, the engine will keep updating this node in 60 fps when it is selected,
+         * otherwise, it will update only if necessary
+         * @property {Boolean} animatableInEditor
+         * @static
+         */
+        animatableInEditor: false
     },
 
     // SERIALIZATION
@@ -518,7 +529,17 @@ var NodeWrapper = Fire.Class({
     getWorldOrientedBounds: function (out_bl, out_tl, out_tr, out_br){
         NYI();
         return [Vec2.zero, Vec2.zero, Vec2.zero, Vec2.zero];
-    }
+    },
+
+    /**
+     * @method onFocusInEditor
+     */
+    onFocusInEditor: null,
+
+    /**
+     * @method onLostFocusInEditor
+     */
+    onLostFocusInEditor: null,
 });
 
 /**

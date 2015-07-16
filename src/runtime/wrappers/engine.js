@@ -72,9 +72,23 @@ var EngineWrapper = Fire.Class({
         this._bindedTick = (FIRE_EDITOR || useDefaultMainLoop) && this._tick.bind(this);
 
         if (FIRE_EDITOR) {
+            /**
+             * The maximum value the Time.deltaTime in edit mode.
+             * @property maxDeltaTimeInEM
+             * @type {Number}
+             * @private
+             */
             this.maxDeltaTimeInEM = 1 / 30;
+            /**
+             * Is playing animation in edit mode.
+             * @property animatingInEditMode
+             * @type {Boolean}
+             * @private
+             */
             this.animatingInEditMode = false;
+
             this._shouldRepaintInEM = false;
+            this._forceRepaintId = -1;
         }
     },
 
@@ -102,7 +116,29 @@ var EngineWrapper = Fire.Class({
         /**
          * @property {Fire.Vec2} canvasSize - Resize the rendering canvas.
          */
-        canvasSize: NYI_Accessor(Fire.Vec2.zero)
+        canvasSize: NYI_Accessor(Fire.Vec2.zero),
+
+        /**
+         * The interval(ms) every time the engine force to repaint the scene in edit mode.
+         * If don't need, set this to 0.
+         * @property forceRepaintIntervalInEM
+         * @type {Number}
+         * @private
+         */
+        forceRepaintIntervalInEM: {
+            default: 500,
+            notify: FIRE_EDITOR && function () {
+                if (this._forceRepaintId !== -1) {
+                    clearInterval(this._forceRepaintId);
+                }
+                if (this.forceRepaintIntervalInEM > 0) {
+                    var self = this;
+                    this._forceRepaintId = setInterval(function () {
+                        self.repaintInEditMode();
+                    }, this.forceRepaintIntervalInEM);
+                }
+            }
+        }
     },
 
     // TO OVERRIDE
@@ -272,12 +308,16 @@ var EngineWrapper = Fire.Class({
             if (FIRE_EDITOR) {
                 // start main loop for editor after initialized
                 self._tickStart();
+                // start timer to force repaint the scene in edit mode
+                self.forceRepaintIntervalInEM = self.forceRepaintIntervalInEM;
             }
         });
     },
 
     repaintInEditMode: function () {
-        this._shouldRepaintInEM = true;
+        if (FIRE_EDITOR && !this._isUpdating) {
+            this._shouldRepaintInEM = true;
+        }
     },
 
     // OVERRIDE
@@ -320,6 +360,7 @@ var EngineWrapper = Fire.Class({
 
         this.playRuntime();
 
+        this._shouldRepaintInEM = false;
         if (this._useDefaultMainLoop) {
             // reset timer for default main loop
             var now = Ticker.now();
@@ -349,6 +390,7 @@ var EngineWrapper = Fire.Class({
 
         if (FIRE_EDITOR) {
             // start tick for edit mode
+            this.repaintInEditMode();
             this._tickStart();
         }
 
