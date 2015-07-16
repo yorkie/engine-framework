@@ -12,21 +12,21 @@ test('test restart', function() {
 
 test('test update', function() {
     Time.maxDeltaTime = 0.2;
-    var startTime = 321;
-    var now = startTime;
+    var now = 321;
     Time._restart(now);
 
 
     now += 0.01;
+    var startTime = now;
     Time._update(now);
-    close(Time.time, 0.01, tolerance, 'time should equals elapsed time since restart 1');
-    close(Time.realTime, now - startTime, tolerance, 'realTime should equals elapsed time since restart 1');
+    close(Time.time, 0, tolerance, 'time should equals 0 in first frame');
+    close(Time.realTime, 0, tolerance, 'realTime should equals 0 in first frame');
     close(Time.frameCount, 1, tolerance, 'frameCount should equals update count 1');
 
     now += 0.01;
     Time._update(now);
     close(Time.deltaTime, 0.01, tolerance, 'deltaTime should equals 0.01');
-    close(Time.time, 0.02, tolerance, 'time should equals elapsed time since restart 2');
+    close(Time.time, 0.01, tolerance, 'time should equals elapsed time since restart 2');
     close(Time.realTime, now - startTime, tolerance, 'realTime should equals elapsed time since restart 2');
     close(Time.frameCount, 2, tolerance, 'frameCount should equals update count 2');
 
