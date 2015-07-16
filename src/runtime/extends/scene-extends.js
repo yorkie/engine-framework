@@ -186,13 +186,13 @@ if (FIRE_EDITOR) {
      * @module Fire
      */
 
-    var getruntimeChildren = function (node) {
+    var getRuntimeChildren = function (node) {
         var wrapper = Fire.node(node);
         var runtimeChildren = wrapper.runtimeChildren;
         return {
             name: wrapper.name,
             id: wrapper.id,
-            children: runtimeChildren.length > 0 ? runtimeChildren.map(getruntimeChildren) : null
+            children: runtimeChildren.length > 0 ? runtimeChildren.map(getRuntimeChildren) : null
         };
     };
 
@@ -203,6 +203,6 @@ if (FIRE_EDITOR) {
     Fire.takeHierarchySnapshot = function () {
         var root = Fire.engine.getCurrentRuntimeScene();
         var children = Fire.node(root).runtimeChildren;
-        return children.map(getruntimeChildren);
+        return children.map(getRuntimeChildren);
     };
 }
