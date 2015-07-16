@@ -425,7 +425,7 @@ var EngineWrapper = Fire.Class({
         else if (FIRE_EDITOR) {
             // edit mode
             Time._update(now, false, this.maxDeltaTimeInEM);
-            if (this._shouldRepaintInEM) {
+            if (this._shouldRepaintInEM || this.animatingInEditMode) {
                 this.tickInEditMode(Time.deltaTime, this.animatingInEditMode);
                 this._shouldRepaintInEM = false;
             }
