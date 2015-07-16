@@ -71,6 +71,10 @@ var EngineWrapper = Fire.Class({
 
         this._bindedTick = (FIRE_EDITOR || useDefaultMainLoop) && this._tick.bind(this);
 
+        // states
+        this._isCloning = false;    // deserializing or instantiating
+        //this._isLockingScene = false;
+
         if (FIRE_EDITOR) {
             /**
              * The maximum value the Time.deltaTime in edit mode.

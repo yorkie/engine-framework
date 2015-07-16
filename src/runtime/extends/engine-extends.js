@@ -98,7 +98,7 @@ JS.mixin(engineProto, {
 
         //editorCallback.onBeforeActivateScene(scene);
 
-        //scene.activate();
+        scene._onActivated();
 
         //editorCallback.onSceneLaunched(scene);
     },

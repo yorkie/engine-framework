@@ -1,4 +1,5 @@
 var JS = Fire.JS;
+var Behavior = Fire.Behavior;
 
 /**
  * @module Fire.Runtime
@@ -156,5 +157,30 @@ JS.mixin(nodeProto, {
      */
     setAsLastSibling: function () {
         this.setSiblingIndex(-1);
-    }
+    },
+
+    _onActivated: function () {
+        // invoke mixin scripts
+        if (!FIRE_EDITOR || Fire.engine._isPlaying) {
+            Behavior.onActivated(this.runtimeTarget);
+        }
+        //
+        if (FIRE_EDITOR) {
+            if (!Fire.engine._isPlaying) {
+                var focused = Editor.Selection.curActivate('node') === this.id;
+                if (focused && this.onFocusInEditor) {
+                    this.onFocusInEditor();
+                }
+                else if (this.onLostFocusInEditor) {
+                    this.onLostFocusInEditor();
+                }
+            }
+        }
+        // activate children recursively
+        var children = this.runtimeChildren;
+        for (var i = 0, len = children.length; i < len; ++i) {
+            var node = children[i];
+            Fire.node(node)._onActivated();
+        }
+    },
 });
