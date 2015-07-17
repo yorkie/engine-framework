@@ -92,7 +92,7 @@ var mixin = {
             if (typeof typeOrTypename === 'string') {
                 classToMix = JS.getClassByName(typeOrTypename);
                 if ( !classToMix ) {
-                    Fire.error('Fire.hasMixin: Failed to get class "%s"');
+                    Fire.error('Fire.hasMixin: Failed to get class "%s"', typeOrTypename);
                     return false;
                 }
             }
@@ -105,6 +105,46 @@ var mixin = {
             return mixinClasses.indexOf(classToMix) !== -1;
         }
         return false;
+    },
+
+    unMixin: function (node, typeOrTypename) {
+        if (!FIRE_EDITOR || Fire.engine.isPlaying) {
+            return Fire.warn("Fire.unMixin: Sorry, can not un-mixin when the engine is playing.");
+        }
+
+        if (node instanceof Wrapper) {
+            node = node.runtimeTarget;
+        }
+
+        if (!node) {
+            return Fire.error("Fire.unMixin: The node to un-mixin must be non-nil.");
+        }
+
+        var mixinClasses = node._mixinClasses;
+        if (mixinClasses) {
+            var classToUnmix;
+            if (typeof typeOrTypename === 'string') {
+                classToUnmix = JS.getClassByName(typeOrTypename);
+                if ( !classToUnmix ) {
+                    return Fire.error('Fire.unMixin: Failed to get class "%s"', typeOrTypename);
+                }
+            }
+            else {
+                if ( !typeOrTypename ) {
+                    return Fire.error('Fire.unMixin: The class to un-mixin must be non-nil');
+                }
+                classToUnmix = typeOrTypename;
+            }
+
+            var index = mixinClasses.indexOf(classToUnmix);
+            if (index !== -1) {
+                mixinClasses.splice(index, 1);
+                // TODO - remove properties ?
+                return;
+            }
+        }
+        return Fire.error('Fire.unMixin: Can not find mixed class "%s" in node "%s".',
+            typeOrTypename, Fire.node(node).name);
     }
 };
 
