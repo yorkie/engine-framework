@@ -240,6 +240,7 @@ var EngineWrapper = Fire.Class({
         if (updateLogic) {
             this.updateRuntime(deltaTime);
             this.animateRuntime(deltaTime);
+            this.emit('post-update');
         }
         this.renderRuntime();
     },
@@ -254,6 +255,7 @@ var EngineWrapper = Fire.Class({
         if (FIRE_EDITOR) {
             if (updateAnimate) {
                 this.animateRuntime(deltaTime);
+                this.emit('post-update');
             }
             this.renderRuntime();
         }
@@ -449,14 +451,14 @@ var EngineWrapper = Fire.Class({
 /**
  * @event node-attach-to-scene
  * @param {CustomEvent} event
- * @param {RuntimeNode} event.runtimeTarget
+ * @param {RuntimeNode} event.detail.runtimeTarget
  * @private
  */
 
 /**
  * @event node-detach-from-scene
  * @param {CustomEvent} event
- * @param {RuntimeNode} event.runtimeTarget
+ * @param {RuntimeNode} event.detail.runtimeTarget
  * @private
  */
 
