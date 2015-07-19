@@ -182,7 +182,7 @@ describe('Editor.getNodeDump', function () {
                         position: {},
                         root: {},
                         rotation: {
-                            tooltip: "The counterclockwise degrees of rotation relative to the parent"
+                            tooltip: "The clockwise degrees of rotation relative to the parent"
                         },
                         scale: {},
                         scaleX: {
