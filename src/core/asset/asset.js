@@ -52,7 +52,7 @@ module.exports = Fire.Class({
                     if (Fire.AssetLibrary) {
                         var url = Fire.AssetLibrary.getRawBase(this._uuid);
                         var filename = this._rawFiles[0];
-                        return Fire.Path.join(url, filename);
+                        return url + Fire.Path.sep + filename;
                     }
                     else {
                         Fire.error('asset.url is not usable in core process');
@@ -155,6 +155,10 @@ module.exports = Fire.Class({
     _setRawFiles: function (rawFiles) {
         rawFiles = rawFiles.map(function (item) {
             if (item.charAt(0) === '.') {
+                item = item.slice(1);
+            }
+            var nextChar = item.charAt(0);
+            if (nextChar === '/' || nextChar === '\\') {
                 item = item.slice(1);
             }
             return item;

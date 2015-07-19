@@ -1,6 +1,7 @@
 var Def = require('../core/definition');
 var PersistentMask = Def.PersistentMask;
 var DontSave = Def.DontSave;
+var EditorOnly = Def.EditorOnly;
 var _isDomNode = require('../core/utils').isDomNode;
 var nicifySerialized = require('./serialize-nicify');
 
