@@ -43,6 +43,7 @@ Fire.node = NodeWrapper.getWrapper;
 var mixin = register.getMixinOptions();
 Fire.mixin = mixin.mixin;
 Fire.hasMixin = mixin.hasMixin;
+Fire.unMixin = mixin.unMixin;
 
 ///**
 // * The SceneWrapper class registered by runtime.

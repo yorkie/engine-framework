@@ -66,6 +66,9 @@ test('basic', function() {
 
     strictEqual(Node.__props__, undefined, 'should not change origin class');
 
+    Fire.unMixin(node, Script);
+    strictEqual(Fire.hasMixin(node, Script), false, 'could un-mixin');
+
     Fire.JS.unregisterClass(Script);
 });
 
