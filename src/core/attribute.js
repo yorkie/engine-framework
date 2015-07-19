@@ -234,33 +234,33 @@ Fire.ObjectType = function (typeCtor) {
     return {
         type: 'Object',
         ctor: typeCtor,
-        _onAfterProp: (function () {
-            if (FIRE_DEV) {
-                return function (classCtor, mainPropName) {
-                    var check = getTypeChecker('Object', 'Fire.ObjectType', typeCtor);
-                    check(classCtor, mainPropName);
-                    // check ValueType
-                    var mainPropAttrs = Fire.attr(classCtor, mainPropName) || {};
-                    if (!Array.isArray(mainPropAttrs.default) && typeof typeCtor.prototype.clone === 'function') {
-                        var typename = JS.getClassName(typeCtor);
-                        var hasDefault = mainPropAttrs.default === null || mainPropAttrs.default === undefined;
-                        if (hasDefault) {
-                            Fire.warn('%s is a ValueType, no need to specify the "type" of "%s.%s", ' +
-                                      'because the type information can obtain from its default value directly.',
-                                typename, JS.getClassName(classCtor), mainPropName, typename);
-                        }
-                        else {
-                            Fire.warn('%s is a ValueType, no need to specify the "type" of "%s.%s", ' +
-                                      'just set the default value to "new %s()" and it will be handled properly.',
-                                typename, JS.getClassName(classCtor), mainPropName, typename);
-                        }
-                    }
-                };
-            }
-            else {
-                return undefined;
-            }
-        })()
+        // _onAfterProp: (function () {
+        //     if (FIRE_DEV) {
+        //         return function (classCtor, mainPropName) {
+        //             var check = getTypeChecker('Object', 'Fire.ObjectType', typeCtor);
+        //             check(classCtor, mainPropName);
+        //             // check ValueType
+        //             var mainPropAttrs = Fire.attr(classCtor, mainPropName) || {};
+        //             if (!Array.isArray(mainPropAttrs.default) && typeof typeCtor.prototype.clone === 'function') {
+        //                 var typename = JS.getClassName(typeCtor);
+        //                 var hasDefault = mainPropAttrs.default === null || mainPropAttrs.default === undefined;
+        //                 if (hasDefault) {
+        //                     Fire.warn('%s is a ValueType, no need to specify the "type" of "%s.%s", ' +
+        //                               'because the type information can obtain from its default value directly.',
+        //                         typename, JS.getClassName(classCtor), mainPropName, typename);
+        //                 }
+        //                 else {
+        //                     Fire.warn('%s is a ValueType, no need to specify the "type" of "%s.%s", ' +
+        //                               'just set the default value to "new %s()" and it will be handled properly.',
+        //                         typename, JS.getClassName(classCtor), mainPropName, typename);
+        //                 }
+        //             }
+        //         };
+        //     }
+        //     else {
+        //         return undefined;
+        //     }
+        // })()
     };
 };
 
