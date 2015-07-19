@@ -119,14 +119,19 @@ module.exports = {
     registerToCoreLevel: function () {
         if (FIRE_EDITOR) {
             // register create node menu
-            var nodeCreateMenus = [];
-            for (var key in menuToWrapper) {
-                nodeCreateMenus.push({
-                    menuPath: key,
-                    id: JS._getClassId(menuToWrapper[key])
+            var menuTmpl = [];
+            for (var menuPath in menuToWrapper) {
+                var basename = menuPath.split('/').slice(-1)[0];
+                menuTmpl.push({
+                    label: menuPath,
+                    message: 'scene:create-node-by-classid',
+                    params: [
+                        'New ' + basename,
+                        JS._getClassId(menuToWrapper[menuPath])
+                    ],
                 });
             }
-            Editor.sendToCore('app:register-menu', 'create-node', nodeCreateMenus);
+            Editor.sendToCore('app:register-menu', 'create-node', menuTmpl);
         }
     },
 

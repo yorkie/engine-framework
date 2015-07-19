@@ -43,7 +43,7 @@ var mixin = {
             return;
         }
 
-        if (FIRE_EDITOR && node._mixinClasses && node._mixinClasses.indexOf(newMixinClassId) !== -1) {
+        if (FIRE_EDITOR && node._mixinClasses && node._mixinClasses.indexOf(classToMix) !== -1) {
             Fire.warn("Fire.mixin: The class has already mixined.");
             return;
         }
