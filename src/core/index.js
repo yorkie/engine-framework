@@ -17,10 +17,16 @@ var root = typeof global !== 'undefined' ? global : window;
  *
  * @module Fire
  * @main Fire
+ *
+ * 返回跟 object 相互绑定的 NodeWrapper 实例，如果不存在将被创建。
+ * @param {RuntimeNode} node
+ * @return {Fire.Runtime.NodeWrapper}
  */
 if (!root.Fire) {
     // Always export Fire globally.
-    root.Fire = {};
+    root.Fire = function (node) {
+        return Fire.Runtime.NodeWrapper.getWrapper(node);
+    };
 }
 
 require('./definition');

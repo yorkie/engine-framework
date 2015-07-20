@@ -20,17 +20,17 @@ JS.mixin(engineProto, {
      * @return {SceneWrapper}
      */
     getCurrentScene: function () {
-        return Fire.node(this.getCurrentRuntimeScene());
+        return Fire(this.getCurrentSceneN());
     },
 
     /**
      * Returns the wrapper of the node which id is id.
-     * @method getRuntimeInstanceById
+     * @method getInstanceByIdN
      * @param {String} id
      * @return {Object}
      */
     getInstanceById: function (id) {
-        return Fire.node(this.getRuntimeInstanceById(id));
+        return Fire(this.getInstanceByIdN(id));
     },
 
     _initScene: function (sceneWrapper, callback) {
@@ -93,7 +93,7 @@ JS.mixin(engineProto, {
         //// launch scene
         //scene.entities = scene.entities.concat(Engine._dontDestroyEntities);
         //Engine._dontDestroyEntities.length = 0;
-        self._setCurrentRuntimeScene(scene.runtimeTarget);
+        self._setCurrentSceneN(scene.targetN);
         //Engine._renderContext.onSceneLaunched(scene);
 
         //editorCallback.onBeforeActivateScene(scene);

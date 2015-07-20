@@ -37,12 +37,12 @@ describe('Editor.getNodeDump', function () {
                         return 554;
                     }
                 },
-                runtimeParent: {
+                parentN: {
                     get: function () {
                         return null;
                     }
                 },
-                runtimeChildren: {
+                childrenN: {
                     get: function () {
                         return [];
                     }
@@ -169,14 +169,14 @@ describe('Editor.getNodeDump', function () {
                         _objFlags: {
                             visible: false
                         },
-                        runtimeChildren: {
+                        childrenN: {
                             visible: false
                         },
                         id: {
                             "visible": false
                         },
                         name: {},
-                        runtimeParent: {
+                        parentN: {
                             visible: false
                         },
                         position: {},
@@ -256,8 +256,8 @@ describe('Editor.getNodeDump', function () {
                 name: '',
                 _objFlags: 0,
                 id: 554,
-                runtimeChildren: null,
-                runtimeParent: null,
+                childrenN: null,
+                parentN: null,
                 position: {
                     __type__: 'Fire.Vec2',
                     x: 123,
