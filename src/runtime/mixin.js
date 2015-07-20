@@ -35,7 +35,7 @@ var mixin = {
         }
 
         if (node instanceof Wrapper) {
-            node = node.runtimeTarget;
+            node = node.targetN;
         }
 
         if (!node) {
@@ -90,7 +90,7 @@ var mixin = {
 
     hasMixin: function (node, typeOrTypename) {
         if (node instanceof Wrapper) {
-            node = node.runtimeTarget;
+            node = node.targetN;
         }
 
         if (!node) {
@@ -124,7 +124,7 @@ var mixin = {
         }
 
         if (node instanceof Wrapper) {
-            node = node.runtimeTarget;
+            node = node.targetN;
         }
 
         if (!node) {
@@ -155,7 +155,7 @@ var mixin = {
             }
         }
         return Fire.error('Fire.unMixin: Can not find mixed class "%s" in node "%s".',
-            typeOrTypename, Fire.node(node).name);
+            typeOrTypename, Fire(node).name);
     }
 };
 

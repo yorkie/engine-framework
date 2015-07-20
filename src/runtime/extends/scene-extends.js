@@ -20,7 +20,7 @@ JS.mixin(sceneProto, {
             var child = datas[i];
             var wrapper = child.w;
             wrapper.onAfterDeserialize();
-            wrapper.runtimeParent = parentWrapper.runtimeTarget;
+            wrapper.parentN = parentWrapper.targetN;
             var classIdToMixin = child.m;
             if (classIdToMixin) {
                 var ClassToMixin;
@@ -28,8 +28,8 @@ JS.mixin(sceneProto, {
                     for (var j = 0; j < classIdToMixin.length; j++) {
                         ClassToMixin = JS._getClassById(classIdToMixin[j]);
                         if (ClassToMixin) {
-                            mixin(wrapper.runtimeTarget, ClassToMixin);
-                            Fire.deserialize.applyMixinProps(child.t, ClassToMixin, wrapper.runtimeTarget);
+                            mixin(wrapper.targetN, ClassToMixin);
+                            Fire.deserialize.applyMixinProps(child.t, ClassToMixin, wrapper.targetN);
                         }
                         else {
                             Fire.error('Failed to find class %s to mixin', classIdToMixin[j]);
@@ -39,8 +39,8 @@ JS.mixin(sceneProto, {
                 else {
                     ClassToMixin = JS._getClassById(classIdToMixin);
                     if (ClassToMixin) {
-                        mixin(wrapper.runtimeTarget, ClassToMixin);
-                        Fire.deserialize.applyMixinProps(child.t, ClassToMixin, wrapper.runtimeTarget);
+                        mixin(wrapper.targetN, ClassToMixin);
+                        Fire.deserialize.applyMixinProps(child.t, ClassToMixin, wrapper.targetN);
                     }
                     else {
                         Fire.error('Failed to find class %s to mixin', classIdToMixin);
@@ -133,15 +133,15 @@ if (FIRE_EDITOR) {
     //};
 
     var parseWrappers = function (node) {
-        var wrapper = Fire.node(node);
+        var wrapper = Fire(node);
         wrapper.onBeforeSerialize();
         var children;
-        var runtimeChildren = wrapper.runtimeChildren;
-        if (runtimeChildren.length > 0) {
-            children = runtimeChildren.map(parseWrappers);
+        var childrenN = wrapper.childrenN;
+        if (childrenN.length > 0) {
+            children = childrenN.map(parseWrappers);
         }
         var mixinClasses = node._mixinClasses;
-        var runtimeTarget = mixinClasses ? node : undefined;
+        var targetN = mixinClasses ? node : undefined;
 
         var mixin;
         if (mixinClasses) {
@@ -155,7 +155,7 @@ if (FIRE_EDITOR) {
         return {
             w: wrapper,
             c: children,
-            t: runtimeTarget,
+            t: targetN,
             m: mixin
         };
     };
@@ -171,7 +171,7 @@ if (FIRE_EDITOR) {
         _serialize: function (exporting) {
             this.onBeforeSerialize();
 
-            var childWrappers = parseWrappers(this.runtimeTarget).c || [];
+            var childWrappers = parseWrappers(this.targetN).c || [];
             var toSerialize = childWrappers;
 
             return serialize(toSerialize, {

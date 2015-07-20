@@ -1,2 +1,4 @@
 require('./src');
-require('../builtin/canvas-assets/asset');
+if (!FIRE_TEST) {
+    require('../builtin/canvas-assets/asset');
+}

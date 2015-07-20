@@ -2,14 +2,14 @@
  * @module Fire
  */
 
-var getRuntimeChildren = function (node) {
-    var wrapper = Fire.node(node);
-    var runtimeChildren = wrapper.runtimeChildren;
+var getChildrenN = function (node) {
+    var wrapper = Fire(node);
+    var childrenN = wrapper.childrenN;
     if (wrapper.constructor.canHaveChildrenInEditor) {
         return {
             name: wrapper.name,
             id: wrapper.id,
-            children: runtimeChildren.length > 0 ? runtimeChildren.map(getRuntimeChildren) : null
+            children: childrenN.length > 0 ? childrenN.map(getChildrenN) : null
         };
     }
     else {
@@ -27,9 +27,9 @@ var getRuntimeChildren = function (node) {
  * @return {object[]}
  */
 Editor.getHierarchyDump = function () {
-    var root = Fire.engine.getCurrentRuntimeScene();
-    var children = Fire.node(root).runtimeChildren;
-    return children.map(getRuntimeChildren);
+    var root = Fire.engine.getCurrentSceneN();
+    var children = Fire(root).childrenN;
+    return children.map(getChildrenN);
 };
 
 module.exports = Editor.getHierarchyDump;
