@@ -175,7 +175,7 @@ JS.mixin(nodeProto, {
     _onActivated: function () {
         // invoke mixin scripts
         if (!FIRE_EDITOR || Fire.engine._isPlaying) {
-            Behavior.onActivated(this.runtimeTarget);
+            Behavior.onActivated(this.targetN);
         }
         //
         if (FIRE_EDITOR) {
@@ -190,10 +190,10 @@ JS.mixin(nodeProto, {
             }
         }
         // activate children recursively
-        var children = this.runtimeChildren;
+        var children = this.childrenN;
         for (var i = 0, len = children.length; i < len; ++i) {
             var node = children[i];
-            Fire.node(node)._onActivated();
+            Fire(node)._onActivated();
         }
     },
 });
