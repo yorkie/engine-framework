@@ -17,6 +17,7 @@ if (!root.Editor) {
 
 require('./serialize');
 require('./get-node-dump');
+require('./get-hierarchy-dump');
 require('./set-property-by-path');
 require('./utils');
 
