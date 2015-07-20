@@ -344,9 +344,18 @@ var NodeWrapper = Fire.Class({
          * If true, the engine will keep updating this node in 60 fps when it is selected,
          * otherwise, it will update only if necessary
          * @property {Boolean} animatableInEditor
+         * @default false
          * @static
          */
-        animatableInEditor: false
+        animatableInEditor: false,
+
+        /**
+         * If false, Hierarchy will disallow to drag child into this node, and all children will be hidden.
+         * @property {Boolean} canHaveChildrenInEditor
+         * @default true
+         * @static
+         */
+        canHaveChildrenInEditor: true
     },
 
     // SERIALIZATION

@@ -180,29 +180,4 @@ if (FIRE_EDITOR) {
             });
         }
     });
-
-
-    /**
-     * @module Fire
-     */
-
-    var getRuntimeChildren = function (node) {
-        var wrapper = Fire.node(node);
-        var runtimeChildren = wrapper.runtimeChildren;
-        return {
-            name: wrapper.name,
-            id: wrapper.id,
-            children: runtimeChildren.length > 0 ? runtimeChildren.map(getRuntimeChildren) : null
-        };
-    };
-
-    /**
-     * @method takeHierarchySnapshot
-     * @return {object[]}
-     */
-    Fire.takeHierarchySnapshot = function () {
-        var root = Fire.engine.getCurrentRuntimeScene();
-        var children = Fire.node(root).runtimeChildren;
-        return children.map(getRuntimeChildren);
-    };
 }
