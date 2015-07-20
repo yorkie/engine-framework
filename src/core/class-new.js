@@ -103,7 +103,7 @@ Fire.Class = function (options) {
     if (properties) {
 
         // 预处理属性
-        preParseProperties(properties);
+        preParseProperties(name, properties);
 
         for (var propName in properties) {
             var val = properties[propName];
@@ -193,7 +193,7 @@ Fire.Class = function (options) {
 };
 
 // 预处理属性值，例如：notify等
-function preParseProperties (properties) {
+function preParseProperties (name, properties) {
     for (var propName in properties) {
         var val = properties[propName];
         if (!val) {
@@ -237,6 +237,25 @@ function preParseProperties (properties) {
             }
             else if (FIRE_DEV) {
                 Fire.warn('"notify" must work with "default" !');
+            }
+        }
+
+        var wrapperOf = val.wrapper;
+        if (wrapperOf) {
+            if (val.type) {
+                Fire.warn('The "wrapper" attribute of %s.%s can not be used with "type"', name, propName);
+            }
+            if (Fire.isChildClassOf(wrapperOf, Fire.Runtime.NodeWrapper)) {
+                val.type = wrapperOf;
+                continue;
+            }
+            var wrapper = Fire.getWrapperType(wrapperOf);
+            if (wrapper) {
+                val.type = wrapper;
+            }
+            else {
+                Fire.warn('Can not declare "wrapper" attribute for %s.%s, the registered wrapper of "%s" is not found.',
+                    name, propName, Fire.JS.getClassName(wrapperOf));
             }
         }
     }

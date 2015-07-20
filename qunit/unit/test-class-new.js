@@ -377,25 +377,22 @@ test('property notify', function () {
     strictEqual(string2, "0 : 2", 'dogs has 2 eyes');
 });
 
-//test('type', 0, function () {
-//    var Animal = Fire.Class({
-//        properties: {
-//            legs: {
-//                default: 0,
-//                type: 'Float'
-//            },
-//            eyes: {
-//                default: 0,
-//                type: 'Integer'
-//            },
-//            foo: {
-//                default: '',
-//                type: 'String'
-//            },
-//            bar: {
-//                default: null,
-//                type: Fire.Texture
-//            }
-//        }
-//    });
-//});
+test('wrapper attribute', function () {
+    var MyNode = Fire.Class();
+    var MyNodeWrapper = Fire.Class({
+        extends: Fire.Runtime.NodeWrapper,
+    });
+    Fire.Runtime.registerNodeType(MyNode, MyNodeWrapper);
+
+    var Animal = Fire.Class({
+        properties: {
+            legs: {
+                default: null,
+                wrapper: MyNode,
+            }
+        }
+    });
+
+    strictEqual(Fire.attr(Animal, 'legs').ctor, MyNodeWrapper, 'The type of leg should be wrapper of MyNode');
+});
+
