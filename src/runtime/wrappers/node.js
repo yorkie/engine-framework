@@ -239,16 +239,16 @@ var NodeWrapper = Fire.Class({
         },
 
         /**
-         * The counterclockwise degrees of rotation relative to the parent
+         * The clockwise degrees of rotation relative to the parent
          * @property rotation
          * @type {number}
          */
         rotation: NYI_Accessor(0, {
-            tooltip: "The counterclockwise degrees of rotation relative to the parent"
+            tooltip: "The clockwise degrees of rotation relative to the parent"
         }),
 
         /**
-         * The counterclockwise degrees of rotation in world space
+         * The clockwise degrees of rotation in world space
          * @property worldRotation
          * @type {number}
          */
@@ -344,9 +344,18 @@ var NodeWrapper = Fire.Class({
          * If true, the engine will keep updating this node in 60 fps when it is selected,
          * otherwise, it will update only if necessary
          * @property {Boolean} animatableInEditor
+         * @default false
          * @static
          */
-        animatableInEditor: false
+        animatableInEditor: false,
+
+        /**
+         * If false, Hierarchy will disallow to drag child into this node, and all children will be hidden.
+         * @property {Boolean} canHaveChildrenInEditor
+         * @default true
+         * @static
+         */
+        canHaveChildrenInEditor: true
     },
 
     // SERIALIZATION

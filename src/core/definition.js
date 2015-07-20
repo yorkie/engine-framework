@@ -206,7 +206,7 @@ module.exports = {
     Destroyed: Destroyed,
     ToDestroy: ToDestroy,
     DontSave: DontSave,
-    //EditorOnly: EditorOnly,
+    EditorOnly: EditorOnly,
     //Dirty: Dirty,
     //DontDestroy: DontDestroy,
     PersistentMask: PersistentMask

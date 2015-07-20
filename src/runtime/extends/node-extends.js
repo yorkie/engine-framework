@@ -26,7 +26,15 @@ JS.getset(nodeProto, 'parent',
         return parent && Fire.node(parent);
     },
     function (value) {
-        this.runtimeParent = value && value.runtimeTarget;
+        if (FIRE_EDITOR && value && !value.constructor.canHaveChildrenInEditor) {
+            Fire.warn('Can not add "%s" to "%s" which type is "%s".', this.name, value.name, JS.getClassName(value));
+            if (!this.runtimeParent) {
+                this.runtimeParent = Fire.engine.getCurrentRuntimeScene();
+            }
+        }
+        else {
+            this.runtimeParent = value && value.runtimeTarget;
+        }
     }
 );
 
@@ -37,7 +45,12 @@ JS.getset(nodeProto, 'parent',
  */
 JS.get(nodeProto, 'children',
     function () {
-        return this.runtimeChildren.map(Fire.node);
+        if (!FIRE_EDITOR || this.constructor.canHaveChildrenInEditor) {
+            return this.runtimeChildren.map(Fire.node);
+        }
+        else {
+            return [];
+        }
     }
 );
 
