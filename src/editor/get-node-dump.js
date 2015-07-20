@@ -244,7 +244,7 @@ function dumpMain (types, wrapper) {
     dumpByClass(types, data, wrapper, wrapper.constructor);
 
     // iterate mixins
-    var mixinClasses = wrapper.runtimeTarget._mixinClasses;
+    var mixinClasses = wrapper.targetN._mixinClasses;
     if (mixinClasses) {
         data.__mixins__ = [];
         for (var i = 0; i < mixinClasses.length; i++) {
@@ -257,7 +257,7 @@ function dumpMain (types, wrapper) {
                 };
 
                 // dump mixin values
-                dumpByClass(types, mixinData, wrapper.runtimeTarget, klass);
+                dumpByClass(types, mixinData, wrapper.targetN, klass);
 
                 data.__mixins__.push(mixinData);
             }
@@ -323,7 +323,7 @@ Editor.getNodeDump = function (node) {
         };
     }
 
-    var wrapper = Fire.node(node);
+    var wrapper = Fire(node);
     var value = dumpMain(types, wrapper);
 
     return {

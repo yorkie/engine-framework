@@ -26,10 +26,10 @@ var NYI_Accessor = Utils.NYI_Accessor;
  * - updateRuntime
  * - animateRuntime
  * - renderRuntime
- * - getCurrentRuntimeScene
- * - _setCurrentRuntimeScene
+ * - getCurrentSceneN
+ * - _setCurrentSceneN
  * - canvasSize
- * - getRuntimeInstanceById
+ * - getInstanceByIdN
  * - getIntersectionList
  *
  * You may want to override:
@@ -214,25 +214,25 @@ var EngineWrapper = Fire.Class({
 
     /**
      * Get the current running runtime scene.
-     * @method getCurrentRuntimeScene
+     * @method getCurrentSceneN
      * @return {RuntimeNode}
      */
-    getCurrentRuntimeScene: NYI,
+    getCurrentSceneN: NYI,
 
     /**
      * Set the current running runtime scene.
-     * @method _setCurrentRuntimeScene
+     * @method _setCurrentSceneN
      * @param {RuntimeNode}
      */
-    _setCurrentRuntimeScene: NYI,
+    _setCurrentSceneN: NYI,
 
     /**
      * Returns the node which id is id.
-     * @method getRuntimeInstanceById
+     * @method getInstanceByIdN
      * @param {String} id
      * @return {Object}
      */
-    getRuntimeInstanceById: NYI,
+    getInstanceByIdN: NYI,
 
     /**
      * This method will be invoke only if useDefaultMainLoop is true.
@@ -304,7 +304,7 @@ var EngineWrapper = Fire.Class({
                     var Register = require('../register');
                     Register.registerToCoreLevel();
                 }
-                //var scene = SceneWrapper.getCurrentRuntimeScene()
+                //var scene = SceneWrapper.getCurrentSceneN()
                 //if (editorCallback.onSceneLoaded) {
                 //    editorCallback.onSceneLoaded(this._scene);
                 //}
@@ -455,14 +455,14 @@ var EngineWrapper = Fire.Class({
 /**
  * @event node-attach-to-scene
  * @param {CustomEvent} event
- * @param {RuntimeNode} event.detail.runtimeTarget
+ * @param {RuntimeNode} event.detail.targetN
  * @private
  */
 
 /**
  * @event node-detach-from-scene
  * @param {CustomEvent} event
- * @param {RuntimeNode} event.detail.runtimeTarget
+ * @param {RuntimeNode} event.detail.targetN
  * @private
  */
 

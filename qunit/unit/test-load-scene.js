@@ -23,21 +23,21 @@
             name: 'MyNodeWrapper',
             extends: Fire.Runtime.NodeWrapper,
             properties: {
-                runtimeChildren: {
+                childrenN: {
                     get: function () {
-                        return this.runtimeTarget.children;
+                        return this.targetN.children;
                     }
                 },
-                runtimeParent: {
+                parentN: {
                     get: function () {
-                        return this.runtimeTarget.parent;
+                        return this.targetN.parent;
                     },
                     set: function (value) {
-                        if (this.runtimeTarget.parent) {
-                            Fire.JS.Array.remove(this.runtimeTarget.parent.children, this.runtimeTarget);
+                        if (this.targetN.parent) {
+                            Fire.JS.Array.remove(this.targetN.parent.children, this.targetN);
                         }
-                        this.runtimeTarget.parent = value;
-                        value.children.push(this.runtimeTarget);
+                        this.targetN.parent = value;
+                        value.children.push(this.targetN);
                     }
                 },
                 _color: {
@@ -46,10 +46,10 @@
                 _asset: null
             },
             onBeforeSerialize: function () {
-                this._color = this.runtimeTarget.color;
-                this._asset = this.runtimeTarget.asset;
+                this._color = this.targetN.color;
+                this._asset = this.targetN.asset;
             },
-            createRuntimeNode: function () {
+            createNode: function () {
                 var node = new MyNode(this._asset);
                 node.color = this._color;
                 return node;
@@ -63,19 +63,19 @@
             name: 'MySceneWrapper',
             extends: Fire.Runtime.SceneWrapper,
             properties: {
-                runtimeChildren: {
+                childrenN: {
                     get: function () {
-                        return this.runtimeTarget.children;
+                        return this.targetN.children;
                     }
                 }
             },
-            createRuntimeNode: function () {
+            createNode: function () {
                 var node = new MyScene();
                 return node;
             }
         });
 
-        Fire.engine.getCurrentRuntimeScene = function () {
+        Fire.engine.getCurrentSceneN = function () {
             return currentScene;
         };
 
@@ -220,10 +220,10 @@
             deepEqual(actual, expect, 'serializing empty scene');
 
             var node1 = new MyNode();
-            node1.parent = wrapper.runtimeTarget;
+            node1.parent = wrapper.targetN;
             node1.color = {r: 123, g: 0, b: 255, a: 255};
             node1.asset = sprite;
-            wrapper.runtimeTarget.children.push(node1);
+            wrapper.targetN.children.push(node1);
 
             var node2 = new MyNode();
             node2.parent = node1;
@@ -233,7 +233,7 @@
 
             Fire.mixin(node1, ScriptToMix);
             node1.age = 30;
-            node1.target = Fire.node(node2);
+            node1.target = Fire(node2);
 
             actual = Editor.serialize(wrapper, {stringify: false});
             expect = {
@@ -306,21 +306,21 @@
                 loaded.preloadAssets.once('should call preloadAssets');
 
                 strictEqual(loaded.constructor, MySceneWrapper, 'loaded scene should be MySceneWrapper');
-                strictEqual(loaded.runtimeChildren.length, 1, 'loaded scene should have 1 child');
-                strictEqual(loaded.runtimeParent, null, 'loaded scene should have no parent');
+                strictEqual(loaded.childrenN.length, 1, 'loaded scene should have 1 child');
+                strictEqual(loaded.parentN, null, 'loaded scene should have no parent');
 
-                var rootNode = loaded.runtimeChildren[0];
+                var rootNode = loaded.childrenN[0];
                 strictEqual(rootNode.constructor, MyNode, 'root node should be MyNode');
                 deepEqual(rootNode.color, node1.color, 'color of root node should equals to node1');
                 strictEqual(rootNode.asset._uuid, sprite._uuid, 'asset of root node should equals to sprite');
-                strictEqual(Fire.node(rootNode).runtimeChildren.length, 1, 'root node should have 1 child');
-                strictEqual(Fire.node(rootNode).parent, loaded, 'parent of root node should be scene');
+                strictEqual(Fire(rootNode).childrenN.length, 1, 'root node should have 1 child');
+                strictEqual(Fire(rootNode).parent, loaded, 'parent of root node should be scene');
 
-                var childNode = Fire.node(rootNode).runtimeChildren[0];
+                var childNode = Fire(rootNode).childrenN[0];
                 deepEqual(childNode.color, node2.color, 'color of child node should equals to node2');
                 strictEqual(childNode.asset._uuid, texture._uuid, 'asset of child node should equals to texture');
-                strictEqual(Fire.node(childNode).runtimeChildren.length, 0, 'child node should have no child');
-                strictEqual(Fire.node(childNode).runtimeParent, rootNode, 'parent of child node should be root node');
+                strictEqual(Fire(childNode).childrenN.length, 0, 'child node should have no child');
+                strictEqual(Fire(childNode).parentN, rootNode, 'parent of child node should be root node');
 
                 strictEqual(rootNode.asset.texture, childNode.asset, 'references of the same asset should be equal');
 
@@ -329,7 +329,7 @@
                 strictEqual(rootNode.getName, ScriptToMix.prototype.getName, 'should mixin methods');
                 strictEqual(rootNode.age, 30, 'should deserialize mixin');
                 //ok(rootNode.target === childNode, 'should restore node references in mixin');
-                ok(rootNode.target === Fire.node(childNode), 'should restore wrapper references in mixin');
+                ok(rootNode.target === Fire(childNode), 'should restore wrapper references in mixin');
 
                 start();
             });
