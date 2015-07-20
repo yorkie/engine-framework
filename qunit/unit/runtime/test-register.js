@@ -10,11 +10,11 @@ test('basic', function() {
     strictEqual(Fire.getWrapperType(MyNode), MyNodeWrapper, 'getWrapperType should return registered wrapper type');
 
     var node = new MyNode();
-    var wrapper = Fire.node(node);
-    ok(wrapper instanceof MyNodeWrapper, 'Fire.node should create registered wrapper');
-    strictEqual(Fire.node(node), wrapper, 'Fire.node should return created registered wrapper');
+    var wrapper = Fire(node);
+    ok(wrapper instanceof MyNodeWrapper, 'Fire should create registered wrapper');
+    strictEqual(Fire(node), wrapper, 'Fire should return created registered wrapper');
 
-    strictEqual(wrapper.runtimeTarget, node, 'wrapper target should be node');
+    strictEqual(wrapper.targetN, node, 'wrapper target should be node');
 
     //var mixinOpt = Fire.getMixinOptions();
     //ok(mixinOpt, 'has default mixin options');

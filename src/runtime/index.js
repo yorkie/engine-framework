@@ -38,7 +38,6 @@ Runtime.Settings = require('./settings');
 
 Fire.getWrapperType = register.getWrapperType;
 Fire.menuToWrapper = register.menuToWrapper;
-Fire.node = NodeWrapper.getWrapper;
 
 var mixin = register.getMixinOptions();
 Fire.mixin = mixin.mixin;

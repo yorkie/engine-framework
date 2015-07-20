@@ -21,18 +21,18 @@ var nodeProto = NodeWrapper.prototype;
  */
 JS.getset(nodeProto, 'parent',
     function () {
-        var parent = this.runtimeParent;
-        return parent && Fire.node(parent);
+        var parent = this.parentN;
+        return parent && Fire(parent);
     },
     function (value) {
         if (FIRE_EDITOR && value && !value.constructor.canHaveChildrenInEditor) {
             Fire.warn('Can not add "%s" to "%s" which type is "%s".', this.name, value.name, JS.getClassName(value));
-            if (!this.runtimeParent) {
-                this.runtimeParent = Fire.engine.getCurrentRuntimeScene();
+            if (!this.parentN) {
+                this.parentN = Fire.engine.getCurrentSceneN();
             }
         }
         else {
-            this.runtimeParent = value && value.runtimeTarget;
+            this.parentN = value && value.targetN;
         }
     }
 );
@@ -45,7 +45,7 @@ JS.getset(nodeProto, 'parent',
 JS.get(nodeProto, 'children',
     function () {
         if (!FIRE_EDITOR || this.constructor.canHaveChildrenInEditor) {
-            return this.runtimeChildren.map(Fire.node);
+            return this.childrenN.map(Fire);
         }
         else {
             return [];

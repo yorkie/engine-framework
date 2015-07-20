@@ -10,9 +10,9 @@ test('Node', function() {
     Fire.Runtime.registerNodeType(MyNode, MyNodeWrapper);
 
     var node = new MyNode();
-    var nodeWrapper = Fire.node(node);
+    var nodeWrapper = Fire(node);
 
-    strictEqual(nodeWrapper.runtimeTarget, node, 'target of wrapper');
+    strictEqual(nodeWrapper.targetN, node, 'target of wrapper');
     strictEqual(nodeWrapper.isScene, false, 'not scene');
 });
 
@@ -29,7 +29,7 @@ test('SceneNode', function() {
     Fire.Runtime.registerNodeType(MyScene, MySceneWrapper);
 
     dummyScene = new MyScene();
-    var dummySceneWrapper = Fire.node(dummyScene);
+    var dummySceneWrapper = Fire(dummyScene);
 
     //strictEqual(Fire.engine.getCurrentScene(), dummySceneWrapper, 'could get current scene wrapper');
 
@@ -45,12 +45,12 @@ test('root', function() {
     var MyNodeWrapper = Fire.Class({
         extends: Fire.Runtime.NodeWrapper,
         properties: {
-            runtimeParent: {
+            parentN: {
                 get: function () {
-                    return this.runtimeTarget.parent;
+                    return this.targetN.parent;
                 },
                 set: function (value) {
-                    this.runtimeTarget.parent = value;
+                    this.targetN.parent = value;
                 }
             }
         }
@@ -63,11 +63,11 @@ test('root', function() {
     Fire.Runtime.registerNodeType(MyScene, MySceneWrapper);
 
     var node = new MyNode();
-    var nodeWrapper = Fire.node(node);
+    var nodeWrapper = Fire(node);
     var node2 = new MyNode();
-    var nodeWrapper2 = Fire.node(node2);
+    var nodeWrapper2 = Fire(node2);
     var scene = new MyScene();
-    var sceneWrapper = Fire.node(scene);
+    var sceneWrapper = Fire(scene);
 
     strictEqual(nodeWrapper.root, nodeWrapper, 'root should be itself if no parent');
 
