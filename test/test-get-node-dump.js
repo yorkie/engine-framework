@@ -9,10 +9,10 @@ var CoreLevel = true;
 
 describe('Editor.getNodeDump', function () {
     if (PageLevel && Fire.isCoreLevel) {
-        // only test in page-level
         var spawnRunner = require('./lib/spawn-runner');
         spawnRunner(this.title, __filename);
         if (!CoreLevel) {
+            // only test in page-level
             return;
         }
     }

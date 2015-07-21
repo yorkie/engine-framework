@@ -296,8 +296,9 @@ var EngineWrapper = Fire.Class({
             //Resources._resBundle.init(options.resBundle);
         }
 
-        var self = this;
+        Fire.Runtime.Helpers.init();
 
+        var self = this;
         this.initRuntime(options, function (err) {
             if (!err) {
                 if (FIRE_EDITOR && Editor.isPageLevel) {

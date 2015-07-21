@@ -18,7 +18,9 @@ Fire.JS.mixin(Runtime, {
     registerMixin: register.registerMixin,
 
     EngineWrapper: require('./wrappers/engine'),
-    registerEngine: register.registerEngine
+    registerEngine: register.registerEngine,
+
+    Helpers: require('./helpers')
 });
 
 // load utility methods
