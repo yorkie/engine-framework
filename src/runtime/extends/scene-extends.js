@@ -176,6 +176,7 @@ if (FIRE_EDITOR) {
 
             return serialize(toSerialize, {
                 exporting: exporting,
+                nicify: exporting,
                 stringify: false
             });
         }
