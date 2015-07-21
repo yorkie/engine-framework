@@ -353,7 +353,7 @@ describe('Serialize', function () {
         });
     });
 
-    if (Fire.isEditorCore) {
+    if (Fire.isCoreLevel) {
         // test in page-level
         var spawnRunner = require('./lib/spawn-runner');
         spawnRunner(this.title, __filename);

@@ -1,6 +1,6 @@
 // so as to run tests in page-level
 
-if (Fire.isEditorCore) {
+if (Fire.isCoreLevel) {
     var Ipc = require('ipc');
     var Path = require('path');
     var Url = require('url');

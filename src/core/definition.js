@@ -40,11 +40,11 @@ else {
 }
 
 /**
- * indicates whether executes in editor's core process(atom-shell's browser context)
- * @property isEditorCore
+ * Indicates whether executes in editor's main process (Electron's browser context)
+ * @property isCoreLevel
  * @type {Boolean}
  */
-Fire.isEditorCore = Fire.isApp && !Fire.isWeb;
+Fire.isCoreLevel = Fire.isApp && !Fire.isWeb;
 
 if (Fire.isNode) {
     /**

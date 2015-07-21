@@ -1,8 +1,8 @@
 require('../src');
 
 describe('Environment Variables', function() {
-    it('Fire.isEditorCore should be true', function() {
-        expect(Fire.isEditorCore).to.be.true;
+    it('Fire.isCoreLevel should be true', function() {
+        expect(Fire.isCoreLevel).to.be.true;
     });
     it('Fire.isNode should be true', function() {
         expect(Fire.isNode).to.be.true;
@@ -15,7 +15,7 @@ describe('Environment Variables', function() {
     });
 
 
-    if (Fire.isEditorCore) {
+    if (Fire.isCoreLevel) {
         // test in page-level
         var spawnRunner = require('./lib/spawn-runner');
         spawnRunner(this.title, require('path').resolve(__dirname, 'test-env-page'));

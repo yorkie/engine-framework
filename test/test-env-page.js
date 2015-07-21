@@ -1,8 +1,8 @@
 require('../src');
 
 describe('Environment Variables', function() {
-    it('Fire.isEditorCore should be false', function() {
-        expect(Fire.isEditorCore).to.be.false;
+    it('Fire.isCoreLevel should be false', function() {
+        expect(Fire.isCoreLevel).to.be.false;
     });
     it('Fire.isNode should be true', function() {
         expect(Fire.isNode).to.be.true;

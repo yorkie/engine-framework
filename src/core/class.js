@@ -324,6 +324,7 @@ var _createInstanceProps = function (instance, itsClass) {
  * @method _isFireClass
  * @param {function} constructor
  * @return {Boolean}
+ * @private
  */
 Fire._isFireClass = function (constructor) {
     return !!constructor && (constructor.prop === _metaClass.prop);
@@ -332,6 +333,7 @@ Fire._isFireClass = function (constructor) {
 /**
  * @method _convertToFireClass
  * @param {function} constructor
+ * @private
  */
 Fire._convertToFireClass = function (constructor) {
     constructor.prop = _metaClass.prop;
