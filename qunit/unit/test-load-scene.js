@@ -215,7 +215,7 @@
             var actual = Editor.serialize(wrapper, {stringify: false});
             var expect = {
                 "__type__": "MySceneWrapper",
-                "content": []
+                "content": [[]]
             };
             deepEqual(actual, expect, 'serializing empty scene');
 

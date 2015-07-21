@@ -61,8 +61,8 @@ var EngineWrapper = Fire.Class({
         this._useDefaultMainLoop = useDefaultMainLoop;
         this._isInitialized = false;
 
-        // Scene name to uuid
-        this._sceneInfos = {};
+        // Scene list
+        this._sceneInfos = [];
 
         // current scene
         this._scene = null;
@@ -288,7 +288,7 @@ var EngineWrapper = Fire.Class({
         this._isInitialized = true;
 
         if (options) {
-            JS.mixin(this._sceneInfos, options.scenes);
+            this._sceneInfos = this._sceneInfos.concat(options.scenes);
             //Resources._resBundle.init(options.resBundle);
         }
 

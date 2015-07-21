@@ -113,17 +113,41 @@ JS.mixin(engineProto, {
      */
     loadScene: function (sceneName, onLaunched, onUnloaded) {
         if (this._loadingScene) {
-            Fire.error('[Engine.loadScene] Failed to load scene "%s" because "%s" is already loading', sceneName, this._loadingScene);
+            Fire.error('[loadScene] Failed to load scene "%s" because "%s" is already loading', sceneName, this._loadingScene);
             return false;
         }
-        var uuid = this._sceneInfos[sceneName];
+        var uuid;
+        if (typeof sceneName === 'string') {
+            if (!sceneName.endsWith('.fire')) {
+                sceneName += '.fire';
+            }
+            // search scene
+            for (var i = 0; i < this._sceneInfos.length; i++) {
+                var info = this._sceneInfos[i];
+                var url = info.url;
+                if (url.endsWith(sceneName)) {
+                    uuid = info.uuid;
+                    break;
+                }
+            }
+        }
+        else {
+            var info = this._sceneInfos[sceneName];
+            if (typeof info === 'object') {
+                uuid = info.uuid;
+            }
+            else {
+                Fire.error('[loadScene] The scene index to load (%s) is out of range.', sceneName);
+                return false;
+            }
+        }
         if (uuid) {
             this._loadingScene = sceneName;
             this._loadSceneByUuid(uuid, onLaunched, onUnloaded);
             return true;
         }
         else {
-            Fire.error('[Engine.loadScene] Can not load the scene "%s" because it has not been added to the build settings.', sceneName);
+            Fire.error('[loadScene] Can not load the scene "%s" because it has not been added to the build settings before play.', sceneName);
             return false;
         }
     },

@@ -9,7 +9,7 @@ var match = function (obj, expect, info) {
 
 test('basic test', function() {
     match({}, {}, 'smoke test1');
-    match([], [], 'smoke test2');
+    match([], [[]], 'smoke test2');
 
     var BaseAsset = function () {
         this.inheritProp = 321;

@@ -69,7 +69,7 @@ JS.mixin(sceneProto, {
         }
         var self = this;
         // deserialize (create wrappers)
-        var json = this._dataToDeserialize.json;
+        var json = this._dataToDeserialize;
 
         //
         function doCreate (wrappers) {
@@ -110,9 +110,7 @@ JS.mixin(sceneProto, {
      */
     _deserialize: function (data, ctx) {
         // save temporarily for create()
-        this._dataToDeserialize = {
-            json: data
-        };
+        this._dataToDeserialize = data;
     }
 });
 

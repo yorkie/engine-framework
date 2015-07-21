@@ -380,7 +380,13 @@ Editor.serialize = function (obj, options) {
         nicifySerialized(serializedList);
     }
 
-    var serializedData = serializedList.length === 1 ? serializedList[0] : serializedList;
+    var serializedData;
+    if (serializedList.length === 1 && !Array.isArray(serializedList[0])) {
+        serializedData = serializedList[0];
+    }
+    else {
+        serializedData = serializedList;
+    }
     if (stringify === false) {
         return serializedData;
     }
