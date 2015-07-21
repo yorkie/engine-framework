@@ -55,8 +55,8 @@ var mixin = {
 
         // mixin prototype
         //var nodeProto = nodeClass.prototype;
-        var clsProto = classToMix.prototype;
-        JS.mixin(node, clsProto);  // 这里也会 mixin cls 的父类的 prototype
+        var classToMixProto = classToMix.prototype;
+        JS.mixin(node, classToMixProto);  // 这里也会 mixin cls 的父类的 prototype
 
         // restore overrided properties
         node.constructor = nodeClass;
@@ -72,9 +72,20 @@ var mixin = {
         }
         else {
             node._mixinClasses = [classToMix];
+            node._mixinContexts = [];
         }
+        node._mixinContexts.push({
+            _objFlags: 0,
+        });
 
         // TODO - behaviours
+
+        if (Fire.engine._isPlaying && !Fire.engine._isCloning) {
+            // invoke onLoad
+            if (classToMixProto.onLoad) {
+                classToMixProto.onLoad.call(node);
+            }
+        }
     },
 
     hasMixin: function (node, typeOrTypename) {

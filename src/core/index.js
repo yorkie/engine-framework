@@ -66,6 +66,7 @@ require('./asset');
 require('./deserialize');
 require('./event/event-target');
 require('./playable');
+require('./behavior');
 
 // script management
 
