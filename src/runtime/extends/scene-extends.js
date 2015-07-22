@@ -168,10 +168,10 @@ if (FIRE_EDITOR) {
             }
         }
         return {
-            w: wrapper,
-            c: children,
-            t: targetN,
-            m: mixin
+            w: wrapper,     // wrapper properties
+            c: children,    // children
+            t: targetN,     // target node
+            m: mixin        // mixin class list
         };
     };
 

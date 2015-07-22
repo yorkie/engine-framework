@@ -23,7 +23,7 @@ Fire.isPureWeb = !Fire.isNode && !Fire.isApp;                               // c
 Fire.isEditor = Fire.isApp;     // by far there is no standalone client version, so app == editor
 // Always export FIRE_EDITOR globally
 if (typeof FIRE_EDITOR === 'undefined') {
-    FIRE_EDITOR = Fire.isEditor;
+    eval('FIRE_EDITOR=Fire.isEditor');  // use eval to ignore uglify
 }
 
 

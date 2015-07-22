@@ -33,13 +33,18 @@ require('./definition');
 
 // Declare pre-process macros globally for uglify
 if (typeof FIRE_DEBUG === 'undefined') {
-    FIRE_DEBUG = true;
+    eval('FIRE_DEBUG=!0');      // use eval to ignore uglify
 }
 if (typeof FIRE_DEV === 'undefined') {
-    FIRE_DEV = FIRE_EDITOR || FIRE_DEBUG;
+    if (FIRE_EDITOR || FIRE_DEBUG) {
+        eval('FIRE_DEV=!0');    // use eval to ignore uglify
+    }
+    else {
+        eval('FIRE_DEV=!1');    // use eval to ignore uglify
+    }
 }
 if (typeof FIRE_TEST === 'undefined') {
-    FIRE_TEST = false;
+    eval('FIRE_TEST=!1');       // use eval to ignore uglify
 }
 
 // javascript extends

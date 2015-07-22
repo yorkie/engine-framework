@@ -292,7 +292,7 @@ var _metaClass = {
     }
 };
 
-var _createInstanceProps = function (instance, itsClass) {
+function instantiateProps (instance, itsClass) {
     var propList = itsClass.__props__;
     if (propList) {
         for (var i = 0; i < propList.length; i++) {
@@ -316,7 +316,7 @@ var _createInstanceProps = function (instance, itsClass) {
             }
         }
     }
-};
+}
 
 /**
  * Checks whether the constructor is created by Fire.define or Fire.Class
@@ -532,7 +532,7 @@ function _createCtor (constructor, baseClass, useTryCatch) {
     if (FIRE_EDITOR) {
         body += 'this._observing=false;\n';
     }
-    body += '_createInstanceProps(this,fireClass);\n';
+    body += 'instantiateProps(this,fireClass);\n';
 
     // call user constructors
     if (ctors) {
@@ -589,4 +589,8 @@ Fire._fastDefine = function (className, constructor, serializableFields) {
     for (var i = 0; i < serializableFields.length; i++) {
         Fire.attr(constructor, serializableFields[i], { visible: false });
     }
+};
+
+module.exports = {
+    instantiateProps: instantiateProps
 };
