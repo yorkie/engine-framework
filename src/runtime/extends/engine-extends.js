@@ -171,8 +171,12 @@ JS.mixin(engineProto, {
                 }
             }
             else {
+                var uuid = scene._uuid;
                 scene = scene.scene;    // Currently our scene not inherited from Asset, so need to extract scene from dummy asset
-                if (!(scene instanceof SceneWrapper)) {
+                if (scene instanceof SceneWrapper) {
+                    scene.uuid = uuid;
+                }
+                else {
                     error = 'The asset ' + uuid + ' is not a scene';
                     scene = null;
                 }

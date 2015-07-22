@@ -26,6 +26,7 @@ var SceneWrapper = Fire.Class({
     extends: NodeWrapper,
     constructor: function () {
         this._dataToDeserialize = null;
+        this.uuid = null;   // for editor
     },
 
     properties: {

@@ -111,6 +111,14 @@ JS.mixin(sceneProto, {
     _deserialize: function (data, ctx) {
         // save temporarily for create()
         this._dataToDeserialize = data;
+        if (data.length > 0) {
+            if (Array.isArray(data[0])) {
+                this.uuid = data[0][0].uuid;
+            }
+            else {
+                this.uuid = data[0].uuid;
+            }
+        }
     }
 });
 
@@ -170,8 +178,11 @@ if (FIRE_EDITOR) {
             this.onBeforeSerialize();
 
             var childWrappers = parseWrappers(this.targetN).c || [];
-            var toSerialize = childWrappers;
+            if (childWrappers.length > 0) {
+                childWrappers[0].uuid = this.uuid;
+            }
 
+            var toSerialize = childWrappers;
             return serialize(toSerialize, {
                 exporting: exporting,
                 nicify: exporting,
