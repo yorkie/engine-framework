@@ -1,6 +1,5 @@
 var JS = Fire.JS;
 var Behavior = Fire.Behavior;
-var Uuid = require('./uuid');
 
 /**
  * @module Fire.Runtime
@@ -125,19 +124,6 @@ JS.getset(nodeProto, 'sceneScale',
         }
 
         return this.worldScale.div(scene.scale);
-    }
-);
-
-/**
- * !#en the UUID, must be type string, editor only
- * !#zh 节点的 UUID，是字符串类型，只能在编辑器里用
- * @property uuid
- * @type {string}
- * @readOnly
- */
-JS.get(nodeProto, 'uuid',
-    function () {
-        return this._id || (this._id = Uuid());
     }
 );
 

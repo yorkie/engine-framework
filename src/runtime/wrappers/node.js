@@ -8,6 +8,7 @@ var Rect = Fire.Rect;
 var Utils = require('./utils');
 var NYI = Utils.NYI;
 var NYI_Accessor = Utils.NYI_Accessor;
+var Uuid = require('./uuid');
 
 var INVISIBLE = {
     visible: false
@@ -114,6 +115,20 @@ var NodeWrapper = Fire.Class({
         _id: {
             default: '',
             editorOnly: true
+        },
+
+        /**
+         * !#en the UUID, must be type string, editor only
+         * !#zh 节点的 UUID，是字符串类型，只能在编辑器里用
+         * @property uuid
+         * @type {string}
+         * @readOnly
+         */
+        uuid: {
+            get: function () {
+                return this._id || (this._id = Uuid());
+            },
+            visible: false
         },
 
         // HIERARCHY
