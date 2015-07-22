@@ -12,7 +12,11 @@ module.exports = {
     // assert(node)
     onNodeAttachedToParent: function (node) {
         if (FIRE_EDITOR) {
-            var index = detachingNodes.lastIndexOf(node);
+            var uuid = Fire(node).uuid;
+            if (!uuid) {
+                return;
+            }
+            var index = detachingNodes.lastIndexOf(uuid);
             if (index !== -1) {
                 // debounce
                 if (index === detachingNodes.length - 1) {
@@ -35,7 +39,11 @@ module.exports = {
     // assert(node)
     onNodeDetachedFromParent: function (node) {
         if (FIRE_EDITOR) {
-            detachingNodes.push(node);
+            var uuid = Fire(node).uuid;
+            if (!uuid) {
+                return;
+            }
+            detachingNodes.push(uuid);
         }
     },
 
@@ -43,11 +51,18 @@ module.exports = {
         if (FIRE_EDITOR) {
             if (detachingNodes.length > debouncedCount) {
                 for (var i = 0, len = detachingNodes.length; i < len; ++i) {
-                    var node = detachingNodes[i];
-                    if (node) {
-                        Fire.engine.emit('node-detach-from-scene', {
-                            targetN: node
-                        });
+                    var id = detachingNodes[i];
+                    if (id) {
+                        var wrapper = Fire.engine.attachedWrappers[id];
+                        if (wrapper && wrapper.targetN) {
+                            Fire.engine.emit('node-detach-from-scene', {
+                                targetN: wrapper.targetN
+                            });
+                        }
+                        else {
+                            Editor.error("Failed to get last frame's node to detach, " +
+                                         wrapper ? "target node not exists." : "wrapper not attached.");
+                        }
                     }
                 }
             }
