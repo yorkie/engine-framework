@@ -1,5 +1,4 @@
 
-var attachedNodes = {};
 var detachingNodes = [];
 var debouncedCount = 0;
 
@@ -9,8 +8,6 @@ module.exports = {
             Fire.engine.on('post-update', this._debounceNodeEvent);
         }
     },
-
-    attachedNodes: attachedNodes,
 
     // assert(node)
     onNodeAttachedToParent: function (node) {
@@ -28,7 +25,6 @@ module.exports = {
             }
             else {
                 // new node
-                attachedNodes[Fire(node).id] = node;
                 Fire.engine.emit('node-attach-to-scene', {
                     targetN: node
                 });
@@ -52,7 +48,6 @@ module.exports = {
                         Fire.engine.emit('node-detach-from-scene', {
                             targetN: node
                         });
-                        delete attachedNodes[Fire(node).id];
                     }
                 }
             }

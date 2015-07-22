@@ -8,14 +8,14 @@ var getChildrenN = function (node) {
     if (wrapper.constructor.canHaveChildrenInEditor) {
         return {
             name: wrapper.name,
-            id: wrapper.id,
+            id: wrapper.uuid,
             children: childrenN.length > 0 ? childrenN.map(getChildrenN) : null
         };
     }
     else {
         return {
             name: wrapper.name,
-            id: wrapper.id,
+            id: wrapper.uuid,
             children: [],
             canHaveChildren: false
         };

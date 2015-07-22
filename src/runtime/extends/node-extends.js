@@ -1,5 +1,6 @@
 var JS = Fire.JS;
 var Behavior = Fire.Behavior;
+var Uuid = require('./uuid');
 
 /**
  * @module Fire.Runtime
@@ -127,6 +128,21 @@ JS.getset(nodeProto, 'sceneScale',
     }
 );
 
+/**
+ * !#en the UUID, must be type string, editor only
+ * !#zh 节点的 UUID，是字符串类型，只能在编辑器里用
+ * @property uuid
+ * @type {string}
+ * @readOnly
+ */
+JS.get(nodeProto, 'uuid',
+    function () {
+        return this._id || (this._id = Uuid());
+    }
+);
+
+JS.obsolete(nodeProto, 'NodeWrapper.id', 'uuid', false);
+
 JS.mixin(nodeProto, {
     /**
      * Is this node an instance of Scene?
@@ -180,7 +196,7 @@ JS.mixin(nodeProto, {
         //
         if (FIRE_EDITOR) {
             if (!Fire.engine._isPlaying) {
-                var focused = Editor.Selection.curActivate('node') === this.id;
+                var focused = Editor.Selection.curActivate('node') === this.uuid;
                 if (focused && this.onFocusInEditor) {
                     this.onFocusInEditor();
                 }

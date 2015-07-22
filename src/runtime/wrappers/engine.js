@@ -29,7 +29,6 @@ var NYI_Accessor = Utils.NYI_Accessor;
  * - getCurrentSceneN
  * - _setCurrentSceneN
  * - canvasSize
- * - getInstanceByIdN
  * - getIntersectionList
  *
  * You may want to override:
@@ -93,6 +92,26 @@ var EngineWrapper = Fire.Class({
 
             this._shouldRepaintInEM = false;
             this._forceRepaintId = -1;
+
+            // used in getInstanceById
+            this.attachedWrappers = {};
+
+            var attachedWrappers = this.attachedWrappers;
+            this.on('node-detach-from-scene', function (event) {
+                var node = event.detail.targetN;
+                if (node) {
+                    var uuid = Fire(node).uuid;
+                    delete attachedWrappers[uuid];
+                }
+            });
+            this.on('node-attach-to-scene', function (event) {
+                var node = event.detail.targetN;
+                if (node) {
+                    var wrapper = Fire(node);
+                    var uuid = wrapper.uuid;
+                    attachedWrappers[uuid] = wrapper;
+                }
+            });
         }
     },
 
@@ -225,14 +244,6 @@ var EngineWrapper = Fire.Class({
      * @param {RuntimeNode}
      */
     _setCurrentSceneN: NYI,
-
-    /**
-     * Returns the node which id is id.
-     * @method getInstanceByIdN
-     * @param {String} id
-     * @return {Object}
-     */
-    getInstanceByIdN: NYI,
 
     /**
      * This method will be invoke only if useDefaultMainLoop is true.

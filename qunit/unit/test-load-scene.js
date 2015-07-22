@@ -215,7 +215,7 @@
             var actual = Editor.serialize(wrapper, {stringify: false});
             var expect = {
                 "__type__": "MySceneWrapper",
-                "content": [[]]
+                "content": {c: [], uuid: ""}
             };
             deepEqual(actual, expect, 'serializing empty scene');
 
@@ -235,37 +235,43 @@
             node1.age = 30;
             node1.target = Fire(node2);
 
+            Fire(node1)._id = 'id1';
+            Fire(node2)._id = 'id2';
             actual = Editor.serialize(wrapper, {stringify: false});
             expect = {
                 "__type__": "MySceneWrapper",
                 "content": [
-                    [
-                        {
-                            "c": [
-                                {
-                                    "c": undefined,
-                                    "m": undefined,
-                                    "t": undefined,
-                                    "w": {
-                                        "__id__": 2
+                    {
+                        c: [
+                            {
+                                "c": [
+                                    {
+                                        "c": undefined,
+                                        "m": undefined,
+                                        "t": undefined,
+                                        "w": {
+                                            "__id__": 2
+                                        }
                                     }
+                                ],
+                                "m": Fire.JS._getClassId(ScriptToMix),
+                                "t": {
+                                    "__id__": 3
+                                },
+                                "w": {
+                                    "__id__": 1
                                 }
-                            ],
-                            "m": Fire.JS._getClassId(ScriptToMix),
-                            "t": {
-                                "__id__": 3
-                            },
-                            "w": {
-                                "__id__": 1
                             }
-                        }
-                    ],
+                        ],
+                        uuid: '',
+                    },
                     {
                         "__type__": "MyNodeWrapper",
                         _color: node1.color,
                         _asset: {
                             __uuid__: node1.asset._uuid
                         },
+                        "_id": 'id1',
                         "_name": "",
                         "_objFlags": 0
                     },
@@ -275,6 +281,7 @@
                         _asset: {
                             __uuid__: node2.asset._uuid
                         },
+                        "_id": 'id2',
                         "_name": "",
                         "_objFlags": 0
                     },

@@ -32,9 +32,9 @@ describe('Runtime helpers', function () {
     var MyNodeWrapper = Fire.Class({
         extends: Fire.Runtime.NodeWrapper,
         properties: {
-            id: {
+            uuid: {
                 get: function () {
-                    return this.targetN.id;
+                    return this.targetN.uuid;
                 }
             }
         }
@@ -43,7 +43,7 @@ describe('Runtime helpers', function () {
 
     it('should emit "node-attach-to-scene"', function () {
         var c1 = new MyNode();
-        c1.id = 1;
+        c1.uuid = 1;
 
         var target;
         Fire.engine.once("node-attach-to-scene", function (event) {
@@ -56,7 +56,7 @@ describe('Runtime helpers', function () {
 
     it('should emit "node-detach-from-scene" in next frame', function () {
         var c1 = new MyNode();
-        c1.id = 1;
+        c1.uuid = 1;
 
         var target;
         Fire.engine.once("node-detach-from-scene", function (event) {
@@ -71,28 +71,28 @@ describe('Runtime helpers', function () {
 
     it('should maintains attached node', function () {
         var c1 = new MyNode();
-        c1.id = 1;
+        c1.uuid = 1;
 
         Helpers.onNodeAttachedToParent(c1);
-        expect(Helpers.attachedNodes[c1.id]).to.be.equals(c1);
+        expect(Fire.engine.attachedWrappers[c1.uuid]).to.be.equals(Fire(c1));
 
         Helpers.onNodeDetachedFromParent(c1);
         Fire.engine.emit("post-update");
-        expect(Helpers.attachedNodes[c1.id]).to.be.undefined;
+        expect(Fire.engine.attachedWrappers[c1.uuid]).to.be.undefined;
     });
 
     it('should debounce event in one frame', function () {
         var c1 = new MyNode();
-        c1.id = 1;
+        c1.uuid = 1;
         var c2 = new MyNode();
-        c2.id = 2;
+        c2.uuid = 2;
 
         var target = [];
         Fire.engine.once("node-detach-from-scene", function (event) {
             target.push(event.detail.targetN);
         });
 
-        Helpers.attachedNodes[c1.id] = 'unchanged';
+        Fire.engine.attachedWrappers[c1.uuid] = 'unchanged';
 
         Helpers.onNodeDetachedFromParent(c1);
         Helpers.onNodeDetachedFromParent(c2);
@@ -101,7 +101,7 @@ describe('Runtime helpers', function () {
         Fire.engine.emit("post-update");
 
         expect(target).to.be.deep.equals([c2]);
-        expect(Helpers.attachedNodes[c1.id]).to.be.equals('unchanged');
-        expect(Helpers.attachedNodes[c2.id]).to.be.undefined;
+        expect(Fire.engine.attachedWrappers[c1.uuid]).to.be.equals('unchanged');
+        expect(Fire.engine.attachedWrappers[c2.uuid]).to.be.undefined;
     });
 });

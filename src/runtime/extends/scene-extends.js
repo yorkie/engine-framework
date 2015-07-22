@@ -86,7 +86,11 @@ JS.mixin(sceneProto, {
             json,
             function (err, data) {
                 self._dataToDeserialize = null;
-                var wrappers = data;
+                var wrappers = data.c;
+                if (FIRE_EDITOR) {
+                    // fallback to old format
+                    wrappers = wrappers || data;
+                }
                 if (handle.assetsNeedPostLoad.length > 0) {
                     // preload
                     self.preloadAssets(handle.assetsNeedPostLoad, function () {
@@ -112,12 +116,7 @@ JS.mixin(sceneProto, {
         // save temporarily for create()
         this._dataToDeserialize = data;
         if (data.length > 0) {
-            if (Array.isArray(data[0])) {
-                this.uuid = data[0][0].uuid;
-            }
-            else {
-                this.uuid = data[0].uuid;
-            }
+            this.uuid = data[0].uuid;
         }
     }
 });
@@ -129,6 +128,16 @@ JS.mixin(sceneProto, {
 JS.get(sceneProto, '_needCreate', function () {
     return !!this._dataToDeserialize;
 });
+
+// scene uuid will copy from assets
+JS.getset(sceneProto, 'uuid',
+    function () {
+        return this._id;
+    },
+    function (value) {
+        this._id = value;
+    }
+);
 
 if (FIRE_EDITOR) {
 
@@ -177,12 +186,12 @@ if (FIRE_EDITOR) {
         _serialize: function (exporting) {
             this.onBeforeSerialize();
 
-            var childWrappers = parseWrappers(this.targetN).c || [];
-            if (childWrappers.length > 0) {
-                childWrappers[0].uuid = this.uuid;
-            }
+            var childWrappers = parseWrappers(this.targetN).c;
+            var toSerialize = {
+                c: childWrappers || [],
+                uuid: this.uuid || ''
+            };
 
-            var toSerialize = childWrappers;
             return serialize(toSerialize, {
                 exporting: exporting,
                 nicify: exporting,

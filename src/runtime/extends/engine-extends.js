@@ -24,13 +24,24 @@ JS.mixin(engineProto, {
     },
 
     /**
-     * Returns the wrapper of the node which id is id.
-     * @method getInstanceByIdN
-     * @param {String} id
-     * @return {Object}
+     * Returns the wrapper by wrapper id.
+     * @method getInstanceById
+     * @param {String} uuid
+     * @return {Fire.Runtime.NodeWrapper}
      */
-    getInstanceById: function (id) {
-        return Fire(this.getInstanceByIdN(id));
+    getInstanceById: function (uuid) {
+        return this.attachedWrappers[uuid];
+    },
+
+    /**
+     * Returns the node by wrapper id.
+     * @method getInstanceByIdN
+     * @param {String} uuid
+     * @return {RuntimeNode}
+     */
+    getInstanceByIdN: function (uuid) {
+        var wrapper = this.attachedWrappers[uuid];
+        return wrapper && wrapper.targetN;
     },
 
     _initScene: function (sceneWrapper, callback) {

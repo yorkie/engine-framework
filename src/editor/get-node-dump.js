@@ -184,12 +184,12 @@ function dumpObject (types, obj, expectedType) {
             if (expectedType !== actualType) {
                 return {
                     __type__: actualType,
-                    id: obj.id
+                    id: obj.uuid
                 };
             }
             else {
                 return {
-                    id: obj.id
+                    id: obj.uuid
                 };
             }
         }

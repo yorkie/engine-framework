@@ -68,6 +68,7 @@ var NodeWrapper = Fire.Class({
          */
         this.targetN = arguments[0];
         if (this.targetN) {
+            Fire.engine.attachedWrappers[this.uuid] = this;
             this.attached();
         }
 
@@ -105,13 +106,15 @@ var NodeWrapper = Fire.Class({
         },
 
         /**
-         * !#en the instance id, must be type string
-         * !#zh 节点ID，是字符串类型
-         * @property id
+         * uuid
+         * @property _id
          * @type {string}
-         * @readOnly
+         * @private
          */
-        id: NYI_Accessor('', INVISIBLE, true),
+        _id: {
+            default: '',
+            editorOnly: true
+        },
 
         // HIERARCHY
 
@@ -387,6 +390,7 @@ var NodeWrapper = Fire.Class({
         var node = this.createNode();
         this.targetN = node;
         node._FB_wrapper = this;
+        Fire.engine.attachedWrappers[this.uuid] = this;
         this.attached();
     },
 
