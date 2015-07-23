@@ -92,6 +92,7 @@ describe('Editor.getNodeDump', function () {
         var Script = Fire.Class({
             name: '2154648724566',
             extends: Fire.Class({
+                extends: Fire.Behavior,
                 constructor: function () {
                     this.realAge = 30;
                 },
@@ -215,6 +216,7 @@ describe('Editor.getNodeDump', function () {
                     }
                 },
                 '2154648724566': {
+                    extends: [ 'Fire.Behavior' ],
                     properties: {
                         age: {
                             default: 40,

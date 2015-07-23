@@ -15,7 +15,8 @@ test('basic', function() {
     var Script = Fire.Class({
         name: '2154648724566',
         extends: Fire.Class({
-            constructor: function () {
+            extends: Fire.Behavior,
+            onLoad: function () {
                 this.realAge = 30;
             },
             properties: {
@@ -29,6 +30,9 @@ test('basic', function() {
             }
         }),
         constructor: function () {
+            this._ctorCalled = true;
+        },
+        onLoad: function () {
             this._name = 'ha';
         },
         properties: {
@@ -53,12 +57,13 @@ test('basic', function() {
 
     strictEqual(node.constructor, Node, 'constructor should not changed');
 
-    strictEqual(node._name, 'ha', 'should execute constructor');
+    strictEqual(node._ctorCalled, undefined, 'should not execute constructor');
+    node.onLoad();
+    strictEqual(node._name, 'ha', 'could call onLoad');
     strictEqual(node.name, 'ha', 'should mixin properties');
     strictEqual(Fire.attr(node, 'name').displayName, 'Name', 'should mixin attributes');
     strictEqual(node.getName(), 'ha', 'should mixin methods');
 
-    strictEqual(node.realAge, 30, 'should mixin base constructor');
     strictEqual(node.age, 40, 'should mixin base properties');
     strictEqual(Fire.attr(node, 'age').tooltip, 'Age', 'should mixin base attributes');
     notStrictEqual(node.getAge, originGetAge, 'should override origin methods');

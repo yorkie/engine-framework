@@ -1,92 +1,161 @@
 // The default mixin solution
 var JS = Fire.JS;
 var Wrapper = require('./wrappers/node');
+var Behavior = require('./behavior');
+var instantiateProps = require('../core/class').instantiateProps;
 
-//var tmpArray = [];
+var LifecycleMethods = Behavior.LCMethodNames;
+var lcmInvokers = Behavior.lcmInvokers;
 
-var mixin = {
-    mixin: function (node, typeOrTypename) {
+function callInTryCatch (method, target) {
+    try {
+        method.call(target);
+    }
+    catch (e) {
+        Fire._throw(e);
+    }
+}
 
-        var classToMix;
-        if (typeof typeOrTypename === 'string') {
-            classToMix = JS.getClassByName(typeOrTypename);
-            if ( !classToMix ) {
-                Fire.error('Fire.mixin: Failed to get class "%s"');
-                if (Fire._RFpeek()) {
-                    Fire.error('You should not mixin %s when the scripts are still loading.', typeOrTypename);
-                }
+function mixin (node, typeOrTypename) {
+    'use strict';
+    if (arguments.length > 2) {
+        for (var a = 1; a < arguments.length; a++) {
+            mixin(node, arguments[a]);
+        }
+        return;
+    }
+    var classToMix;
+    if (typeof typeOrTypename === 'string') {
+        classToMix = JS.getClassByName(typeOrTypename);
+        if ( !classToMix ) {
+            Fire.error('Fire.mixin: Failed to get class "%s"');
+            if (Fire._RFpeek()) {
+                Fire.error('You should not mixin %s when the scripts are still loading.', typeOrTypename);
             }
         }
-        else {
-            if ( !typeOrTypename ) {
-                Fire.error('Fire.mixin: The class to mixin must be non-nil');
-            }
-            classToMix = typeOrTypename;
+    }
+    else {
+        if ( !typeOrTypename ) {
+            Fire.error('Fire.mixin: The class to mixin must be non-nil');
         }
+        classToMix = typeOrTypename;
+    }
 
-        if (FIRE_EDITOR && !Fire._isFireClass(classToMix)) {
+    if (FIRE_EDITOR) {
+        // validate
+        if (!Fire._isFireClass(classToMix)) {
             Fire.error('Fire.mixin: The class to mixin must be FireClass.');
             return;
         }
-        var newMixinClassId = JS._getClassId(classToMix);
-        if (FIRE_EDITOR && !newMixinClassId) {
+        if (!JS._getClassId(classToMix) && !FIRE_TEST) {
             Fire.error("Fire.mixin: The class to mixin must have class name or script's uuid.");
             return;
         }
-
-        if (node instanceof Wrapper) {
-            node = node.targetN;
-        }
-
-        if (!node) {
-            Fire.error("Fire.mixin: The node to mixin must be non-nil.");
+        if (!Fire.isChildClassOf(classToMix, Behavior)) {
+            Fire.warn("Fire.mixin: The class to mixin must inherit from Fire.Behavior.");
             return;
         }
+    }
 
-        if (FIRE_EDITOR && node._mixinClasses && node._mixinClasses.indexOf(classToMix) !== -1) {
-            Fire.warn("Fire.mixin: The class has already mixined.");
-            return;
-        }
+    if (node instanceof Wrapper) {
+        node = node.targetN;
+    }
 
-        // call constructor on node
-        classToMix.call(node);
+    if (!node) {
+        Fire.error("Fire.mixin: The node to mixin must be non-nil.");
+        return;
+    }
 
-        var nodeClass = node.constructor;
+    if (FIRE_EDITOR && node._mixinClasses && node._mixinClasses.indexOf(classToMix) !== -1) {
+        Fire.warn("Fire.mixin: The class has already mixined.");
+        return;
+    }
 
-        // mixin prototype
-        //var nodeProto = nodeClass.prototype;
-        var classToMixProto = classToMix.prototype;
-        JS.mixin(node, classToMixProto);  // 这里也会 mixin cls 的父类的 prototype
+    // init props
+    instantiateProps(node, classToMix);
 
-        // restore overrided properties
-        node.constructor = nodeClass;
+    // creating mixin script context
+    var scriptCtx = {
+        _objFlags: 0,
+    };
 
-        // remove properties no need to mixin
-        node.__cid__ = undefined;
-        node.__classname__ = undefined;
+    var mixinData;
 
-        // declare mixin classes
-        var _mixinClasses = node._mixinClasses;
-        if (_mixinClasses) {
-            _mixinClasses.push(classToMix);
-        }
-        else {
-            node._mixinClasses = [classToMix];
-            node._mixinContexts = [];
-        }
-        node._mixinContexts.push({
-            _objFlags: 0,
-        });
+    // maintain mixin states
+    var _mixinClasses = node._mixinClasses;
+    if (_mixinClasses) {
+        _mixinClasses.push(classToMix);
+        node._mixinContexts.push(scriptCtx);
+        mixinData = node._mixin;
+    }
+    else {
+        node._mixinClasses = [classToMix];
+        node._mixinContexts = [scriptCtx];
+        mixinData = {
+            lcmInitStates: LifecycleMethods.map(function () { return false; })
+        };
+        node._mixin = mixinData;
+    }
 
-        // TODO - behaviours
-
-        if (Fire.engine._isPlaying && !Fire.engine._isCloning) {
-            // invoke onLoad
-            if (classToMixProto.onLoad) {
-                classToMixProto.onLoad.call(node);
+    // DO MIXIN
+    var lcmInitStates = mixinData.lcmInitStates;
+    var classToMixProto = classToMix.prototype;
+    for (var propName in classToMixProto) {
+        if (propName !== '__cid__' &&
+            propName !== '__classname__' &&
+            propName !== 'constructor') {
+            // TODO - dont mixin class attr
+            var pd = JS.getPropertyDescriptor(classToMixProto, propName);
+            var lcmIndex = LifecycleMethods.indexOf(propName);
+            var isLifecycleMethods = lcmIndex !== -1;
+            if (isLifecycleMethods) {
+                scriptCtx[propName] = pd.value;
+                if (! lcmInitStates[lcmIndex]) {
+                    lcmInitStates[lcmIndex] = true;
+                    // Fire.warn("Fire.mixin: %s's %s is overridden", Fire(node).name, propName);
+                    (function () {
+                        var invoker = lcmInvokers[propName];
+                        var originMethod = node[propName];
+                        if (originMethod) {
+                            node[propName] = function () {
+                                originMethod.apply(this, arguments);
+                                invoker.apply(this, arguments);
+                            };
+                        }
+                        else {
+                            node[propName] = invoker;
+                        }
+                    })();
+                }
+            }
+            else {
+                Object.defineProperty(node, propName, pd);
             }
         }
-    },
+    }
+
+    //// cache lifecycle methods
+    //for (var j = 0; j < LifecycleMethods.length; j++) {
+    //    var method = LifecycleMethods[j];
+    //}
+
+    if ((!FIRE_EDITOR || (Fire.engine && Fire.engine._isPlaying)) && !Fire.engine._isCloning) {
+        // invoke onLoad
+        var onLoad = classToMixProto.onLoad;
+        if (onLoad) {
+            if (FIRE_EDITOR) {
+                callInTryCatch(onLoad, node);
+            }
+            else {
+                onLoad.call(node);
+            }
+        }
+    }
+}
+
+var exports = {
+
+    mixin: mixin,
 
     hasMixin: function (node, typeOrTypename) {
         if (node instanceof Wrapper) {
@@ -150,7 +219,7 @@ var mixin = {
             var index = mixinClasses.indexOf(classToUnmix);
             if (index !== -1) {
                 mixinClasses.splice(index, 1);
-                // TODO - remove properties ?
+                node._mixinContexts.splice(index, 1);
                 return;
             }
         }
@@ -159,4 +228,4 @@ var mixin = {
     }
 };
 
-module.exports = mixin;
+module.exports = exports;

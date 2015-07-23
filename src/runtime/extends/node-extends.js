@@ -26,10 +26,16 @@ JS.getset(nodeProto, 'parent',
         return parent && Fire(parent);
     },
     function (value) {
-        if (FIRE_EDITOR && value && !value.constructor.canHaveChildrenInEditor) {
-            Fire.warn('Can not add "%s" to "%s" which type is "%s".', this.name, value.name, JS.getClassName(value));
-            if (!this.parentN) {
-                this.parentN = Fire.engine.getCurrentSceneN();
+        if (FIRE_EDITOR && value) {
+            if (!(value instanceof NodeWrapper)) {
+                Fire.error('The new parent must be type NodeWrapper');
+                return;
+            }
+            if (!value.constructor.canHaveChildrenInEditor) {
+                Fire.warn('Can not add "%s" to "%s" which type is "%s".', this.name, value.name, JS.getClassName(value));
+                if (!this.parentN) {
+                    this.parentN = Fire.engine.getCurrentSceneN();
+                }
             }
         }
         else {
@@ -175,27 +181,45 @@ JS.mixin(nodeProto, {
     },
 
     _onActivated: function () {
-        // invoke mixin scripts
         if (!FIRE_EDITOR || Fire.engine._isPlaying) {
-            Behavior.onActivated(this.targetN);
+            this._onActivatedInGameMode();
         }
-        //
-        if (FIRE_EDITOR) {
-            if (!Fire.engine._isPlaying) {
-                var focused = Editor.Selection.curActivate('node') === this.uuid;
-                if (focused && this.onFocusInEditor) {
-                    this.onFocusInEditor();
-                }
-                else if (this.onLostFocusInEditor) {
-                    this.onLostFocusInEditor();
-                }
-            }
+        else {
+            this._onActivatedInEditMode();
         }
-        // activate children recursively
+    },
+
+    _onActivatedInGameMode: function () {
+        // invoke mixin
+        Behavior.onActivated(this.targetN);
+
+        // invoke children recursively
         var children = this.childrenN;
         for (var i = 0, len = children.length; i < len; ++i) {
             var node = children[i];
-            Fire(node)._onActivated();
+            Fire(node)._onActivatedInGameMode();
+        }
+    },
+
+    _onActivatedInEditMode: function () {
+        if (FIRE_EDITOR) {
+            // invoke wrapper
+            var focused = !FIRE_TEST && Editor.Selection.curActivate('node') === this.uuid;
+            if (focused) {
+                if (this.onFocusInEditor) {
+                    this.onFocusInEditor();
+                }
+            }
+            else if (this.onLostFocusInEditor) {
+                this.onLostFocusInEditor();
+            }
+
+            // invoke children recursively
+            var children = this.childrenN;
+            for (var i = 0, len = children.length; i < len; ++i) {
+                var node = children[i];
+                Fire(node)._onActivatedInEditMode();
+            }
         }
     },
 });

@@ -155,7 +155,8 @@
         ScriptToMix = Fire.Class({
             name: '2154648724566',
             extends: Fire.Class({
-                constructor: function () {
+                extends: Fire.Behavior,
+                onLoad: function () {
                     this.realAge = 30;
                 },
                 properties: {
@@ -232,6 +233,7 @@
             node1.children.push(node2);
 
             Fire.mixin(node1, ScriptToMix);
+            node1.onLoad();
             node1.age = 30;
             node1.target = Fire(node2);
 

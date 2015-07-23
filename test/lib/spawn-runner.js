@@ -6,9 +6,13 @@ if (Fire.isCoreLevel) {
     var Url = require('url');
     var BrowserWindow = require('browser-window');
 
-    module.exports = (function spawnWorker (title, scriptUrl) {
+    module.exports = (function spawnWorker (title, scriptUrl, debug) {
 
         describe(title, function () {
+            if (debug) {
+                this.timeout(0);
+            }
+
             var win;
 
             // close window afterward
@@ -17,7 +21,9 @@ if (Fire.isCoreLevel) {
                     win = null;
                     done();
                 });
-                win.close();
+                if (!debug) {
+                    win.close();
+                }
             });
 
             //
@@ -31,8 +37,11 @@ if (Fire.isCoreLevel) {
                     title: title,
                     width: 400,
                     height: 400,
-                    show: true,
+                    show: !!debug,
                 });
+                if (debug) {
+                    win.openDevTools();
+                }
                 var query = {scriptUrl: scriptUrl};
                 var url = Url.format({
                     protocol: 'file',
