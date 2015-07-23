@@ -64,9 +64,8 @@ var EngineWrapper = Fire.Class({
         this._sceneInfos = [];
 
         // current scene
-        this._scene = null;
-
         this._loadingScene = '';
+        this._emptySceneN = null;
 
         this._bindedTick = (FIRE_EDITOR || useDefaultMainLoop) && this._tick.bind(this);
 
@@ -329,6 +328,11 @@ var EngineWrapper = Fire.Class({
                 // start timer to force repaint the scene in edit mode
                 self.forceRepaintIntervalInEM = self.forceRepaintIntervalInEM;
             }
+
+            // create empty scene
+            var scene = new (self.getCurrentScene().constructor)();
+            scene.onAfterDeserialize();
+            self._emptySceneN = scene.targetN;
         });
     },
 

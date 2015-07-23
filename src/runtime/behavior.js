@@ -12,13 +12,19 @@ var Behavior = Fire.Class({
     name: 'Fire.Behavior',
 
     /**
-     * When attaching to an active node or its node first activated
+     * Called when attaching to a node.
      * @method onLoad
      */
     onLoad: null,
 
+    ///**
+    // * Called before all scripts' update.
+    // * @method start
+    // */
+    //start: null,
+
     /**
-     * Update is called every frame, if the Component is enabled.
+     * Update is called every frame.
      * @method update
      */
     update: null,
@@ -112,6 +118,16 @@ var LCMethods = {
     onLoad: {
         tmpl: CallLcmOnceTmpl,
         flag: Fire._ObjectFlags.IsOnLoadCalled
+    },
+    //start: {
+    //    tmpl: CallLcmOnceTmpl,
+    //    flag: Fire._ObjectFlags.IsOnStartCalled
+    //},
+    onEnter: {
+        tmpl: CallLcmTmpl,
+    },
+    onExit: {
+        tmpl: CallLcmTmpl,
     },
     update: {
         tmpl: CallLcmTmpl,

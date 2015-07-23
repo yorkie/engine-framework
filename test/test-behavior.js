@@ -1,6 +1,6 @@
 require('../src');
 require('./lib/init');
-var BehTester = require('./lib/behavior-callback-tester');
+//var BehTester = require('./lib/behavior-callback-tester');
 
 var DebugPage = 0;
 var PageLevel = true;
@@ -54,10 +54,14 @@ describe('Behavior', function () {
 
         describe('in play mode', function () {
             var Script = Fire.Class({
-                extends: Fire.Behavior,
-                onLoad: function () {
-                    this.onLoadCalled = true;
-                }
+                extends: Fire.Class({
+                    extends: Fire.Class({
+                        extends: Fire.Behavior,
+                        onLoad: function () {
+                            this.onLoadCalled = true;
+                        }
+                    })
+                })
             });
             var Script2 = Fire.Class({
                 extends: Fire.Behavior,
@@ -65,20 +69,19 @@ describe('Behavior', function () {
                     this.onLoadCalledBy2 = true;
                 }
             });
-
             var node1 = new MyNode();
-            Fire.mixin(node1, Script);
             var node2 = new MyNode();
-            Fire.mixin(node2, Script);
-
             var bigNode = new MyNode();
-            Fire.mixin(bigNode, Script, Script2);
-
-            node1.children = [node2, bigNode];
 
             before(function () {
                 Fire.engine._reset();
                 Fire.engine.play();
+
+                Fire.mixin(node1, Script);
+                Fire.mixin(node2, Script);
+                Fire.mixin(bigNode, Script, Script2);
+
+                node1.children = [node2, bigNode];
             });
 
             it('should be called when play', function () {
@@ -117,6 +120,7 @@ describe('Behavior', function () {
         before(function () {
             Fire.engine._reset();
         });
+
         it('should be forbidden in edit mode', function () {
             var node = new MyNode();
             var called = false;
@@ -126,7 +130,9 @@ describe('Behavior', function () {
                     called = true;
                 }
             }));
-            node.update();
+            if (node.update) {
+                node.update();
+            }
             expect(called).to.be.false;
         });
     });

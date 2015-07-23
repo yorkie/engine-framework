@@ -92,54 +92,55 @@ function mixin (node, typeOrTypename) {
         node._mixinClasses = [classToMix];
         node._mixinContexts = [scriptCtx];
         mixinData = {
-            lcmInitStates: LifecycleMethods.map(function () { return false; })
+            lcmInitStates: []
         };
         node._mixin = mixinData;
     }
+    var lcmInitStates = mixinData.lcmInitStates;
+    lcmInitStates.length = LifecycleMethods.length;
 
     // DO MIXIN
-    var lcmInitStates = mixinData.lcmInitStates;
     var classToMixProto = classToMix.prototype;
     for (var propName in classToMixProto) {
-        if (propName !== '__cid__' &&
-            propName !== '__classname__' &&
-            propName !== 'constructor') {
-            // TODO - dont mixin class attr
+        if (propName === '__cid__' ||
+            propName === '__classname__' ||
+            propName === 'constructor') {
+            continue;
+        }
+        // TODO - dont mixin class attr
+
+        var lcmIndex = LifecycleMethods.indexOf(propName);
+        var isLifecycleMethods = lcmIndex !== -1;
+        if (isLifecycleMethods) {
+            //if (!Fire.engine._isPlaying && FIRE_EDITOR) {
+            //    continue;
+            //}
+            scriptCtx[propName] = classToMixProto[propName];
+            if (! lcmInitStates[lcmIndex]) {
+                lcmInitStates[lcmIndex] = true;
+                // Fire.warn("Fire.mixin: %s's %s is overridden", Fire(node).name, propName);
+                (function () {
+                    var invoker = lcmInvokers[propName];
+                    var originMethod = node[propName];
+                    if (originMethod) {
+                        node[propName] = function () {
+                            originMethod.apply(this, arguments);
+                            invoker.apply(this, arguments);
+                        };
+                    }
+                    else {
+                        node[propName] = invoker;
+                    }
+                })();
+            }
+        }
+        else {
             var pd = JS.getPropertyDescriptor(classToMixProto, propName);
-            var lcmIndex = LifecycleMethods.indexOf(propName);
-            var isLifecycleMethods = lcmIndex !== -1;
-            if (isLifecycleMethods) {
-                scriptCtx[propName] = pd.value;
-                if (! lcmInitStates[lcmIndex]) {
-                    lcmInitStates[lcmIndex] = true;
-                    // Fire.warn("Fire.mixin: %s's %s is overridden", Fire(node).name, propName);
-                    (function () {
-                        var invoker = lcmInvokers[propName];
-                        var originMethod = node[propName];
-                        if (originMethod) {
-                            node[propName] = function () {
-                                originMethod.apply(this, arguments);
-                                invoker.apply(this, arguments);
-                            };
-                        }
-                        else {
-                            node[propName] = invoker;
-                        }
-                    })();
-                }
-            }
-            else {
-                Object.defineProperty(node, propName, pd);
-            }
+            Object.defineProperty(node, propName, pd);
         }
     }
 
-    //// cache lifecycle methods
-    //for (var j = 0; j < LifecycleMethods.length; j++) {
-    //    var method = LifecycleMethods[j];
-    //}
-
-    if ((!FIRE_EDITOR || (Fire.engine && Fire.engine._isPlaying)) && !Fire.engine._isCloning) {
+    if ((Fire.engine._isPlaying || !FIRE_EDITOR) && !Fire.engine._isCloning) {
         // invoke onLoad
         var onLoad = classToMixProto.onLoad;
         if (onLoad) {

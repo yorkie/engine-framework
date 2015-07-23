@@ -16,7 +16,7 @@ test('basic', function() {
         name: '2154648724566',
         extends: Fire.Class({
             extends: Fire.Behavior,
-            onLoad: function () {
+            load: function () {
                 this.realAge = 30;
             },
             properties: {
@@ -32,7 +32,7 @@ test('basic', function() {
         constructor: function () {
             this._ctorCalled = true;
         },
-        onLoad: function () {
+        load: function () {
             this._name = 'ha';
         },
         properties: {
@@ -58,8 +58,8 @@ test('basic', function() {
     strictEqual(node.constructor, Node, 'constructor should not changed');
 
     strictEqual(node._ctorCalled, undefined, 'should not execute constructor');
-    node.onLoad();
-    strictEqual(node._name, 'ha', 'could call onLoad');
+    node.load();
+    strictEqual(node._name, 'ha', 'could call load');
     strictEqual(node.name, 'ha', 'should mixin properties');
     strictEqual(Fire.attr(node, 'name').displayName, 'Name', 'should mixin attributes');
     strictEqual(node.getName(), 'ha', 'should mixin methods');

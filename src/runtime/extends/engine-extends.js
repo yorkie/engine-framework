@@ -68,7 +68,7 @@ JS.mixin(engineProto, {
             return;
         }
 
-        if (FIRE_EDITOR && scene._needCreate) {
+        if (scene._needCreate && FIRE_EDITOR) {
             Fire.error('The scene wrapper %s is not yet fully created', scene.name);
             return;
         }
@@ -89,6 +89,9 @@ JS.mixin(engineProto, {
         //FObject._deferredDestroy();
         //
         //Engine._scene = null;
+
+        // destroy last scene
+        self._setCurrentSceneN(this._emptySceneN);
 
         if (onBeforeLoadScene) {
             onBeforeLoadScene();
