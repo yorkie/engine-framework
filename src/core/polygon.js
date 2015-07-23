@@ -1,4 +1,4 @@
-var JS = require('./js')
+var JS = require('./js');
 
 Fire.Polygon = (function () {
     function Polygon( points ) {

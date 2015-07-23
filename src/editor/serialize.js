@@ -79,13 +79,13 @@ var _Serializer = (function () {
             }
         }
         else {
-            var attrs, propName;
+            var attrs, propName, props;
             var klass = obj.constructor;
             var mixinClasses = obj._mixinClasses;
             if (mixinClasses) {
-                for (var i = 0; i < mixinClasses.length; i++) {
-                    var mixinClass = mixinClasses[i];
-                    var props = mixinClass.__props__;
+                for (var m = 0; m < mixinClasses.length; m++) {
+                    var mixinClass = mixinClasses[m];
+                    props = mixinClass.__props__;
                     if (props) {
                         for (var p2 = 0; p2 < props.length; p2++) {
                             propName = props[p2];
@@ -124,7 +124,7 @@ var _Serializer = (function () {
                 //if (obj.onBeforeSerialize) {
                 //    obj.onBeforeSerialize();
                 //}
-                var props = klass.__props__;
+                props = klass.__props__;
                 if (props) {
                     if (props[props.length - 1] !== '_$erialized') {
                         for (var p = 0; p < props.length; p++) {

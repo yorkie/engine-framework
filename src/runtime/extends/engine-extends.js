@@ -127,14 +127,14 @@ JS.mixin(engineProto, {
             Fire.error('[loadScene] Failed to load scene "%s" because "%s" is already loading', sceneName, this._loadingScene);
             return false;
         }
-        var uuid;
+        var uuid, info;
         if (typeof sceneName === 'string') {
             if (!sceneName.endsWith('.fire')) {
                 sceneName += '.fire';
             }
             // search scene
             for (var i = 0; i < this._sceneInfos.length; i++) {
-                var info = this._sceneInfos[i];
+                info = this._sceneInfos[i];
                 var url = info.url;
                 if (url.endsWith(sceneName)) {
                     uuid = info.uuid;
@@ -143,7 +143,7 @@ JS.mixin(engineProto, {
             }
         }
         else {
-            var info = this._sceneInfos[sceneName];
+            info = this._sceneInfos[sceneName];
             if (typeof info === 'object') {
                 uuid = info.uuid;
             }

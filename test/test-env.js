@@ -13,7 +13,9 @@ describe('Environment Variables', function() {
     it('FIRE_EDITOR should be true', function() {
         expect(FIRE_EDITOR).to.be.true;
     });
-
+    it('FIRE_TEST should be true', function() {
+        expect(FIRE_TEST).to.be.true;
+    });
 
     if (Fire.isCoreLevel) {
         // test in page-level

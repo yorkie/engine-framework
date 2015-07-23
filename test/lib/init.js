@@ -33,6 +33,10 @@ var v2 = Fire.v2;
 var color = Fire.color;
 var M3 = Fire.Matrix23;
 
+//if (Fire.isCoreLevel) {
+//    Editor.Selection.register('node');
+//}
+
 if (!Fire.Sprite) {
     var Sprite = (function () {
         var Sprite = Fire.Class({

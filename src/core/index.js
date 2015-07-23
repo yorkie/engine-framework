@@ -44,7 +44,12 @@ if (typeof FIRE_DEV === 'undefined') {
     }
 }
 if (typeof FIRE_TEST === 'undefined') {
-    eval('FIRE_TEST=!1');       // use eval to ignore uglify
+    if (FIRE_EDITOR) {
+        eval('FIRE_TEST=typeof describe!=="undefined"');       // use eval to ignore uglify
+    }
+    else {
+        eval('FIRE_TEST=!1');       // use eval to ignore uglify
+    }
 }
 
 // javascript extends

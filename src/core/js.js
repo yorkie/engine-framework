@@ -66,7 +66,7 @@ var JS = {
             var source = arguments[i];
             if (source) {
                 if (typeof source !== 'object') {
-                    Fire.error('Fire.JS.mixin called on non-object:', source);
+                    Fire.error('Fire.JS.mixin: arguments must be type object:', source);
                     continue;
                 }
                 for ( var name in source) {
