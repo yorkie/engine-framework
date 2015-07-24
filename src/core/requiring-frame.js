@@ -10,7 +10,7 @@ Fire._RFpush = function (module, uuid, script) {
         script: script,
         module: module,
         exports: module.exports,    // original exports
-        //comp: null
+        beh: null
     });
 };
 
@@ -18,29 +18,28 @@ Fire._RFpop = function () {
     var frameInfo = requiringFrames.pop();
     // check exports
     var module = frameInfo.module;
-    //var exports = frameInfo.exports;
-    //if (exports === module.exports) {
-    //    for (var anyKey in exports) {
-    //        // exported
-    //        return;
-    //    }
-    //    // auto export component
-    //    module.exports = frameInfo.comp;
-    //}
     var exports = module.exports;
-    if (Fire._isFireClass(exports)) {
-        if (frameInfo.script) {
-            if (! Fire.JS.getClassName(exports)) {
-                Fire.JS.setClassName(frameInfo.script, exports);
-            }
-            else {
-                Fire.warn('Sorry, specifying class name for exported FireClass is not allowed.');
-            }
+    if (exports === frameInfo.exports) {
+        for (var anyKey in exports) {
+            // exported
+            return;
         }
-        if (frameInfo.uuid) {
-            Fire.JS._setClassId(frameInfo.uuid, exports);
-        }
+        // auto export behavior
+        module.exports = exports = frameInfo.beh;
     }
+    //if (Fire.isChildClassOf(exports, Fire.Behavior)) {
+    //    if (frameInfo.script) {
+    //        if (! Fire.JS.getClassName(exports)) {
+    //            Fire.JS.setClassName(frameInfo.script, exports);
+    //        }
+    //        else {
+    //            Fire.warn('Sorry, specifying class name for exported Behavior is not allowed.');
+    //        }
+    //    }
+    //    if (frameInfo.uuid) {
+    //        Fire.JS._setClassId(frameInfo.uuid, exports);
+    //    }
+    //}
 };
 
 Fire._RFpeek = function () {

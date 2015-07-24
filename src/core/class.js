@@ -407,7 +407,7 @@ function _nicifyFireClass (fireClass, className) {
     }
 }
 
-Fire._doDefine = function (className, baseClass, constructor) {
+function doDefine (className, baseClass, constructor) {
     var useTryCatch = ! JS.String.startsWith(className, 'Fire.');
     var fireClass = _createCtor(constructor, baseClass, useTryCatch);
     _initClass(className, fireClass);
@@ -429,20 +429,40 @@ Fire._doDefine = function (className, baseClass, constructor) {
     }
 
     return fireClass;
-};
+}
 
-/**
- * Defines a FireClass using the given constructor.
- *
- * @method define
- * @param {string} [className] - the name of class that is used to deserialize this class
- * @param {function} [constructor] - a constructor function that is used to instantiate this class
- * @return {function} the constructor of newly defined class
- * @private
- */
-Fire.define = function (className, constructor) {
-    return Fire.extend(className, null, constructor);
-};
+function define (className, baseClass, constructor) {
+    if (Fire.isChildClassOf(baseClass, Fire.Behavior)) {
+        var frame = Fire._RFpeek();
+        if (frame) {
+            if (FIRE_DEV && constructor) {
+                Fire.warn('Fire.Class: Should not define constructor for Fire.Behavior.');
+            }
+            if (frame.beh) {
+                Fire.error('Each script can have at most one Behavior.');
+                return;
+            }
+            var isInProject = frame.uuid;
+            if (isInProject) {
+                if (className) {
+                    Fire.warn('Should not specify class name for Behavior which defines in project.');
+                }
+            }
+            //else {
+            //    builtin plugin behavior
+            //}
+            className = className || frame.script;
+            var cls = doDefine(className, baseClass, constructor);
+            if (frame.uuid) {
+                JS._setClassId(frame.uuid, cls);
+            }
+            frame.beh = cls;
+            return cls;
+        }
+    }
+    // not project behavior
+    return doDefine(className, baseClass, constructor);
+}
 
 /**
  * Creates a sub FireClass based on the specified baseClass parameter.
@@ -469,11 +489,11 @@ Fire.extend = function (className, baseClass, constructor) {
         className = '';
     }
     if (typeof className === 'string') {
-        return Fire._doDefine(className, baseClass, constructor);
+        return define(className, baseClass, constructor);
     }
     else if (typeof className === 'undefined') {
         // 未传入任何参数
-        return Fire._doDefine('', baseClass, constructor);
+        return define('', baseClass, constructor);
     }
     else if (FIRE_DEV && className) {
         Fire.error('[Fire.extend] unknown typeof first argument:' + className);
