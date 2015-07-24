@@ -9,7 +9,8 @@ var root = typeof global !== 'undefined' ? global : window;
  * - [Runtime](./Fire.Runtime.html)
  *
  * !#zh
- * 可全局访问的公共方法和属性，也会包括一些组件和类的静态方法
+ * 可全局访问的公共方法和属性，也会包括一些组件和类的静态方法。
+ * Fire 本身也是一个方法，直接调用的话将返回或新建跟给定 node 相互绑定的 NodeWrapper 实例。
  *
  * 包含的子模块:
  * - [JS](./Fire.JS.html)
@@ -17,17 +18,18 @@ var root = typeof global !== 'undefined' ? global : window;
  *
  * @module Fire
  * @main Fire
- *
- * 返回跟 object 相互绑定的 NodeWrapper 实例，如果不存在将被创建。
- * @param {RuntimeNode} node
- * @return {Fire.Runtime.NodeWrapper}
  */
+var getWrapper;
 if (!root.Fire) {
     // Always export Fire globally.
     root.Fire = function (node) {
-        return Fire.Runtime.NodeWrapper.getWrapper(node);
+        return getWrapper(node);
     };
 }
+
+Fire._setWrapperGetter = function (getter) {
+    getWrapper = getter;
+};
 
 require('./definition');
 

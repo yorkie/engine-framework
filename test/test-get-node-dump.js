@@ -1,16 +1,18 @@
 require('../src');
 require('./lib/init');
 
-// make runtime available in core-level
-Fire.Runtime = require('../src/runtime');
-
-var PageLevel = false;
-var CoreLevel = true;
+var DebugPage = 0;
+var PageLevel = true;
+var CoreLevel = false;
+if (CoreLevel) {
+    // make runtime available in core-level, but Fire.engine will be undefined.
+    Fire.Runtime = require('../src/runtime');
+}
 
 describe('Editor.getNodeDump', function () {
     if (PageLevel && Fire.isCoreLevel) {
         var spawnRunner = require('./lib/spawn-runner');
-        spawnRunner(this.title, __filename);
+        spawnRunner(this.title, __filename, DebugPage);
         if (!CoreLevel) {
             // only test in page-level
             return;
@@ -32,11 +34,6 @@ describe('Editor.getNodeDump', function () {
             name: 'MyNodeWrapper',
             extends: Fire.Runtime.NodeWrapper,
             properties: {
-                id: {
-                    get: function () {
-                        return 554;
-                    }
-                },
                 parentN: {
                     get: function () {
                         return null;
@@ -106,7 +103,7 @@ describe('Editor.getNodeDump', function () {
                     return this.age;
                 }
             }),
-            constructor: function () {
+            init: function () {
                 this._name = 'ha';
             },
             properties: {
@@ -131,6 +128,7 @@ describe('Editor.getNodeDump', function () {
         });
 
         Fire.mixin(node, Script);
+        node.init();
     });
 
     //describe('Smoke testing', function () {
@@ -173,8 +171,12 @@ describe('Editor.getNodeDump', function () {
                         childrenN: {
                             visible: false
                         },
-                        id: {
-                            "visible": false
+                        _id: {
+                            default: "",
+                            visible: false,
+                        },
+                        uuid: {
+                            visible: false
                         },
                         name: {},
                         parentN: {
@@ -257,7 +259,8 @@ describe('Editor.getNodeDump', function () {
                 _name: '',
                 name: '',
                 _objFlags: 0,
-                id: 554,
+                _id: Fire(node)._id,
+                uuid: Fire(node).uuid,
                 childrenN: null,
                 parentN: null,
                 position: {
@@ -290,7 +293,7 @@ describe('Editor.getNodeDump', function () {
                 y: 456,
                 root: {
                     __type__: "MyNodeWrapper",
-                    id: 554
+                    id: Fire(node).root.uuid
                 },
 
                 __mixins__: [{

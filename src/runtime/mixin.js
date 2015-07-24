@@ -112,7 +112,7 @@ function mixin (node, typeOrTypename) {
         var lcmIndex = LifecycleMethods.indexOf(propName);
         var isLifecycleMethods = lcmIndex !== -1;
         if (isLifecycleMethods) {
-            //if (!Fire.engine._isPlaying && FIRE_EDITOR) {
+            //if (Fire.engine && !Fire.engine._isPlaying && FIRE_EDITOR) {
             //    continue;
             //}
             scriptCtx[propName] = classToMixProto[propName];
@@ -140,7 +140,7 @@ function mixin (node, typeOrTypename) {
         }
     }
 
-    if ((Fire.engine._isPlaying || !FIRE_EDITOR) && !Fire.engine._isCloning) {
+    if (Fire.engine && (Fire.engine._isPlaying || !FIRE_EDITOR) && !Fire.engine._isCloning) {
         // invoke onLoad
         var onLoad = classToMixProto.onLoad;
         if (onLoad) {
@@ -189,7 +189,7 @@ var exports = {
     },
 
     unMixin: function (node, typeOrTypename) {
-        if (!FIRE_EDITOR || Fire.engine.isPlaying) {
+        if ((Fire.engine && Fire.engine.isPlaying) || !FIRE_EDITOR) {
             return Fire.warn("Fire.unMixin: Sorry, can not un-mixin when the engine is playing.");
         }
 

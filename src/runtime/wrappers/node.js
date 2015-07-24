@@ -570,17 +570,7 @@ var NodeWrapper = Fire.Class({
     onLostFocusInEditor: null,
 });
 
-/**
- * @module Fire
- */
-
-/**
- * 返回跟 object 相互绑定的 NodeWrapper 实例，如果不存在将被创建。
- * @method node
- * @param {RuntimeNode} node
- * @return {Fire.Runtime.NodeWrapper}
- */
-NodeWrapper.getWrapper = function (node) {
+Fire._setWrapperGetter(function (node) {
     if (node instanceof NodeWrapper) {
         Fire.warn('Fire accept argument of type runtime node, not wrapper.');
         return node;
@@ -600,6 +590,6 @@ NodeWrapper.getWrapper = function (node) {
         node._FB_wrapper = wrapper;
     }
     return wrapper;
-};
+});
 
 module.exports = NodeWrapper;

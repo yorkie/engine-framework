@@ -133,8 +133,6 @@ JS.getset(nodeProto, 'sceneScale',
     }
 );
 
-JS.obsolete(nodeProto, 'NodeWrapper.id', 'uuid', false);
-
 JS.mixin(nodeProto, {
     /**
      * Is this node an instance of Scene?

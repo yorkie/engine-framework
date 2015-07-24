@@ -1,4 +1,4 @@
-var FObject = require('../fobject');
+var FObject = require('./fobject');
 
 /**
  * Base class for asset handling.
@@ -15,7 +15,7 @@ var FObject = require('../fobject');
  * @extends Object
  * @constructor
  */
-module.exports = Fire.Class({
+Fire.Asset = Fire.Class({
     name: 'Fire.Asset', extends: FObject,
 
     constructor: function () {
@@ -167,3 +167,4 @@ module.exports = Fire.Class({
     }
 });
 
+module.exports = Fire.Asset
