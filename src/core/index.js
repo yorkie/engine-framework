@@ -74,6 +74,7 @@ require('./polygon');
 
 // engine toolkit
 
+require('./url');
 require('./asset');
 require('./deserialize');
 require('./event/event-target');

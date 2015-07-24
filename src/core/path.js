@@ -139,19 +139,20 @@ Fire.Path.setExtname = function (path, newExtension) {
 /**
  * @method setEndWithSep
  * @param {string} path
- * @param {Boolean} [endWithSep = true]
+ * @param {boolean} [endWithSep = true]
+ * @param {string} [sep = Fire.Path.sep]
  * @return {string} result
  */
-Fire.Path.setEndWithSep = function (path, endWithSep) {
+Fire.Path.setEndWithSep = function (path, endWithSep, sep) {
     endWithSep = (typeof endWithSep !== 'undefined') ? endWithSep : true;
 
     var endChar = path[path.length - 1];
     var oldEndWithSep = (endChar === '\\' || endChar === '/');
     if (!oldEndWithSep && endWithSep) {
-        path += Fire.Path.sep;
+        path += (sep || Fire.Path.sep);
     }
     else if (oldEndWithSep && !endWithSep) {
-        path = path.substring(0, path.length - 1);
+        path = path.slice(0, -1);
     }
     return path;
 };

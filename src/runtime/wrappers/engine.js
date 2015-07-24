@@ -291,6 +291,7 @@ var EngineWrapper = Fire.Class({
      * @param {object} options
      * @param {number} options.width
      * @param {number} options.height
+     * @param {string} options.rawUrl
      * @param {Canvas} [options.canvas]
      * @param {initCallback} callback
      */
@@ -301,10 +302,11 @@ var EngineWrapper = Fire.Class({
         }
         this._isInitialized = true;
 
-        if (options) {
-            this._sceneInfos = this._sceneInfos.concat(options.scenes);
-            //Resources._resBundle.init(options.resBundle);
+        this._sceneInfos = this._sceneInfos.concat(options.scenes);
+        if (options.rawUrl) {
+            Fire.url.rawUrl = Fire.Path.setEndWithSep(options.rawUrl, true, '/');
         }
+        //Resources._resBundle.init(options.resBundle);
 
         Fire.Runtime.Helpers.init();
 
