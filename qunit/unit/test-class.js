@@ -1,7 +1,7 @@
 ﻿largeModule('Class');
 
 test('test', function () {
-    var Animal = Fire.define('Animal')
+    var Animal = Fire.extend('Animal')
                      .prop('name', '...', { type: 'Float' }, { serializable: true })
                      .prop('eat', function () {
                          return 'eating';
@@ -50,7 +50,7 @@ test('test', function () {
     Fire.JS.unregisterClass(Animal);
 
     var constructor = new Callback();
-    Animal = Fire.define('Animal', constructor)
+    Animal = Fire.extend('Animal', null, constructor)
                  .prop('weight', 100);
 
     constructor.enable();
@@ -71,7 +71,7 @@ test('test', function () {
 });
 
 test('Inherit', function () {
-    var Animal = Fire.define('Fire.Animal').prop('name', 'ann');
+    var Animal = Fire.extend('Fire.Animal').prop('name', 'ann');
     var Dog = Fire.extend('Fire.Dog', Animal)
                    .prop('name', 'doge', { type: 'str' });
     var Husky = Fire.extend('Fire.Husky', Dog).prop('weight', 100);
@@ -102,7 +102,7 @@ test('Inherit', function () {
 test('Inherit + constructor', function () {
     var animalConstructor = Callback();
     var huskyConstructor = Callback();
-    var Animal = Fire.define('Fire.Animal', animalConstructor)
+    var Animal = Fire.extend('Fire.Animal', null, animalConstructor)
                       .prop('name', 'ann');
     var Dog = Fire.extend('Fire.Dog', Animal)
                   .prop('name', 'doge');
@@ -130,7 +130,7 @@ test('Inherit + constructor', function () {
 });
 
 test('prop reference', function () {
-    var type = Fire.define('Fire.MyType')
+    var type = Fire.extend('Fire.MyType')
                    .prop('ary', [])
                    .prop('vec2', new Fire.Vec2(10, 20))
                    .prop('dict', {});

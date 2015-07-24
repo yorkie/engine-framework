@@ -66,11 +66,11 @@ var _propertyNotForGet = [
  */
 Fire.Class = function (options) {
     if (arguments.length === 0) {
-        return Fire.define();
+        return Fire.extend();
     }
     if ( !options ) {
         Fire.error('[Fire.Class] Option must be non-nil');
-        return Fire.define();
+        return Fire.extend();
     }
 
     var name = options.name;

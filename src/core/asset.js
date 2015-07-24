@@ -167,4 +167,4 @@ Fire.Asset = Fire.Class({
     }
 });
 
-module.exports = Fire.Asset
+module.exports = Fire.Asset;

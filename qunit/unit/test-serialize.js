@@ -125,7 +125,7 @@ test('test inherited FireClass', function() {
 });
 
 test('test FireClass', function () {
-    var Sprite = Fire.define('Sprite', function () {
+    var Sprite = Fire.extend('Sprite', null, function () {
         this.image = 'sprite.png';
     })
     Sprite.prop('size', new Fire.Vec2(128, 128));
@@ -178,7 +178,7 @@ test('test circular reference', function () {
 });
 
 test('test serializable attributes', function () {
-    var Sprite = Fire.define('Sprite')
+    var Sprite = Fire.extend('Sprite')
                      .prop('trimThreshold', 2, Fire.EditorOnly)
                      .prop('_isValid', true, Fire.NonSerialized);
 

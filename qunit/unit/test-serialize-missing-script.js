@@ -2,12 +2,12 @@
 
 test('deserialize missing script', function() {
 
-    var MissingScript = Fire.define('MissingScript').prop('_$erialized', null);
+    var MissingScript = Fire.extend('MissingScript').prop('_$erialized', null);
     MissingScript.safeFindClass = function (id) {
         return Fire.JS._getClassById(id) || MissingScript;
     };
 
-    var ToMiss = Fire.define('ToMiss').prop('ref', null);
+    var ToMiss = Fire.extend('ToMiss').prop('ref', null);
 
     var obj = new ToMiss();
     obj.ref = new Fire.FObject();

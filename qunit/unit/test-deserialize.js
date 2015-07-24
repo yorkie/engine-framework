@@ -86,7 +86,7 @@ test('nil', function () {
     var str = '{ "null": null }'
     deepEqual(Fire.deserialize(str), obj, 'can deserialize null');
 
-    var MyAsset = Fire.define('MyAsset', function () {
+    var MyAsset = Fire.extend('MyAsset', null, function () {
         this.foo = 'bar';
     }).prop('nil', 1234);
 
@@ -261,7 +261,7 @@ testWithTarget('circular reference by dict', function (useTarget) {
 
 test('target', function () {
     var MyAsset = (function () {
-        var MyAsset = Fire.define( 'MyAsset', function () {
+        var MyAsset = Fire.extend( 'MyAsset', null, function () {
             this.tmpVal = 0;
         }).prop('saveVal', 0);
 
