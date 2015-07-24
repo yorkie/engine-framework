@@ -192,39 +192,48 @@ var _Deserializer = (function () {
             // assume all prop in __props__ must have attr
             var rawType = attrs.rawType;
             if (!rawType) {
-                if (attrs.serializable === false) {
-                    continue;   // skip nonSerialized
-                }
                 if (!self._editor && attrs.editorOnly) {
                     continue;   // skip editor only if not editor
                 }
+                var saveUrlAsAsset = attrs.saveUrlAsAsset;
+                if (attrs.serializable === false && !saveUrlAsAsset) {
+                    continue;   // skip nonSerialized
+                }
                 var prop = serialized[propName];
-                if (typeof prop !== 'undefined') {
-                    if (typeof prop !== 'object') {
-                        obj[propName] = prop;
-                    }
-                    else {
-                        if (prop) {
-                            if (!prop.__uuid__ && typeof prop.__id__ === 'undefined') {
-                                if (ENABLE_TARGET) {
-                                    obj[propName] = _deserializeObject(self, prop, target && target[propName]);
-                                }
-                                else {
-                                    obj[propName] = _deserializeObject(self, prop);
-                                }
+                if (typeof prop === 'undefined') {
+                    continue;
+                }
+                if (typeof prop !== 'object') {
+                    obj[propName] = prop;
+                }
+                else {
+                    if (prop) {
+                        if (!prop.__uuid__ && typeof prop.__id__ === 'undefined') {
+                            if (ENABLE_TARGET) {
+                                obj[propName] = _deserializeObject(self, prop, target && target[propName]);
                             }
                             else {
-                                if (ENABLE_TARGET) {
-                                    self._deserializeObjField(obj, prop, propName, target && obj);
-                                }
-                                else {
-                                    self._deserializeObjField(obj, prop, propName);
-                                }
+                                obj[propName] = _deserializeObject(self, prop);
                             }
                         }
                         else {
-                            obj[propName] = null;
+                            if (ENABLE_TARGET) {
+                                self._deserializeObjField(obj, prop, propName, target && obj);
+                            }
+                            else {
+                                self._deserializeObjField(obj, prop, propName);
+                            }
+                            if (saveUrlAsAsset) {
+                                // redirect to setter
+                                var result = self.result;
+                                if (result.uuidObjList[result.uuidObjList.length - 1] === obj) {
+                                    result.uuidPropList[result.uuidPropList.length - 1] = "_set$" + propName;
+                                }
+                            }
                         }
+                    }
+                    else {
+                        obj[propName] = null;
                     }
                 }
             }

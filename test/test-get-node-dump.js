@@ -24,13 +24,13 @@ describe('Editor.getNodeDump', function () {
         expect(dump).to.deep.equal(expectedDump);
     }
 
-    var node;
+    var node, Node, NodeWrapper, Script;
 
     before(function () {
-        function Node () {}
+        Node = function () {};
         Node.prototype.getAge = function () {};
 
-        var NodeWrapper = Fire.Class({
+        NodeWrapper = Fire.Class({
             name: 'MyNodeWrapper',
             extends: Fire.Runtime.NodeWrapper,
             properties: {
@@ -86,7 +86,7 @@ describe('Editor.getNodeDump', function () {
             Trilinear: -1
         });
 
-        var Script = Fire.Class({
+        Script = Fire.Class({
             name: '2154648724566',
             extends: Fire.Class({
                 extends: Fire.Behavior,
@@ -130,21 +130,9 @@ describe('Editor.getNodeDump', function () {
         Fire.mixin(node, Script);
         node.init();
     });
-
-    //describe('Smoke testing', function () {
-    //    it('should pass if null', function () {
-    //        test(null, {
-    //            types: {},
-    //            value: null
-    //        });
-    //    });
-    //    it('should pass if empty', function () {
-    //        test({}, {
-    //            types: {},
-    //            value: {}
-    //        });
-    //    });
-    //});
+    after(function () {
+        Fire.JS.unregisterClass(Script, NodeWrapper);
+    });
 
     describe('dump result', function () {
 
@@ -168,12 +156,12 @@ describe('Editor.getNodeDump', function () {
                         _objFlags: {
                             visible: false
                         },
-                        childrenN: {
-                            visible: false
-                        },
                         _id: {
                             default: "",
                             visible: false,
+                        },
+                        childrenN: {
+                            visible: false
                         },
                         uuid: {
                             visible: false
@@ -247,6 +235,11 @@ describe('Editor.getNodeDump', function () {
                         },
                         texture: {
                             default: null,
+                            type: 'Fire.Texture',
+                            visible: false
+                        },
+                        _idOf$texture: {
+                            displayName: 'Texture',
                             type: 'Fire.Texture'
                         }
                     }
@@ -304,7 +297,8 @@ describe('Editor.getNodeDump', function () {
                     texture: {
                         __type__: 'Fire.Sprite',
                         uuid: node.texture._uuid
-                    }
+                    },
+                     '_idOf$texture': '43728e743120'
                 }]
             });
         });
@@ -364,6 +358,135 @@ describe('Editor.getNodeDump', function () {
             var actual = Editor.getNodeDump.dumpInheritanceChain(Sprite);
             expect(actual).to.deep.equal(['Node', 'HashObject', 'Object']);
             Fire.JS.unregisterClass(Sprite, Node, HashObj, Obj);
+        });
+    });
+    describe('dump uuid adapter', function () {
+        it('should return empty array if is anonymous function', function () {
+            var node = new Node();
+            var Script = Fire.Class({
+                name: 'MyScript',
+                extends: Fire.Behavior,
+                properties: {
+                    texture: {
+                        default: '',
+                        url: Fire.Texture
+                    },
+                }
+            });
+
+            Fire.mixin(node, Script);
+            node.texture = 'foo/bar.png';
+            var urlToUuid = sinon.stub(Fire.Asset, "urlToUuid");
+            urlToUuid.returns('543875034502');
+
+            test(node, {
+                types: {
+                    "MyNodeWrapper": {
+                        "extends": [
+                            "Fire.Runtime.NodeWrapper", "Fire.FObject"
+                        ],
+                        "properties": {
+                            "_name": {
+                                "visible": false
+                            },
+                            "_objFlags": {
+                                "visible": false
+                            },
+                            "name": {},
+                            "_id": {
+                                "default": "",
+                                "visible": false
+                            },
+                            "uuid": {
+                                "visible": false
+                            },
+                            "parentN": {
+                                "visible": false
+                            },
+                            "childrenN": {
+                                "visible": false
+                            },
+                            "position": {},
+                            "x": {
+                                "visible": false
+                            },
+                            "y": {
+                                "visible": false
+                            },
+                            "worldPosition": {
+                                "visible": false
+                            },
+                            "worldX": {
+                                "visible": false
+                            },
+                            "worldY": {
+                                "visible": false
+                            },
+                            "rotation": {
+                                "tooltip": "The clockwise degrees of rotation relative to the parent"
+                            },
+                            "worldRotation": {
+                                "visible": false
+                            },
+                            "scale": {},
+                            "scaleX": {
+                                "visible": false
+                            },
+                            "scaleY": {
+                                "visible": false
+                            },
+                            "worldScale": {
+                                "visible": false
+                            },
+                            "root": {}
+                        }
+                    },
+                    "MyScript": {
+                        "extends": [ "Fire.Behavior" ],
+                        "properties": {
+                            "texture": {
+                                "default": "",
+                                "visible": false
+                            },
+                            "_idOf$texture": {
+                                "type": "Fire.Texture",
+                                "displayName": "Texture"
+                            }
+                        }
+                    }
+                },
+                value: {
+                    __type__: 'MyNodeWrapper',
+                    _name: '',
+                    _objFlags: 0,
+                    name: '',
+                    _id: Fire(node).uuid,
+                    uuid: Fire(node).uuid,
+                    parentN: null,
+                    childrenN: null,
+                    position: { __type__: 'Fire.Vec2', x: 123, y: 456 },
+                    x: 123,
+                    y: 456,
+                    worldPosition: { __type__: 'Fire.Vec2', x: 0, y: 0 },
+                    worldX: 0,
+                    worldY: 0,
+                    rotation: 0,
+                    worldRotation: 0,
+                    scale: { __type__: 'Fire.Vec2', x: 1, y: 1 },
+                    scaleX: 1,
+                    scaleY: 1,
+                    worldScale: { __type__: 'Fire.Vec2', x: 1, y: 1 },
+                    root: { __type__: 'MyNodeWrapper', id: Fire(node).uuid },
+                    __mixins__: [{
+                        __type__: "MyScript",
+                        _idOf$texture: "543875034502",
+                        texture: "foo/bar.png"
+                    }]
+                }
+            });
+
+            Fire.Asset.urlToUuid.restore();
+            Fire.JS.unregisterClass(Script);
         });
     });
 });

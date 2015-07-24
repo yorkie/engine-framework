@@ -63,6 +63,41 @@ var _Serializer = (function () {
         }
     };
 
+    function enumerateByFireClass (self, obj, data, fireClass) {
+        var props = fireClass.__props__;
+        if (props) {
+            for (var p = 0; p < props.length; p++) {
+                var propName = props[p];
+                var attrs = Fire.attr(fireClass, propName);
+                // assume all prop in __props__ must have attr
+
+                // skip editor only when exporting
+                if (self._exporting && attrs.editorOnly) {
+                    continue;
+                }
+
+                if (attrs.saveUrlAsAsset) {
+                    var url = obj[propName];
+                    if (!url) {
+                        continue;
+                    }
+                    var uuid = Fire.Asset.urlToUuid(url);
+                    if (!uuid) {
+                        continue;
+                    }
+                    data[propName] = _serializeField(self, Editor.serialize.asAsset(uuid));
+                    continue;
+                }
+                else if (attrs.serializable === false) {
+                    continue;
+                }
+
+                // undefined value (if dont save) will be stripped from JSON
+                data[propName] = _serializeField(self, obj[propName]);
+            }
+        }
+    }
+
     ///**
     // * @param {object} obj - The object to serialize
     // * @param {array|object} data - The array or dict where serialized data to store
@@ -85,27 +120,7 @@ var _Serializer = (function () {
             if (mixinClasses) {
                 for (var m = 0; m < mixinClasses.length; m++) {
                     var mixinClass = mixinClasses[m];
-                    props = mixinClass.__props__;
-                    if (props) {
-                        for (var p2 = 0; p2 < props.length; p2++) {
-                            propName = props[p2];
-                            attrs = Fire.attr(mixinClass, propName);
-                            // assume all prop in __props__ must have attr
-
-                            // skip nonSerialized
-                            if (attrs.serializable === false) {
-                                continue;
-                            }
-
-                            // skip editor only when exporting
-                            if (self._exporting && attrs.editorOnly) {
-                                continue;
-                            }
-
-                            // undefined value (if dont save) will be stripped from JSON
-                            data[propName] = _serializeField(self, obj[propName]);
-                        }
-                    }
+                    enumerateByFireClass(self, obj, data, mixinClass);
                 }
             }
             else if (! Fire._isFireClass(klass)) {
@@ -127,24 +142,7 @@ var _Serializer = (function () {
                 props = klass.__props__;
                 if (props) {
                     if (props[props.length - 1] !== '_$erialized') {
-                        for (var p = 0; p < props.length; p++) {
-                            propName = props[p];
-                            attrs = Fire.attr(klass, propName);
-                            // assume all prop in __props__ must have attr
-
-                            // skip nonSerialized
-                            if (attrs.serializable === false) {
-                                continue;
-                            }
-
-                            // skip editor only when exporting
-                            if (self._exporting && attrs.editorOnly) {
-                                continue;
-                            }
-
-                            // undefined value (if dont save) will be stripped from JSON
-                            data[propName] = _serializeField(self, obj[propName]);
-                        }
+                        enumerateByFireClass(self, obj, data, klass);
                     }
                     else {
                         // If is missing script proxy, serialized as original data

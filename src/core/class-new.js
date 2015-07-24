@@ -2,14 +2,8 @@ require('./attribute');
 require('./class');
 //var FObject = require('./fobject');
 var getTypeChecker = require('./attribute').getTypeChecker;
+var preprocessAttrs = require('./preprocess-attrs');
 
-// 不能使用于get方法的属性
-var _propertyNotForGet = [
-    'default',
-    'serializable',
-    'editorOnly',
-    'rawType'
-];
 
 /**
  * !#en Defines a FireClass using the given specification, please see [Class](/en/scripting/class/) for details.
@@ -103,7 +97,7 @@ Fire.Class = function (options) {
     if (properties) {
 
         // 预处理属性
-        preParseProperties(name, properties);
+        preprocessAttrs(properties, name);
 
         for (var propName in properties) {
             var val = properties[propName];
@@ -191,75 +185,6 @@ Fire.Class = function (options) {
 
     return cls;
 };
-
-// 预处理属性值，例如：notify等
-function preParseProperties (name, properties) {
-    for (var propName in properties) {
-        var val = properties[propName];
-        if (!val) {
-            continue;
-        }
-
-        var notify = val.notify;
-        if (notify) {
-            if (val.get || val.set) {
-                if (FIRE_DEV) {
-                    Fire.warn('"notify" can\'t work with "get/set" !');
-                }
-                continue;
-            }
-            if (val.hasOwnProperty('default')) {
-                // 添加新的内部属性，将原来的属性修改为 getter/setter 形式
-                // 以 _ 开头将自动设置property 为 Fire.HideInInspector
-                var newKey = "_val$" + propName;
-
-                (function (notify, newKey) {
-                    val.get = function () {
-                        return this[newKey];
-                    };
-                    val.set = function (value) {
-                        var oldValue = this[newKey];
-                        this[newKey] = value;
-                        notify.call(this, oldValue);
-                    };
-                })(notify, newKey);
-
-                var newValue = {};
-                properties[newKey] = newValue;
-                // 将不能用于get方法中的属性移动到newValue中
-                for (var i = 0; i < _propertyNotForGet.length; i++) {
-                    var prop = _propertyNotForGet[i];
-                    if (val.hasOwnProperty(prop)) {
-                        newValue[prop] = val[prop];
-                        delete val[prop];
-                    }
-                }
-            }
-            else if (FIRE_DEV) {
-                Fire.warn('"notify" must work with "default" !');
-            }
-        }
-
-        var wrapperOf = val.wrapper;
-        if (wrapperOf) {
-            if (val.type) {
-                Fire.warn('The "wrapper" attribute of %s.%s can not be used with "type"', name, propName);
-            }
-            if (Fire.isChildClassOf(wrapperOf, Fire.Runtime.NodeWrapper)) {
-                val.type = wrapperOf;
-                continue;
-            }
-            var wrapper = Fire.getWrapperType(wrapperOf);
-            if (wrapper) {
-                val.type = wrapper;
-            }
-            else {
-                Fire.warn('Can not declare "wrapper" attribute for %s.%s, the registered wrapper of "%s" is not found.',
-                    name, propName, Fire.JS.getClassName(wrapperOf));
-            }
-        }
-    }
-}
 
 var tmpAttrs = [];
 function parseAttributes (attrs, className, propName) {
@@ -354,7 +279,10 @@ function parseAttributes (attrs, className, propName) {
     parseSimpleAttr('readonly', 'boolean', { readOnly: true });
     parseSimpleAttr('tooltip', 'string');
 
-    if (attrs.serializable === false) {
+    if (attrs.url) {
+        result.push({ saveUrlAsAsset: true });
+    }
+    else if (attrs.serializable === false) {
         result.push(Fire.NonSerialized);
     }
 
